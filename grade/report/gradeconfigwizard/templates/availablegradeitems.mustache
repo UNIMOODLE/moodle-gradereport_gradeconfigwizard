@@ -1,0 +1,35 @@
+{{#availablegradeitems}}
+  {{#iscourse}}
+    <div class="form-check m-1">
+      <input class="form-check-input" type="checkbox" data-id="{{id}}" data-displayname="Total curso" value="" id="availablegradeitem-{{id}}">
+      <label class="form-check-label font-weight-bold" for="availablegradeitem-{{id}}">
+        Total curso
+      </label>
+    </div>
+  {{/iscourse}}
+  {{#iscategory}}
+    <div class="form-check m-1">
+      <input class="form-check-input" type="checkbox" data-id="{{id}}" data-displayname="Total {{categoryname}}" value="" id="availablegradeitem-{{id}}">
+      <label class="form-check-label font-weight-bold" for="availablegradeitem-{{id}}">
+        Total {{categoryname}}
+      </label>
+    </div>
+  {{/iscategory}}
+
+  {{#ismod}}
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" data-id="{{id}}" data-displayname="{{itemname}}" value="" id="availablegradeitem-{{id}}">
+      <label class="form-check-label" for="availablegradeitem-{{id}}">
+        {{itemname}}
+      </label>
+    </div>
+  {{/ismod}}
+  {{#ismanual}}
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" data-id="{{id}}" data-displayname="{{itemname}}" value="" id="availablegradeitem-{{id}}">
+      <label class="form-check-label" for="availablegradeitem-{{id}}">
+        {{itemname}}
+      </label>
+    </div>
+  {{/ismanual}}
+{{/availablegradeitems}}

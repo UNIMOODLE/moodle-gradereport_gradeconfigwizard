@@ -1,0 +1,136 @@
+<div class="container">
+  <div class="container">
+    <div class="row">CREACIÓN DE CATEGORIAS</div>
+    <div class="row mb-4">
+      <input type="text" class="mr-3" name="weight-1" size="40">
+      <button type="button" class="btn btn-primary">Crear</button>
+    </div>
+  </div>
+
+  <table class="multipleevaluation-table table table-bordered">
+    <thead>
+      <tr>
+        <th>CATEGORÍA</th>
+        <th>PESO</th>
+        <th>ITINERARIO</th>
+        <th>ELEMENTOS</th>
+        <th>PESO</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{! START: 1st data tr }}
+
+      <tr>
+        <td class="category" rowspan="10">
+          Categoría 1
+          <i class="fa fa-fw fa-trash-o icon remove-item-icon" title="Remove element" role="img" aria-label="Remove element"></i>
+        </td>
+        <td class="weight-1" rowspan="10">
+          <input type="text" name="weight-1" size="4" value="1">
+        </td>
+      </tr>
+
+      <tr>
+        <td class="resit-1" rowspan="4">
+          Convocatoria ordinaria
+          <i class="fa fa-fw fa-trash-o icon remove-item-icon" title="Remove element" role="img" aria-label="Remove element"></i>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="resit-1">
+          Elemento 1
+          <i class="fa fa-fw fa-trash-o icon remove-item-icon" title="Remove element" role="img" aria-label="Remove element"></i>
+        </td>
+        <td class="weight-1">
+          <input type="text" name="weight-1" size="4" value="1">
+        </td>
+      </tr>
+
+      <tr>
+        <td class="resit-1">
+          Elemento 3
+          <i class="fa fa-fw fa-trash-o icon remove-item-icon" title="Remove element" role="img" aria-label="Remove element"></i>
+        </td>
+        <td class="weight-1">
+          <input type="text" name="weight-1" size="4" value="1">
+        </td>
+      </tr>
+
+      <tr>
+        <td class="resit-2">
+          <button tyoe="button" class="btn btn-primary">Añadir elementos</button>
+        </td>
+        <td class="weight-1"></td>
+      </tr>
+
+      <tr>
+        <td class="resit-1" rowspan="4">
+          Convocatoria extraordinaria
+          <i class="fa fa-fw fa-trash-o icon remove-item-icon" title="Remove element" role="img" aria-label="Remove element"></i>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="resit-1">
+          Elemento 2
+          <i class="fa fa-fw fa-trash-o icon remove-item-icon" title="Remove element" role="img" aria-label="Remove element"></i>
+        </td>
+        <td class="weight-1">
+          <input type="text" name="weight-1" size="4" value="1">
+        </td>
+      </tr>
+
+      <tr>
+        <td class="resit-1">
+          Elemento 4
+          <i class="fa fa-fw fa-trash-o icon remove-item-icon" title="Remove element" role="img" aria-label="Remove element"></i>
+        </td>
+        <td class="weight-1">
+          <input type="text" name="weight-1" size="4" value="1">
+        </td>
+      </tr>
+
+      <tr>
+        <td class="resit-2">
+          <button tyoe="button" class="btn btn-primary">Añadir elementos</button>
+        </td>
+        <td class="weight-1"></td>
+      </tr>
+
+      <tr>
+        <td class="resit-2">
+          <button tyoe="button" class="align-items-center block-add btn btn-secondary d-flex" id="yui_3_17_2_1_1683224871423_53">
+            <span class="pluscontainer icon-no-margin icon-size-3 d-flex p-2 mr-3">
+                <i class="icon fa fa-plus fa-fw " aria-hidden="true"></i>
+            </span>
+            <span class="">Añadir itinerario</span>
+          </button>
+        </td>
+        <td class="resit-2">
+          <button tyoe="button" class="btn btn-primary" disabled>Añadir elementos</button>
+        </td>
+        <td class="weight-1"></td>
+      </tr>
+
+      {{! END: 1st data tr }}
+
+    </tbody>
+  </table>
+  <div class="text-center">
+    <button tyoe="button" class="btn btn-primary">Guardar cambios</button>
+    <button tyoe="button" class="btn btn-primary">Guardar y salir</button>
+  </div>
+</div>
+
+<style type="text/css">
+
+.multipleevaluation-table td {
+  vertical-align: middle;
+}
+
+.remove-item-icon {
+  cursor: pointer;
+}
+
+</style>
