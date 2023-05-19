@@ -52,13 +52,6 @@ print_grade_page_head($courseid, 'report', 'gradeconfigwizard', 'Múltiples eval
 $gtree = new grade_tree($courseid, false, false);
 $gradeitems = $gtree->get_items();
 
-// $gseq = new grade_seq($courseid);
-// $gradeitems = $gseq->elements;
-
-
-// echo '<pre>'; var_dump($gradeitems); echo '</pre>'; die('f7d8f678d6f78d6'); //#DEBUG# remove
-
-
 $availablegradeitems = [];
 
 foreach ($gradeitems as $gradeitemkey => $gradeitem) {
@@ -98,21 +91,13 @@ foreach ($gradeitems as $gradeitemkey => $gradeitem) {
 		$availablegradeitem[$requiredfield] = $gradeitem->$requiredfield;
 	}
 	
-	// $availablegradeitem['depth'] = $gradeitem->depth;
-
 	$availablegradeitems[] = $availablegradeitem;
 }
-
-// echo '<pre>'; var_dump($availablegradeitems); echo '</pre>'; die('fd8798f7d89f7d8'); //#DEBUG# remove
 
 $data = [
 	'availablegradeitems' => $availablegradeitems
 ];
 
 echo $OUTPUT->render_from_template('gradereport_gradeconfigwizard/weightedevaluations', $data);
-
-/*
-echo $OUTPUT->box_end();
-*/
 
 echo $OUTPUT->footer();

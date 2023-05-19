@@ -2,7 +2,7 @@
   <div class="multipleevaluations-category-creation container">
     <div class="row">CREACIÓN DE CATEGORIAS</div>
     <div class="row mb-4">
-      <input type="text" id="multipleevaluations-category-create-name" class="mr-3" name="weight-1" size="40">
+      <input type="text" id="multipleevaluations-category-create-name" class="mr-3" size="40">
       <button type="button" id="multipleevaluations-category-create-btn" class="btn btn-primary">Crear</button>
     </div>
   </div>
@@ -124,7 +124,7 @@ newcategoryrow = (randomid) => `
 </tr>
 `
 //not needed
-removeitemiconhtml = (randomid) => `<i class="fa fa-fw fa-trash-o icon remove-item-icon" data-randomid="${randomid}" title="Remove element" role="img" aria-label="Remove element"></i>`
+removeitemiconhtml = (randomid) => `<i class="fa fa-fw fa-trash-o icon remove-item-icon" data-randomid="${randomid}" title="Remove element" role="img" aria-label="Remove element"></i>`;
 newcategoryextracellshtml = `
 <td class="weight-1" rowspan="2">
   <input type="text" name="weight-1" size="4" value="1">
@@ -233,7 +233,7 @@ addcategoryresitbuttoncellenabledhtml = `
 `
 
 addcategorygradeitemresitgradeitembuttoncellenabledhtml = (gradeitemid) => `
-<td class="resit-2"
+<td class="resit-2 add-btn"
   data-gradeitemid="${gradeitemid}"
   >
   <button tyoe="button"
@@ -319,6 +319,8 @@ function addCategory(categoryname) {
 }
 
 function removeCategory(randomid) {
+  removeCategoryResititem(randomid);
+
   let catgorygradeitemrowstodelete = multipleevaluationtablebody.querySelectorAll('tr[data-rowtype="categorygradeitem"][data-randomid="' + randomid + '"]');
   catgorygradeitemrowstodelete.forEach(catgorygradeitemrow => {
     let randomid = catgorygradeitemrow.dataset['randomid'];
@@ -393,14 +395,34 @@ function addCategoryresititem(randomid, gradeitem) {
   newcategoryresitgradeitem.querySelector('.remove-item-icon').addEventListener('click', removeCategoryResitGradeitemCallback);
 }
 
-function removeCategoryResititem(randomid, gradeitemid) {
-  let categoryresitgradeitem = multipleevaluationtablebody.querySelector('td.resit-1[data-gradeitemid="'+gradeitemid+'"]');
+function removeCategoryResititem(randomid, gradeitemid=null) {
+  let categoryresitgradeitem = null;
+  if (gradeitemid === null) {
+    categoryresitgradeitem = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"] td.resit-1');
+    gradeitemid = categoryresitgradeitem.dataset['gradeitemid'];
+  } else {
+    categoryresitgradeitem = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"] td.resit-1[data-gradeitemid="'+gradeitemid+'"]');
+  }
   let categoryresitgradeitemcell = categoryresitgradeitem.closest('td');
   categoryresitgradeitemcell.insertAdjacentHTML('afterend', addcategoryresitbuttoncellenabledhtml);
   categoryresitgradeitemcell.remove();
 
   addGradeitemsmodalItem(gradeitemid);
   recalculateRowspans(randomid);
+}
+
+function enableAddCategoryResititmeBtn(randomid) {
+  let addcategoryresititmebtn = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"] td.resit-1.add-btn button');
+  if (addcategoryresititmebtn) {
+    addcategoryresititmebtn.disabled = false;
+  }
+}
+
+function disableAddCategoryResititmeBtn(randomid) {
+  let addcategoryresititmebtn = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"] td.resit-1.add-btn button');
+  if (addcategoryresititmebtn) {
+    addcategoryresititmebtn.disabled = true;
+  }
 }
 
 function addCategoryGradeitemResititem(randomid, parentgradeitem, gradeitem) {
@@ -423,6 +445,20 @@ function removeCategoryGradeitemResititem(randomid, parentgradeitemid, gradeitem
 
   addGradeitemsmodalItem(gradeitemid);
   recalculateRowspans(randomid);
+}
+
+function enableAddCategoryGradeitemResititemBtn(randomid) {
+  let addcategorygradeitemresititembtn = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"] td.resit-2.add-btn button.add-grade-item-resit-items-btn');
+  if (addcategorygradeitemresititembtn) {
+    addcategorygradeitemresititembtn.disabled = false;
+  }
+}
+
+function disableAddCategoryGradeitemResititemBtn(randomid) {
+  let addcategorygradeitemresititembtn = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"] td.resit-2.add-btn button.add-grade-item-resit-items-btn');
+  if (addcategorygradeitemresititembtn) {
+    addcategorygradeitemresititembtn.disabled = true;
+  }
 }
 
 /* END: FUNCTIONS */
@@ -520,8 +556,14 @@ function availableGradeItemsModalConfirmCallback() {
 function categoryMinGradeCheckboxChangeCallback(event) {
     let categorymingradecheckbox = event.target;
     let categorymingradecheckboxrow = categorymingradecheckbox.closest('tr');
-
     let randomid = categorymingradecheckboxrow.dataset['randomid'];
+
+    let categoryresititemid = categorymingradecheckboxrow.querySelector('.resit-1').dataset['gradeitemid'];
+    if (categoryresititemid) {
+      removeCategoryResititem(randomid, categoryresititemid);
+      disableAddCategoryResititmeBtn(randomid);
+    }
+
     let categorymingradeinput = categorymingradecheckboxrow.querySelector('.min-grade-1 input[type="text"]');
     if (categorymingradecheckbox.checked) {
       categorymingradeinput.disabled = false;
@@ -534,21 +576,22 @@ function categoryMinGradeCheckboxChangeCallback(event) {
 function categoryGradeitemMinGradeCheckboxChangeCallback(event) {
     let categorymingradecheckbox = event.target;
     let categorygradeitemchangedrow = categorymingradecheckbox.closest('tr');
-
     let randomid = categorygradeitemchangedrow.dataset['randomid'];
-    let gradeitemid = categorygradeitemchangedrow.dataset['gradeitemid'];
 
-    // let categorygradeitemchangedrow = multipleevaluationtablebody.querySelector('tr[data-randomid="'+randomid+'"][data-randomid="'+gradeitemid+'"]');
+    let parentgradeitemid = categorygradeitemchangedrow.querySelector('td.item').dataset['gradeitemid'];
+    let resitgradeitemid = categorygradeitemchangedrow.querySelector('td.resit-2').dataset['gradeitemid'];
+    if (resitgradeitemid !== null && parentgradeitemid !== null) {
+      removeCategoryGradeitemResititem(randomid, parentgradeitemid, resitgradeitemid);
+      disableAddCategoryGradeitemResititemBtn(randomid);
+    }
 
     let categorymingradeinput = categorygradeitemchangedrow.querySelector('.min-grade-2 input[type="text"]');
-    let addCategoryGradeitemResititemBtn = categorygradeitemchangedrow.querySelector('.resit-2 button');
 
     if (categorymingradecheckbox.checked) {
       categorymingradeinput.disabled = false;
     } else {
       categorymingradeinput.disabled = true;
       categorymingradeinput.value = '';
-      addCategoryGradeitemResititemBtn.disabled = true;
     }
 }
 
@@ -579,6 +622,8 @@ function categoryGradeitemMinGradeTextChangeCallback(event) {
     addCategoryGradeitemResititemBtn.disabled = false;
   }
 }
+
+/* END: CALLBACKS */
 
 /* START: EVENT LISTENERS DECLARATION */
 
