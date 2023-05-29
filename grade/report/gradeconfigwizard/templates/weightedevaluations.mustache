@@ -22,7 +22,9 @@
   </table>
   <div class="text-center">
     <button tyoe="button" class="btn btn-primary">Guardar cambios</button>
-    <button tyoe="button" class="btn btn-primary">Guardar y salir</button>
+    <a href="{{{urlsaveexit}}}">
+      <button tyoe="button" class="btn btn-primary">Guardar y salir</button>
+    </a>
   </div>
 </div>
 
@@ -198,16 +200,16 @@ function addGradeitemsmodalItem(gradeitemid) {
 
 function recalculateRowspans(randomid) {
   // Category
-  var categorytotalItemCount = weightedevaluationtablebody.querySelectorAll('[data-randomid="'+randomid+'"]').length;;
-  weightedevaluationtablebody.querySelectorAll('[data-randomid="'+randomid+'"][data-rowtype="category"] td').forEach(datacell => {
+  var categorytotalItemCount = weightedevaluationtablebody.querySelectorAll('tr[data-randomid="'+randomid+'"]').length;;
+  weightedevaluationtablebody.querySelectorAll('tr[data-randomid="'+randomid+'"][data-rowtype="category"] td').forEach(datacell => {
     datacell.rowSpan = categorytotalItemCount;
   });
 
   // Subcategory
-  weightedevaluationtablebody.querySelectorAll('[data-randomid="'+randomid+'"][data-rowtype="subcategory"]').forEach(row => {
+  weightedevaluationtablebody.querySelectorAll('tr[data-randomid="'+randomid+'"][data-rowtype="subcategory"]').forEach(row => {
     let subrandomid = row.dataset.subrandomid;
     if (!subrandomid) return;
-    let subcategorygradeitemsCount = weightedevaluationtablebody.querySelectorAll('[data-rowtype="subcategorygradeitem"][data-subrandomid="'+subrandomid+'"]').length;
+    let subcategorygradeitemsCount = weightedevaluationtablebody.querySelectorAll('tr[data-rowtype="subcategorygradeitem"][data-subrandomid="'+subrandomid+'"]').length;
     var subcategorycategorytotalItemCount = 1 + subcategorygradeitemsCount;
     row.querySelectorAll('td').forEach(datacell => {
       datacell.rowSpan = subcategorycategorytotalItemCount;
@@ -223,9 +225,16 @@ function addCategory(categoryname) {
 
   let newcategoryrowhtml = categoryrowhtml(randomid, categorynamecontent, extradatacells);
 
-  weightedevaluationtablebody.innerHTML += newcategoryrowhtml;
-  weightedevaluationtablebody.innerHTML += addsubcategorybuttonrowhtml(randomid);
-  weightedevaluationtablebody.innerHTML += addsubcategorygradeitememptyrowhtml(randomid, "");
+  let newrowshtml = newcategoryrowhtml;
+  newrowshtml += addsubcategorybuttonrowhtml(randomid);
+  newrowshtml += addsubcategorygradeitememptyrowhtml(randomid, "");
+
+  let weightedevaluationtablebodylastrow = weightedevaluationtablebody.querySelector('tr:last-child');
+  if (weightedevaluationtablebodylastrow) {
+    weightedevaluationtablebodylastrow.insertAdjacentHTML('afterend', newrowshtml);
+  } else {
+    weightedevaluationtablebody.innerHTML += newrowshtml;
+  }
 
   let newcategoryrow = weightedevaluationtablebody.querySelector('[data-randomid="'+randomid+'"][data-rowtype="category"]');
   let newsubcategorybuttonrow = weightedevaluationtablebody.querySelector('[data-randomid="'+randomid+'"][data-rowtype="subcategory"]');
@@ -235,7 +244,6 @@ function addCategory(categoryname) {
 
   let addsubcategorybutton = newsubcategorybuttonrow.querySelector('tr[data-randomid="'+randomid+'"] .subcategory .add-subcategory-btn');
   addsubcategorybutton.addEventListener('click', addSubcategoryButtonCallback);
-
 }
 
 function removeCategory(randomid) {

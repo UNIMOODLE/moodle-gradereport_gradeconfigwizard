@@ -44,13 +44,10 @@
 
 <div class="container">
     <div class="row">
-        <a href="{{{urlformulacreator}}}">Acceso al editor de fórmulas (TEMPORAL)</a>
+        <a href="{{{urlmultipleevaluations}}}">Acceso al editor de múltiples evaluaciones</a>
     </div>
     <div class="row">
-        <a href="{{{urlmultipleevaluations}}}">Acceso al editor de múltiples evaluaciones (EJEMPLO) (TEMPORAL)</a>
-    </div>
-    <div class="row">
-        <a href="{{{urlweightedevaluations}}}">Acceso al editor de múltiples evaluaciones por peso (EJEMPLO) (TEMPORAL)</a>
+        <a href="{{{urlweightedevaluations}}}">Acceso al editor de múltiples evaluaciones por peso</a>
     </div>
 </div>
 
@@ -60,7 +57,154 @@
         {{#notification}}
             {{>core/notification_info}}
         {{/notification}}
-        {{{table}}}
+        
+        <table id="gradeconfigwizard-dashboard-table" class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Weights</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {{#availablegradeitems}}
+
+                <tr data-gradecategoryid="{{gradecategoryid}}" data-gradeitemid="{{gradeitemid}}" data-categorydepth="{{categorydepth}}" data-itemtype="{{itemtype}}" data-istotal="{{istotal}}" data-randomid="" id="">
+
+                    {{#iscourse}}
+                      <td data-id="{{id}}" data-displayname="Total curso">
+                        {{#categorydepthloop}}
+                            <span class="p-2"></span>
+                        {{/categorydepthloop}}
+                        <i class="fa fa-folder fa-fw icon itemicon" title="Category" role="img" aria-label="Category"></i>
+                        {{displayname}}
+                      </td>
+                    {{/iscourse}}
+
+                    {{#iscategory}}
+                        <td data-id="{{id}}" data-displayname="{{displayname}}">
+                            {{#categorydepthloop}}
+                                <span class="p-2"></span>
+                            {{/categorydepthloop}}
+                            <i class="fa fa-folder fa-fw icon itemicon" title="Category" role="img" aria-label="Category"></i>
+                            {{displayname}}
+                          </td>
+                    {{/iscategory}}
+
+                    {{#ismod}}
+                      <td data-id="{{id}}" data-displayname="{{itemname}}">
+                        {{#categorydepthloop}}
+                            <span class="p-2"></span>
+                        {{/categorydepthloop}}
+                        <i class="fa fa-file-o fa-fw icon itemicon" title="Category" role="img" aria-label="Category"></i>
+                        {{itemname}}
+                        </td>
+                    {{/ismod}}
+
+                    {{#ismanual}}
+                      <td data-id="{{id}}" data-displayname="{{itemname}}">
+                        {{#categorydepthloop}}
+                            <span class="p-2"></span>
+                        {{/categorydepthloop}}
+                        <i class="fa fa-square-o fa-fw icon itemicon" title="Category" role="img" aria-label="Category"></i>
+                        {{itemname}}
+                      </td>
+                    {{/ismanual}}
+
+                    {{#istotal}}
+                        <td data-id="{{id}}" data-displayname="Total {{displayname}}">
+                            {{#categorydepthloop}}
+                                <span class="p-2"></span>
+                            {{/categorydepthloop}}
+                            <i class="fa fa-list fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                            Total {{displayname}}
+                        </td>
+                    {{/istotal}}
+
+                    <td> {{!-- Weight datacell --}}
+                        {{^iscourse}}
+                        {{^istotal}}
+                            {{#categorydepthloop}}
+                                <span class="p-2"></span>
+                            {{/categorydepthloop}}
+                            <input type="text" name="weight" id="" value="{{weight}}" size="4" disabled="" class="gradeitem-weight form-control d-inline-block">
+                        {{/istotal}}
+                        {{/iscourse}}
+                    </td>
+
+                    <td> {{!-- Actions datacell --}}
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-{{gradecategoryid}}-{{gradeitemid}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Edit
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="-{{gradecategoryid}}-{{gradeitemid}}">
+
+                                {{#iscategory}}
+                                    <a class="add-gradeitemcategory-btn dropdown-item" href="#">
+                                        <i class="fa fa-plus fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Add category
+                                    </a>
+                                    <a class="add-gradeitem-btn dropdown-item" href="#">
+                                        <i class="fa fa-plus fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Add grade item
+                                    </a>
+                                    <a class="gradeitem-disable-btn dropdown-item" href="#">
+                                        <i class="fa fa-minus fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Disable
+                                    </a>
+                                {{/iscategory}}
+
+                                {{#iscourse}}
+                                    <a class="add-gradeitemcategory-btn dropdown-item" href="#">
+                                        <i class="fa fa-plus fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Add category
+                                    </a>
+                                    <a class="add-gradeitem-btn dropdown-item" href="#">
+                                        <i class="fa fa-plus fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Add grade item
+                                    </a>
+                                {{/iscourse}}
+
+                                {{#istotal}}
+                                    <a class="dropdown-item" href="{{urlformulacreator}}">
+                                        <i class="fa fa-calculator fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Edit calculation
+                                    </a>
+                                {{/istotal}}
+
+                                {{#ismanual}}
+                                    <a class="dropdown-item" href="{{urlformulacreator}}">
+                                        <i class="fa fa-calculator fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Edit calculation
+                                    </a>
+                                    <a class="gradeitem-disable-btn dropdown-item" href="#">
+                                        <i class="fa fa-minus fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Disable
+                                    </a>
+                                {{/ismanual}}
+
+                                {{#ismod}}
+                                    <a class="gradeitem-disable-btn dropdown-item" href="#">
+                                        <i class="fa fa-minus fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Disable
+                                    </a>
+                                {{/ismod}}
+
+                            </div>
+                        </div>
+                    </td> {{!-- Actions datacell --}}
+
+                </tr>
+
+            {{/availablegradeitems}}
+
+        </table>
+
+        <div class="text-center">
+            <button tyoe="button" class="btn btn-primary">Guardar cambios</button>
+        </div>
+
         <div id="gradetreesubmit">
             {{#showsave}}
                 <input class="advanced btn btn-primary" type="submit" value="{{#cleanstr}}savechanges{{/cleanstr}}">
@@ -77,7 +221,8 @@
                     </select>
                 </div>
             {{/showbulkmove}}
-        </div>
+        </div> {{!-- #gradetreesubmit --}}
+
     </div>
 </form>
 
@@ -116,3 +261,277 @@
   display: none;
 }
 </style>
+
+{{#js}}
+//
+
+/* START: VARIABLES */
+
+gradeconfigwizarddashboardtable = document.getElementById('gradeconfigwizard-dashboard-table');
+gradeconfigwizarddashboardtablebody = gradeconfigwizarddashboardtable.querySelector('tbody');
+
+courseid = "{{courseid}}";
+
+/* END: VARIABLES */
+
+/* START: TEMPLATES */
+
+removeitemiconhtml = (randomid) => `<i class="fa fa-fw fa-trash-o icon remove-item-icon" data-randomid="${randomid}" title="Remove element" role="img" aria-label="Remove element"></i>`;
+
+gradeitemrowhtml = (randomid, gradecategoryid, gradeitemid, depth) => `
+<tr data-gradecategoryid="${gradecategoryid}" data-gradeitemid="${gradeitemid}" data-itemtype="manual" data-randomid="${randomid}" id="${randomid}" data-categorydepth="${depth}">
+    <td data-id="${gradeitemid}" data-displayname="">
+        ${getDepthPadding(depth)}
+        <i class="fa fa-square-o fa-fw icon itemicon" title="Category" role="img" aria-label="Category"></i>
+        <input class="subcategoryname" name="subcategoryname" value="">${removeitemiconhtml(randomid)}
+      </td>
+    <td>
+        <span class="p-2"></span>
+        <input type="text" name="weight" id="" value="1" size="4" disabled="" class="gradeitem-weight form-control d-inline-block">
+    </td>
+    <td>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-${gradecategoryid}-${gradeitemid}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Edit
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${gradecategoryid}-${gradeitemid}">
+                ${gradeitemeditactioneditcalculationhtml}
+                ${gradeitemeditactiondisablehtml}
+            </div>
+        </div>
+    </td>
+</tr>
+`;
+
+gradeitemcategoryrowhtml = (randomid, gradecategoryid, gradeitemid, depth) => `
+<tr data-gradecategoryid="${gradecategoryid}" data-gradeitemid="${gradeitemid}" data-itemtype="category" data-randomid="${randomid}" id="${randomid}" data-categorydepth="${depth}">
+    <td data-id="${gradeitemid}" data-displayname="">
+        ${getDepthPadding(depth)}
+        <i class="fa fa-folder fa-fw icon itemicon" title="Category" role="img" aria-label="Category"></i>
+        <input class="subcategoryname" name="subcategoryname" value="">${removeitemiconhtml(randomid)}
+      </td>
+    <td>
+        <span class="p-2"></span>
+        <input type="text" name="weight" id="" value="1" size="4" disabled="" class="gradeitem-weight form-control d-inline-block">
+    </td>
+    <td>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-${gradecategoryid}-${gradeitemid}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Edit
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${gradecategoryid}-${gradeitemid}">
+                ${gradeitemeditactionaddgradeitemcategoryhtml}
+                ${gradeitemeditactionaddgradeitemhtml}
+                ${gradeitemeditactiondisablehtml}
+            </div>
+        </div>
+    </td>
+</tr>
+`;
+
+gradeitemcategorytotalrowhtml = (randomid, gradecategoryid, gradeitemid, depth) => `
+<tr data-gradecategoryid="${gradecategoryid}" data-gradeitemid="${gradeitemid}" data-itemtype="category" data-randomid="${randomid}" data-istotal="1" id="${randomid}" data-categorydepth="${depth}">
+    <td data-id="${gradeitemid}" data-displayname="">
+        ${getDepthPadding(depth)}
+        <i class="fa fa-list fa-fw icon itemicon" title="Category total" role="img" aria-label="Category total"></i>
+        <input class="subcategoryname" name="subcategoryname" value="" disabled="true">
+      </td>
+    <td>
+    </td>
+    <td>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-${gradecategoryid}-${gradeitemid}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Edit
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${gradecategoryid}-${gradeitemid}">
+                ${gradeitemeditactioneditcalculationhtml}
+            </div>
+        </div>
+    </td>
+</tr>
+`;
+
+gradeitemeditactionaddgradeitemcategoryhtml = `
+<a class="add-gradeitemcategory-btn dropdown-item" href="#">
+    <i class="fa fa-plus fa-fw icon itemicon" title="Add category" role="img" aria-label="Add category"></i>
+    Add category
+</a>
+`;
+
+gradeitemeditactionaddgradeitemhtml = `
+<a class="add-gradeitem-btn dropdown-item" href="#">
+    <i class="fa fa-plus fa-fw icon itemicon" title="Add gradeitem" role="img" aria-label="Add gradeitem"></i>
+    Add grade item
+</a>
+`;
+
+gradeitemeditactioneditcalculationhtml = `
+<a class="dropdown-item" href="{{urlformulacreator}}">
+    <i class="fa fa-calculator fa-fw icon itemicon" title="" role="img" aria-label=""></i>
+    Edit calculation
+</a>
+`;
+
+
+gradeitemeditactiondisablehtml = `
+<a class="gradeitem-disable-btn dropdown-item" href="#">
+    <i class="fa fa-minus fa-fw icon itemicon" title="" role="img" aria-label=""></i>
+    Disable
+</a>
+`;
+
+
+/* END: TEMPLATES */
+
+/* START: FUNCTIONS */
+
+function generateUniqueId() {
+  let randomid = null;
+  while (randomid === null || document.getElementById(randomid) !== null) {
+    // generate a 8 chars long random id
+    randomid = Math.random().toString(36).substring(2, 10);
+  }
+  return randomid;
+}
+
+function getDepthPadding(depth) {
+    depth = parseInt(depth);
+    let response = '';
+    for (let i = 0; i < depth; i++){
+        response += '<span class="p-2"></span>';
+    }
+    return response; 
+}
+
+function addGradeitemAfterRow(row) {
+    let gradecategoryid = row.dataset.gradecategoryid;
+    let gradeitemid = row.dataset.gradeitemid;
+    let depth = row.dataset.categorydepth;
+
+    let newrandomid = generateUniqueId();
+    let newdepth = parseInt(depth) + 1;
+
+    let newgradeitemrowhtml = gradeitemrowhtml(newrandomid, gradecategoryid, gradeitemid, newdepth);
+    row.insertAdjacentHTML('afterend', newgradeitemrowhtml);
+
+    let newgradeitemrow = document.getElementById(newrandomid);
+
+    newgradeitemrow.querySelector('.remove-item-icon').addEventListener('click', removeGradeitemButtonClickCallback);
+    newgradeitemrow.querySelector('.gradeitem-disable-btn').addEventListener('click', disableGradeitemButtonClickCallback);
+
+    return newgradeitemrow;
+}
+
+function removeGradeitemRow(gradeitemrow) {
+    gradeitemrow.remove();
+}
+
+function disableGradeitem(gradeitemrow) {
+    gradeitemrow.querySelector('input.gradeitem-weight').value = 0;
+}
+
+function addGradeitemCategoryAfterRow(row) {
+    let gradecategoryid = row.dataset.gradecategoryid;
+    let gradeitemid = row.dataset.gradeitemid;
+    let depth = row.dataset.categorydepth;
+
+    let newrandomid = generateUniqueId();
+    let newdepth = parseInt(depth) + 1;
+
+    let newgradeitemcategoryrowhtml = gradeitemcategoryrowhtml(newrandomid, gradecategoryid, gradeitemid, newdepth);
+    row.insertAdjacentHTML('afterend', newgradeitemcategoryrowhtml);
+
+    let newgradeitemcategoryrow = document.getElementById(newrandomid);
+
+    newgradeitemcategoryrow.querySelector('.remove-item-icon').addEventListener('click', removeGradeitemCategoryButtonClickCallback);
+
+    newgradeitemcategoryrow.querySelector('.add-gradeitemcategory-btn').addEventListener('click', addGradeitemCategoryButtonClickCallback);
+    newgradeitemcategoryrow.querySelector('.add-gradeitem-btn').addEventListener('click', addGradeitemButtonClickCallback);
+    newgradeitemcategoryrow.querySelector('.gradeitem-disable-btn').addEventListener('click', disableGradeitemButtonClickCallback);
+
+    let newgradecategorytotaldepth = parseInt(newdepth) + 1;
+    let newgradeitemcategorytotalrowhtml = gradeitemcategorytotalrowhtml(newrandomid, gradecategoryid, gradeitemid, newgradecategorytotaldepth);
+    newgradeitemcategoryrow.insertAdjacentHTML('afterend', newgradeitemcategorytotalrowhtml);
+
+    var newgradeitemcategorytotalrow = gradeconfigwizarddashboardtablebody.querySelector('[data-randomid="'+newrandomid+'"][data-istotal="1"]');
+
+    newgradeitemcategoryrow.querySelector('.subcategoryname').addEventListener('input', function() {
+        newgradeitemcategorytotalrow.querySelector('input.subcategoryname').value = 'Total ' + this.value;
+    });
+
+    return newgradeitemcategoryrow;
+}
+
+function removeGradeitemCategory(gradeitemcategoryrow) {
+    let parentgradecategorydepth = gradeitemcategoryrow.dataset.categorydepth
+
+    while (currentrow = gradeitemcategoryrow.nextElementSibling) {
+        let currentdepth = currentrow.dataset.categorydepth;
+        if (parentgradecategorydepth >= currentdepth) {
+            break;
+        }
+        if (currentrow.dataset.itemtype === 'category' && currentrow.dataset.istotal !== '1') {
+            removeGradeitemCategory(currentrow)
+        } else {
+            removeGradeitemRow(currentrow);
+        }
+    }
+    gradeitemcategoryrow.remove();
+}
+
+/* END: FUNCTIONS */
+
+/* START: CALLBACKS */
+
+function addGradeitemButtonClickCallback() {
+    let targetrow = this.closest('tr');
+    let newrow = addGradeitemAfterRow(targetrow);
+    newrow.querySelector('input.subcategoryname').focus();
+}
+
+function removeGradeitemButtonClickCallback() {
+    let targetrow = this.closest('tr');
+    removeGradeitemRow(targetrow);
+}
+
+function disableGradeitemButtonClickCallback() {
+    let targetrow = this.closest('tr');
+    disableGradeitem(targetrow)
+}
+
+function addGradeitemCategoryButtonClickCallback() {
+    let targetrow = this.closest('tr');
+    let newrow = addGradeitemCategoryAfterRow(targetrow);
+    newrow.querySelector('input.subcategoryname').focus();
+}
+
+function removeGradeitemCategoryButtonClickCallback() {
+    let targetrow = this.closest('tr');
+    removeGradeitemCategory(targetrow);
+}
+
+/* END: CALLBACKS */
+
+/* START: EVENT LISTENERS DECLARATION */
+
+gradeconfigwizarddashboardtablebody.querySelectorAll('.add-gradeitemcategory-btn').forEach(
+    function(row) {
+        row.addEventListener('click', addGradeitemCategoryButtonClickCallback);
+    }
+);
+
+gradeconfigwizarddashboardtablebody.querySelectorAll('.add-gradeitem-btn').forEach(
+    function(row) {
+        row.addEventListener('click', addGradeitemButtonClickCallback);
+    }
+);
+
+gradeconfigwizarddashboardtablebody.querySelectorAll('.gradeitem-disable-btn').forEach(
+    function(row) {
+        row.addEventListener('click', disableGradeitemButtonClickCallback);
+    }
+);
+
+/* END: EVENT LISTENERS DECLARATION */
+
+{{/js}}

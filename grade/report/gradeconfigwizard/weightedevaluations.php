@@ -95,7 +95,8 @@ foreach ($gradeitems as $gradeitemkey => $gradeitem) {
 }
 
 $data = [
-	'availablegradeitems' => $availablegradeitems
+	'availablegradeitems' => $availablegradeitems,
+	'urlsaveexit' => $CFG->wwwroot . "/grade/report/gradeconfigwizard/index.php?id=" . $courseid,
 ];
 
 echo $OUTPUT->render_from_template('gradereport_gradeconfigwizard/weightedevaluations', $data);

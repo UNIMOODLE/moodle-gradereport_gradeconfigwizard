@@ -99,7 +99,8 @@ foreach ($gradeitems as $gradeitemkey => $gradeitem) {
 // echo '<pre>'; var_dump($availablegradeitems); echo '</pre>'; die('fd8798f7d89f7d8'); //#DEBUG# remove
 
 $data = [
-	'availablegradeitems' => $availablegradeitems
+	'availablegradeitems' => $availablegradeitems,
+	'urlsaveexit' => $CFG->wwwroot . "/grade/report/gradeconfigwizard/index.php?id=" . $courseid,
 ];
 
 echo $OUTPUT->render_from_template('gradereport_gradeconfigwizard/formulacreator', $data);

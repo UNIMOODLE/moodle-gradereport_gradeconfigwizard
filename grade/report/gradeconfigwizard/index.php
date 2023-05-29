@@ -65,11 +65,145 @@ $tpldata = (object) [
 // unset($grade_edit_tree->table->head[1]);
 // echo '<pre>'; var_dump($grade_edit_tree->table); echo '</pre>'; die('byebye'); //#DEBUG# remove
 
+
+function gradeconfigwizard_get_grade_items($courseid) {
+	global $DB;
+	$gtree = new grade_tree($courseid, false, false);
+	$gradeitems = $gtree->get_items();
+
+	$availablegradeitems = [];
+
+	$categoriesinfo = [];
+	$categorytotalsstack = [];
+	$course = $DB->get_record('course', ['id' => $courseid]);
+
+	$previouscategorydepth = 0;
+	$previousgradeitem = null;
+
+	foreach ($gradeitems as $gradeitemkey => $gradeitem) {
+		// echo '<pre>'; var_dump($gradeitem); echo '</pre>'; //#DEBUG# remove
+		$availablegradeitem = [
+			'iscourse' => false,
+			'iscategory' => false,
+			'ismod' => false,
+			'ismanual' => false,
+			'istotal' => false,
+			'categorydepth' => 0,
+			'categorydepthloop' => [],
+			'weight' => (float) $gradeitem->aggregationcoef2 * 100,
+			'parentgradecategoryid' => null,
+		];
+
+		foreach ($gradeitem->required_fields as $requiredfield) {
+			$availablegradeitem[$requiredfield] = $gradeitem->$requiredfield;
+		}
+
+		switch ($gradeitem->itemtype) {
+			case 'course':
+				$availablegradeitem['iscourse'] = true;
+
+				if (array_key_exists($gradeitem->iteminstance, $categoriesinfo)) {
+					$gradecategory = $categoriesinfo[$gradeitem->iteminstance];
+				} else {
+					$gradecategory = $DB->get_record('grade_categories', ['id' => $gradeitem->iteminstance]);
+					$categoriesinfo[$gradeitem->iteminstance] = $gradecategory;
+				}
+
+				$availablegradeitem['gradecategoryid'] = $gradecategory->id;
+				$availablegradeitem['gradeitemid'] = $gradeitem->id;
+
+				$availablegradeitem['displayname'] = $course->fullname;
+				$availablegradeitem['categorydepth'] = $gradecategory->depth - 1;
+				$availablegradeitem['categorydepthloop'] = array_fill(0, $availablegradeitem['categorydepth'], '');
+
+				$availablegradeitemtotal = $availablegradeitem;
+				$availablegradeitemtotal['iscourse'] = false;
+				$availablegradeitemtotal['istotal'] = true;
+				$availablegradeitemtotal['categorydepth'] += 1;
+				$availablegradeitemtotal['categorydepthloop'] = array_fill(0, $availablegradeitemtotal['categorydepth'], '');
+				array_push($categorytotalsstack, $availablegradeitemtotal);
+
+				break;
+			
+			case 'category':
+				$availablegradeitem['iscategory'] = true;
+
+				if (array_key_exists($gradeitem->iteminstance, $categoriesinfo)) {
+					$gradecategory = $categoriesinfo[$gradeitem->iteminstance];
+				} else {
+					$gradecategory = $DB->get_record('grade_categories', ['id' => $gradeitem->iteminstance]);
+					$categoriesinfo[$gradeitem->iteminstance] = $gradecategory;
+				}
+
+				$availablegradeitem['gradecategoryid'] = $gradecategory->id;
+				$availablegradeitem['gradeitemid'] = $gradeitem->id;
+
+				$availablegradeitem['displayname'] = $gradecategory->fullname;
+				$availablegradeitem['categorydepth'] = $gradecategory->depth - 1;
+				$availablegradeitem['categorydepthloop'] = array_fill(0, $availablegradeitem['categorydepth'], '');
+
+				$availablegradeitemtotal = $availablegradeitem;
+				$availablegradeitemtotal['iscategory'] = false;
+				$availablegradeitemtotal['istotal'] = true;
+				$availablegradeitemtotal['categorydepth'] += 1;
+				$availablegradeitemtotal['categorydepthloop'] = array_fill(0, $availablegradeitemtotal['categorydepth'], '');
+				array_push($categorytotalsstack, $availablegradeitemtotal);
+
+				break;
+			
+			case 'manual':
+				$availablegradeitem['ismanual'] = true;
+
+				$gradecategory = $categoriesinfo[$gradeitem->categoryid];
+
+				$availablegradeitem['gradecategoryid'] = $gradecategory->id;
+				$availablegradeitem['gradeitemid'] = $gradeitem->id;
+
+				$availablegradeitem['parentgradecategoryid'] = $gradeitem->categoryid;
+				$availablegradeitem['categorydepth'] = $gradecategory->depth;
+				$availablegradeitem['categorydepthloop'] = array_fill(0, $availablegradeitem['categorydepth'], '');
+				break;
+			
+			case 'mod':
+				$availablegradeitem['ismod'] = true;
+
+				$gradecategory = $categoriesinfo[$gradeitem->categoryid];
+
+				$availablegradeitem['gradecategoryid'] = $gradecategory->id;
+				$availablegradeitem['gradeitemid'] = $gradeitem->id;
+
+				$availablegradeitem['parentgradecategoryid'] = $gradeitem->categoryid;
+				$availablegradeitem['categorydepth'] = $gradecategory->depth;
+				$availablegradeitem['categorydepthloop'] = array_fill(0, $availablegradeitem['categorydepth'], '');
+				break;
+			
+		}
+
+		$nexttotalitem = end($categorytotalsstack);
+		while ($nexttotalitem && $nexttotalitem['categorydepth'] > $availablegradeitem['categorydepth'] && $nexttotalitem['categoryid'] !== $availablegradeitem['categoryid']) {
+			$availablegradeitems[] = array_pop($categorytotalsstack);
+			$nexttotalitem = end($categorytotalsstack);
+		}
+
+		$previousgradeitem = $availablegradeitem;
+
+		$availablegradeitems[] = $availablegradeitem;
+	}
+
+	while ($categorytotalsstack) {
+		$availablegradeitems[] = array_pop($categorytotalsstack);
+	}
+
+	return $availablegradeitems;
+}
+
+$tpldata->availablegradeitems = gradeconfigwizard_get_grade_items($courseid);
+
 $tpldata->urlformulacreator = $CFG->wwwroot . "/grade/report/gradeconfigwizard/formulacreator.php?id=" . $courseid;
 $tpldata->urlmultipleevaluations = $CFG->wwwroot . "/grade/report/gradeconfigwizard/multipleevaluations.php?id=" . $courseid;
 $tpldata->urlweightedevaluations = $CFG->wwwroot . "/grade/report/gradeconfigwizard/weightedevaluations.php?id=" . $courseid;
 
-$tpldata->table = html_writer::table($grade_edit_tree->table);
+// $tpldata->table = html_writer::table($grade_edit_tree->table);
 
 echo $OUTPUT->render_from_template('gradereport_gradeconfigwizard/edit_tree', $tpldata);
 
