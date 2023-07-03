@@ -23,8 +23,8 @@
  */
 
 require_once '../../../config.php';
-require_once $CFG->dirroot.'/grade/lib.php';
-require_once $CFG->dirroot.'/grade/edit/tree/lib.php';
+require_once $CFG->dirroot . '/grade/lib.php';
+require_once $CFG->dirroot . '/grade/edit/tree/lib.php';
 
 $courseid = required_param('id', PARAM_INT);
 
@@ -41,8 +41,8 @@ require_login($course);
 $context = context_course::instance($course->id);
 require_capability('moodle/grade:manage', $context);
 
-$strgrades             = get_string('grades');
-$strgraderreport       = get_string('graderreport', 'grades');
+$strgrades = get_string('grades');
+$strgraderreport = get_string('graderreport', 'grades');
 
 $actionbar = new \core_grades\output\gradebook_setup_action_bar($context);
 $actionbar = null;
@@ -55,50 +55,51 @@ $gradeitems = $gtree->get_items();
 $availablegradeitems = [];
 
 foreach ($gradeitems as $gradeitemkey => $gradeitem) {
-	$availablegradeitem = [
-		'iscourse' => false,
-		'iscategory' => false,
-		'ismod' => false,
-		'ismanual' => false,
-	];
+    $availablegradeitem = [
+        'iscourse' => false,
+        'iscategory' => false,
+        'ismod' => false,
+        'ismanual' => false,
+    ];
 
-	switch ($gradeitem->itemtype) {
-		case 'course':
-			$availablegradeitem['iscourse'] = true;
-			break;
-		
-		case 'category':
-			$availablegradeitem['iscategory'] = true;
+    switch ($gradeitem->itemtype) {
+        case 'course':
+            $availablegradeitem['iscourse'] = true;
+            break;
 
-			$gradecategory = $DB->get_record('grade_categories', ['id' => $gradeitem->iteminstance]);
-			$availablegradeitem['categoryname'] = $gradecategory->fullname;
-			break;
-		
-		case 'manual':
-			$availablegradeitem['ismanual'] = true;
-			break;
-		
-		case 'mod':
-			$availablegradeitem['ismod'] = true;
-			break;
-		
-		default:
-			# code...
-			break;
-	}
+        case 'category':
+            $availablegradeitem['iscategory'] = true;
 
-	foreach ($gradeitem->required_fields as $requiredfield) {
-		$availablegradeitem[$requiredfield] = $gradeitem->$requiredfield;
-	}
-	
-	$availablegradeitems[] = $availablegradeitem;
+            $gradecategory = $DB->get_record('grade_categories', ['id' => $gradeitem->iteminstance]);
+            $availablegradeitem['categoryname'] = $gradecategory->fullname;
+            break;
+
+        case 'manual':
+            $availablegradeitem['ismanual'] = true;
+            break;
+
+        case 'mod':
+            $availablegradeitem['ismod'] = true;
+            break;
+
+        default:
+            # code...
+            break;
+    }
+
+    foreach ($gradeitem->required_fields as $requiredfield) {
+        $availablegradeitem[$requiredfield] = $gradeitem->$requiredfield;
+    }
+
+    $availablegradeitems[] = $availablegradeitem;
 }
 
 $data = [
-	'availablegradeitems' => $availablegradeitems,
-	'urlsaveexit' => $CFG->wwwroot . "/grade/report/gradeconfigwizard/index.php?id=" . $courseid,
+    'availablegradeitems' => $availablegradeitems,
+    'urlsaveexit' => new moodle_url('/grade/report/gradeconfigwizard/processgradebook.php', ['id' => $courseid]),
 ];
 
 echo $OUTPUT->render_from_template('gradereport_gradeconfigwizard/weightedevaluations', $data);
+//echo $OUTPUT->render_from_template('gradereport_gradeconfigwizard/weightedevaluations_example', $data);
 
 echo $OUTPUT->footer();

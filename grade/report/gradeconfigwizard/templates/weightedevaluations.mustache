@@ -1,406 +1,67 @@
 <div class="container">
-  <div class="weightedevaluations-category-creation container">
-    <div class="row">CREACIÓN DE CATEGORIAS</div>
-    <div class="row mb-4">
-      <input type="text" id="weightedevaluations-category-create-name" class="mr-3" size="40">
-      <button type="button" id="weightedevaluations-category-create-btn" class="btn btn-primary">Crear</button>
+    <div class="weightedevaluations-category-creation container">
+        <div class="row">CREACIÓN DE CATEGORIAS</div>
+        <div class="row mb-4">
+            <input type="text" id="weightedevaluations-category-create-name" class="mr-3" size="40">
+            <button type="button" id="weightedevaluations-category-create-btn" class="btn btn-primary">Crear</button>
+        </div>
     </div>
-  </div>
 
-  <table id="weightedevaluations-table" class="weightedevaluations-table table table-bordered">
-    <thead>
-      <tr>
-        <th>CATEGORÍA</th>
-        <th>PESO</th>
-        <th>ITINERARIO</th>
-        <th>ELEMENTOS</th>
-        <th>PESO</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-  <div class="text-center">
-    <button tyoe="button" class="btn btn-primary">Guardar cambios</button>
-    <a href="{{{urlsaveexit}}}">
-      <button tyoe="button" class="btn btn-primary">Guardar y salir</button>
-    </a>
-  </div>
+    <form action="{{{urlsaveexit}}}" id="evaluationsform" method="post">
+        <table id="weightedevaluations-table" class="weightedevaluations-table table table-bordered">
+            <thead>
+            <tr>
+                <th>ITINERARIOS</th>
+                <th>CATEGORIAS</th>
+                <th>PESO</th>
+                <th>ELEMENTOS</th>
+                <th>PESO</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </form>
+    <div class="text-center">
+        <input type="submit" form="evaluationsform" class="btn btn-primary" value="Guardar y salir">
+    </div>
 </div>
 
 {{!-- START: Modal --}}
 
 <div class="modal fade"
-  id="available-gradeitems-modal-id"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="available-gradeitems-modal-label"
-  data-gradeitemaddtarget=""
-  data-gradeitemidrow=""
-  data-gradeitemid=""
-  data-callerrandomid=""
-  aria-hidden="true">
+     id="available-gradeitems-modal-id"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="available-gradeitems-modal-label"
+     data-gradeitemaddtarget=""
+     data-gradeitemidrow=""
+     data-gradeitemid=""
+     data-callerrandomid=""
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="available-gradeitems-modal-label">Elegir elementos</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="available-gradeitems-modal-label">Elegir elementos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{> gradereport_gradeconfigwizard/availablegradeitems }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="confirm btn btn-primary mr-3">Añadir</button>
+                <button type="button" data-dismiss="modal" class="cancel btn btn-secondary">Cancelar</button>
+            </div>
         </div>
-        <div class="modal-body">
-          {{> gradereport_gradeconfigwizard/availablegradeitems }}
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="confirm btn btn-primary mr-3">Añadir</button>
-          <button type="button" data-dismiss="modal" class="cancel btn btn-secondary">Cancelar</button>
-        </div>
-      </div>
     </div>
 </div>
 
 {{!-- END: Modal --}}
 
-<style type="text/css">
-
-.weightedevaluations-table td {
-  vertical-align: middle;
-}
-
-.remove-item-icon {
-  cursor: pointer;
-}
-
-</style>
-
 {{#js}}
-//
-
-/* START: VARIABLES */
-
-weightedevaluationtable = document.getElementById('weightedevaluations-table');
-weightedevaluationtablebody = weightedevaluationtable.getElementsByTagName('tbody')[0];
-
-addcategorybtn = document.getElementById('weightedevaluations-category-create-btn');
-
-gradeitemsmodal = document.querySelector('#available-gradeitems-modal-id');
-gradeitemsmodalacceptbutton = gradeitemsmodal.querySelector('.confirm');
-
-/* END: VARIABLES */
-
-/* START: TEMPLATES */
-
-categoryrowhtml = (randomid, categoryname, extradatacells) => `
-<tr id="${randomid}" data-randomid="${randomid}" data-rowtype="category">
-  <td class="category" rowspan="3">
-    ${categoryname}
-  </td>
-  ${extradatacells}
-</tr>
-`;
-
-removeitemiconhtml = (randomid) => `<i class="fa fa-fw fa-trash-o icon remove-item-icon" data-randomid="${randomid}" title="Remove element" role="img" aria-label="Remove element"></i>`;
-
-categoryweightcellhtml = `
-<td class="weight-1" rowspan="3">
-  <input type="text" name="weight-1" size="4" value="1">
-</td>
-`;
-
-addsubcategorybuttonrowhtml = (randomid) => `
-<tr data-randomid="${randomid}" data-rowtype="subcategory">
-  <td class="subcategory add-btn" rowspan="2">
-    <button type="button" class="add-subcategory-btn align-items-center block-add btn btn-secondary d-flex">
-      <span class="pluscontainer icon-no-margin icon-size-3 d-flex p-2 mr-3">
-          <i class="icon fa fa-plus fa-fw" aria-hidden="true"></i>
-      </span>
-      <span>Añadir itinerario</span>
-    </button>
-  </td>
-</tr>
-`;
-subcategoryrowhtml = (randomid, subrandomid) => `
-<tr id="'${subrandomid}" data-randomid="${randomid}" data-subrandomid="${subrandomid}" data-rowtype="subcategory">
-  <td class="subcategory" rowspan="2">
-    <input name="subcategoryname" value="">${removeitemiconhtml(randomid)}
-  </td>
-</tr>
-`;
-
-addsubcategorygradeitembuttonrowhtml = (randomid, subrandomid) => `
-<tr data-randomid="${randomid}" data-subrandomid="${subrandomid}" data-rowtype="subcategorygradeitem">
-  <td class="subcategorygradeitem add-btn">
-    <button type="button"
-      class="add-subcategorygradeitem-btn align-items-center block-add btn btn-secondary d-flex"
-      data-gradeitemaddtarget="subcategorygradeitem"
-      data-toggle="modal"
-      data-target="#available-gradeitems-modal-id">
-      <span class="pluscontainer icon-no-margin icon-size-3 d-flex p-2 mr-3">
-          <i class="icon fa fa-plus fa-fw" aria-hidden="true"></i>
-      </span>
-      <span>Añadir elementos</span>
-    </button>
-  </td>
-  <td class="weight-2">
-  </td>
-</tr>
-`;
-addsubcategorygradeitememptyrowhtml = (randomid, subrandomid) => `
-<tr data-randomid="${randomid}" data-subrandomid="${subrandomid}" data-rowtype="subcategorygradeitem">
-  <td class="subcategorygradeitem">
-  </td>
-  <td class="weight-2">
-  </td>
-</tr>
-`;
-subcategorygradeitemrowhtml = (randomid, subrandomid, gradeitemid, gradeitemname) => `
-<tr data-randomid="${randomid}" data-subrandomid="${subrandomid}"data-gradeitemid="${gradeitemid}" data-rowtype="subcategorygradeitem">
-  <td class="subcategorygradeitem">
-  ${gradeitemname}${removeitemiconhtml(randomid)}
-  </td>
-  <td class="weight-2">
-    <input type="text" name="weight-2" size="4" value="1">
-  </td>
-</tr>
-`;
-/* END: TEMPLATES */
-
-/* START: FUNCTIONS */
-
-function generateUniqueId() {
-  let randomid = null;
-  while (randomid === null || document.getElementById(randomid) !== null) {
-    // generate a 8 chars long random id
-    randomid = Math.random().toString(36).substring(2, 10);
-  }
-  return randomid;
-}
-
-/* START: FUNCTIONS: GRADEITEMS MODAL */
-
-function getGradeitemsmodalSelectedItems() {
-  let gradeitems = gradeitemsmodal.querySelectorAll('input[type="checkbox"]:checked:not(.d-none)');
-  return gradeitems;
-}
-
-function removeGradeitemsmodalItems(gradeitems) {
-  gradeitems.forEach( (gradeitem) => {
-    gradeitem.closest('div').classList.add('d-none');
-    gradeitem.checked = false;
-  });
-}
-
-function addGradeitemsmodalItem(gradeitemid) {
-  let gradeitem = gradeitemsmodal.querySelector('[data-id="'+gradeitemid+'"]');
-  gradeitem.closest('div').classList.remove('d-none');
-  gradeitem.checked = false;
-}
-
-/* END: FUNCTIONS: GRADEITEMS MODAL */
-
-function recalculateRowspans(randomid) {
-  // Category
-  var categorytotalItemCount = weightedevaluationtablebody.querySelectorAll('tr[data-randomid="'+randomid+'"]').length;;
-  weightedevaluationtablebody.querySelectorAll('tr[data-randomid="'+randomid+'"][data-rowtype="category"] td').forEach(datacell => {
-    datacell.rowSpan = categorytotalItemCount;
-  });
-
-  // Subcategory
-  weightedevaluationtablebody.querySelectorAll('tr[data-randomid="'+randomid+'"][data-rowtype="subcategory"]').forEach(row => {
-    let subrandomid = row.dataset.subrandomid;
-    if (!subrandomid) return;
-    let subcategorygradeitemsCount = weightedevaluationtablebody.querySelectorAll('tr[data-rowtype="subcategorygradeitem"][data-subrandomid="'+subrandomid+'"]').length;
-    var subcategorycategorytotalItemCount = 1 + subcategorygradeitemsCount;
-    row.querySelectorAll('td').forEach(datacell => {
-      datacell.rowSpan = subcategorycategorytotalItemCount;
+    require(['gradereport_gradeconfigwizard/weightedevaluations'], function(Weightedevaluations) {
+    Weightedevaluations.init();
     });
-  });
-}
-
-
-function addCategory(categoryname) {
-  let randomid = generateUniqueId();
-  let categorynamecontent = categoryname + removeitemiconhtml(randomid);
-  let extradatacells = categoryweightcellhtml;
-
-  let newcategoryrowhtml = categoryrowhtml(randomid, categorynamecontent, extradatacells);
-
-  let newrowshtml = newcategoryrowhtml;
-  newrowshtml += addsubcategorybuttonrowhtml(randomid);
-  newrowshtml += addsubcategorygradeitememptyrowhtml(randomid, "");
-
-  let weightedevaluationtablebodylastrow = weightedevaluationtablebody.querySelector('tr:last-child');
-  if (weightedevaluationtablebodylastrow) {
-    weightedevaluationtablebodylastrow.insertAdjacentHTML('afterend', newrowshtml);
-  } else {
-    weightedevaluationtablebody.innerHTML += newrowshtml;
-  }
-
-  let newcategoryrow = weightedevaluationtablebody.querySelector('[data-randomid="'+randomid+'"][data-rowtype="category"]');
-  let newsubcategorybuttonrow = weightedevaluationtablebody.querySelector('[data-randomid="'+randomid+'"][data-rowtype="subcategory"]');
-
-  let removeitemicon = newcategoryrow.querySelector('.remove-item-icon');
-  removeitemicon.addEventListener('click', removeCategoryCallback);
-
-  let addsubcategorybutton = newsubcategorybuttonrow.querySelector('tr[data-randomid="'+randomid+'"] .subcategory .add-subcategory-btn');
-  addsubcategorybutton.addEventListener('click', addSubcategoryButtonCallback);
-}
-
-function removeCategory(randomid) {
-  let subcategoryrowstodelete = weightedevaluationtablebody.querySelectorAll('tr[data-rowtype="subcategory"][data-randomid="' + randomid + '"][data-subrandomid]');
-  subcategoryrowstodelete.forEach(subcategoryrow => {
-    let subrandomid = subcategoryrow.dataset['subrandomid'];
-    removeSubcategory(randomid, subrandomid);
-  });
-
-  let categoryrowstodelete = weightedevaluationtablebody.querySelectorAll('tr[data-randomid="' + randomid + '"]');
-  categoryrowstodelete.forEach(row => row.remove());
-}
-
-function addSubcategory(randomid) {
-  let subrandomid = generateUniqueId();
-  let subcategoryaddbtnrow = weightedevaluationtablebody.querySelector('tr[data-randomid="'+randomid+'"][data-rowtype="subcategory"] .add-subcategory-btn').closest('tr');
-  subcategoryaddbtnrow.insertAdjacentHTML('beforebegin', subcategoryrowhtml(randomid, subrandomid) + addsubcategorygradeitembuttonrowhtml(randomid, subrandomid));
-
-  let newsubcategoryrow = weightedevaluationtablebody.querySelector('tr[data-randomid="'+randomid+'"][data-subrandomid="'+subrandomid+'"][data-rowtype="subcategory"]');
-
-  let removeitemicon = newsubcategoryrow.querySelector('.remove-item-icon');
-  removeitemicon.addEventListener('click', removeSubcategoryCallback);
-
-  recalculateRowspans(randomid);
-}
-
-function removeSubcategory(randomid, subrandomid) {
-  let subcategorygradeitemrowtodelete = weightedevaluationtablebody.querySelectorAll('tr[data-subrandomid="'+subrandomid+'"][data-gradeitemid][data-rowtype="subcategorygradeitem"]');
-  subcategorygradeitemrowtodelete.forEach(row => {
-    removeSubcategoryGradeitem(randomid, subrandomid, row.dataset.gradeitemid);
-  });
-  let remainingrowtodelete = weightedevaluationtablebody.querySelectorAll('tr[data-subrandomid="'+subrandomid+'"][data-rowtype="subcategorygradeitem"]');
-  remainingrowtodelete.forEach(row => {
-    row.remove();
-  });
-
-  let subcategoryrowtodelete = weightedevaluationtablebody.querySelector('tr[data-subrandomid="'+subrandomid+'"][data-rowtype="subcategory"]');
-  subcategoryrowtodelete.remove();
-
-  recalculateRowspans(randomid);
-}
-
-function addSubcategoryGradeitems(randomid, subrandomid, gradeitems) {
-  gradeitems.forEach(gradeitem => {
-    addSubcategoryGradeitem(randomid, subrandomid, gradeitem);
-  });
-}
-
-function addSubcategoryGradeitem(randomid, subrandomid, gradeitem) {
-  let gradeitemid = gradeitem.dataset['id'];
-  let gradeitemname = gradeitem.dataset['displayname'];
-  let subcategorygradeitemaddbtnrow = weightedevaluationtablebody.querySelector('tr[data-randomid="'+randomid+'"][data-subrandomid="'+subrandomid+'"][data-rowtype="subcategorygradeitem"] .subcategorygradeitem .add-subcategorygradeitem-btn').closest('tr');
-  subcategorygradeitemaddbtnrow.insertAdjacentHTML('beforebegin', subcategorygradeitemrowhtml(randomid, subrandomid, gradeitemid, gradeitemname));
-
-  let newsubcategorygradeitemrow = weightedevaluationtablebody.querySelector('tr[data-randomid="'+randomid+'"][data-subrandomid="'+subrandomid+'"][data-rowtype="subcategorygradeitem"][data-gradeitemid="' + gradeitemid + '"]');
-
-  let removeitemicon = newsubcategorygradeitemrow.querySelector('.remove-item-icon');
-  removeitemicon.addEventListener('click', removeSubcategoryGradeItemCallback);
-
-  recalculateRowspans(randomid);
-}
-
-function removeSubcategoryGradeitem(randomid, subrandomid, gradeitemid) {
-  let subcategorygradeitemrow = weightedevaluationtablebody.querySelector('tr[data-randomid="'+randomid+'"][data-subrandomid="'+subrandomid+'"][data-gradeitemid="'+gradeitemid+'"][data-rowtype="subcategorygradeitem"]');
-  subcategorygradeitemrow.remove();
-
-  addGradeitemsmodalItem(gradeitemid);
-  recalculateRowspans(randomid);
-}
-
-/* END: FUNCTIONS */
-
-/* START: CALLBACKS */
-
-function addCategoryButtonClickCallback(event) {
-  let categorynameinput = document.getElementById('weightedevaluations-category-create-name');
-  categorynameinput.value = categorynameinput.value.trim();
-  let categoryname = categorynameinput.value;
-  if (categoryname === '') {
-    return;
-  }
-  addCategory(categoryname);
-  categorynameinput.value = '';
-}
-
-function availableGradeItemsModalShowCallback(event) {
-  //@TODO check if all works properly
-  let button = event.relatedTarget // Button that triggered the modal
-  let callerrandomid = button.closest('tr').dataset['randomid'];
-  let gradeitemaddtarget = button.dataset['gradeitemaddtarget'];
-  let gradeitemid = button.closest('td').dataset['gradeitemid']
-  let callersubrandomid = button.closest('tr').dataset.subrandomid;
-
-  gradeitemsmodal.dataset['gradeitemaddtarget'] = gradeitemaddtarget;
-  gradeitemsmodal.dataset['callerrandomid'] = callerrandomid;
-  gradeitemsmodal.dataset['callersubrandomid'] = callersubrandomid;
-  gradeitemsmodal.dataset['gradeitemid'] = gradeitemid;
-}
-
-function availableGradeItemsModalConfirmCallback() {
-  let gradeitemaddtarget = gradeitemsmodal.dataset['gradeitemaddtarget'];
-  let gradeitemid = gradeitemsmodal.dataset['gradeitemid'];
-
-  let randomid = gradeitemsmodal.dataset['callerrandomid']
-  let subrandomid = gradeitemsmodal.dataset['callersubrandomid']
-  let gradeitems = getGradeitemsmodalSelectedItems();
-
-  switch (gradeitemaddtarget) {
-    case 'subcategorygradeitem':
-      addSubcategoryGradeitems(randomid, subrandomid, gradeitems);
-      removeGradeitemsmodalItems(gradeitems);
-      $(gradeitemsmodal).modal('hide')
-      break;
-  }
-}
-
-function removeCategoryCallback() {
-  let randomid = this.dataset.randomid;
-  removeCategory(randomid);
-}
-
-function addSubcategoryButtonCallback(event) {
-  let randomid = event.target.closest('tr').dataset['randomid'];
-  addSubcategory(randomid);
-}
-
-function removeSubcategoryCallback() {
-  let targetrow = this.closest('tr');
-  let randomid = targetrow.dataset.randomid;
-  let subrandomid = targetrow.dataset.subrandomid;
-  removeSubcategory(randomid, subrandomid);
-}
-
-function addSubcategoryGradeitemButtonCallback(event) {
-  let randomid = event.target.closest('tr').dataset['randomid'];
-  let subrandomid = event.target.closest('tr').dataset['subrandomid'];
-  addSubcategoryGradeitem(randomid, subrandomid, gradeitem);
-}
-
-function removeSubcategoryGradeItemCallback(event) {
-  let targetrow = event.target.closest('tr');
-  let randomid = targetrow.dataset.randomid;
-  let subrandomid = targetrow.dataset.subrandomid;
-  let gradeitemid = targetrow.dataset.gradeitemid;
-  removeSubcategoryGradeitem(randomid, subrandomid, gradeitemid);
-}
-
-/* END: CALLBACKS */
-
-/* START: EVENT LISTENERS DECLARATION */
-
-addcategorybtn.addEventListener('click', addCategoryButtonClickCallback);
-
-/* show.bs.modal event only works with jquery event listener framework */
-$(gradeitemsmodal).on('show.bs.modal', availableGradeItemsModalShowCallback);
-gradeitemsmodalacceptbutton.addEventListener('click', availableGradeItemsModalConfirmCallback);
-
-/* END: EVENT LISTENERS DECLARATION */
-
 {{/js}}
