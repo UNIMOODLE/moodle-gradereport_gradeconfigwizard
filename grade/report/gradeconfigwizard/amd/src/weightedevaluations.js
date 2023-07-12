@@ -12,6 +12,8 @@ let gradeitemsmodalacceptbutton = gradeitemsmodal.querySelector('.confirm');
 
 /* END: VARIABLES */
 
+/* START: TEMPLATES */
+
 const categoryrowhtml = (randomid, categoryname, categorynamecontent) => `
 <tr id="${randomid}" data-randomid="${randomid}" data-rowtype="category">
   <td class="category" rowspan="3">
@@ -20,8 +22,6 @@ const categoryrowhtml = (randomid, categoryname, categorynamecontent) => `
   </td>
 </tr>
 `;
-
-/* START: TEMPLATES */
 
 const removeitemiconhtml = (randomid) => `
 <i class="fa fa-fw fa-trash-o icon remove-item-icon" data-randomid="${randomid}" 

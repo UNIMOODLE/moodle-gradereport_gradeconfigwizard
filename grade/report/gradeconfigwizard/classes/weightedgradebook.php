@@ -12,8 +12,6 @@ class weightedgradebook {
 
     public function process(array $categories): bool {
         $this->require_grade_libs();
-        //print_object($categories);
-        //die();
         $this->set_course_aggregation();
 
         foreach ($categories as $category) {
@@ -33,13 +31,13 @@ class weightedgradebook {
         return true;
     }
 
-    private function set_course_aggregation() {
-        $coursegradeitem = new \grade_item(['itemtype' => 'course', 'courseid' => $this->courseid], true);
+    private function set_course_aggregation(): void {
+        $coursegradecat = new \grade_category(['depth' => 1, 'courseid' => $this->courseid, 'fullname' => '?'], true);
         $properties = [
             'aggregation' => GRADE_AGGREGATE_MAX,
         ];
-        \grade_item::set_properties($coursegradeitem, $properties);
-        $coursegradeitem->update();
+        \grade_category::set_properties($coursegradecat, $properties);
+        $coursegradecat->update();
     }
 
     private function create_category(array $category): int {
@@ -51,9 +49,7 @@ class weightedgradebook {
             'aggregation' => GRADE_AGGREGATE_WEIGHTED_MEAN,
         ];
         \grade_category::set_properties($gc, $properties);
-        $id = $gc->insert();
-
-        return $id;
+        return $gc->insert();
     }
 
     private function create_subcategory(array $subcategory, int $parentid): int {

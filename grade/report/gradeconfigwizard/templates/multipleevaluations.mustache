@@ -1,641 +1,70 @@
 <div class="container">
-  <div class="multipleevaluations-category-creation container">
-    <div class="row">CREACIÓN DE CATEGORIAS</div>
-    <div class="row mb-4">
-      <input type="text" id="multipleevaluations-category-create-name" class="mr-3" size="40">
-      <button type="button" id="multipleevaluations-category-create-btn" class="btn btn-primary">Crear</button>
+    <div class="multipleevaluations-category-creation container">
+        <div class="row">CREACIÓN DE CATEGORIAS</div>
+        <div class="row mb-4">
+            <input type="text" id="multipleevaluations-category-create-name" class="mr-3" size="40">
+            <button type="button" id="multipleevaluations-category-create-btn" class="btn btn-primary">Crear</button>
+        </div>
     </div>
-  </div>
 
-  <table id="multipleevaluation-table" class="multipleevaluation-table table table-bordered">
-    <thead>
-      <tr>
-        <th>CATEGORÍA</th>
-        <th>PESO</th>
-        <th>NOTA CORTE</th>
-        <th>RECUPERACIÓN</th>
-        <th>ELEMENTOS</th>
-        <th>PESO</th>
-        <th>NOTA CORTE</th>
-        <th>RECUPERACIÓN</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-  <div class="text-center">
-    <button tyoe="button" class="btn btn-primary">Guardar cambios</button>
-    <a href="{{{urlsaveexit}}}">
-      <button tyoe="button" class="btn btn-primary">Guardar y salir</button>
-    </a>
-  </div>
+    <form action="{{{urlsaveexit}}}" id="multipleevaluationsform" method="post">
+        <table id="multipleevaluation-table" class="multipleevaluation-table table table-bordered">
+            <thead>
+            <tr>
+                <th>CATEGORÍA</th>
+                <th>PESO</th>
+                <th>NOTA CORTE</th>
+                <th>RECUPERACIÓN</th>
+                <th>ELEMENTOS</th>
+                <th>PESO</th>
+                <th>NOTA CORTE</th>
+                <th>RECUPERACIÓN</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </form>
+    <div class="text-center">
+        <input type="submit" form="multipleevaluationsform" class="btn btn-primary" value="Guardar y salir">
+    </div>
 </div>
 
 {{!-- START: Modal --}}
 
 <div class="modal fade"
-  id="available-gradeitems-modal-id"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="available-gradeitems-modal-label"
-  data-gradeitemaddtarget=""
-  data-gradeitemidrow=""
-  data-gradeitemid=""
-  data-callerrandomid=""
-  aria-hidden="true">
+     id="available-gradeitems-modal-id"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="available-gradeitems-modal-label"
+     data-gradeitemaddtarget=""
+     data-gradeitemidrow=""
+     data-gradeitemid=""
+     data-callerrandomid=""
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="available-gradeitems-modal-label">Elegir elementos</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="available-gradeitems-modal-label">Elegir elementos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{> gradereport_gradeconfigwizard/availablegradeitems }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="confirm btn btn-primary mr-3">Añadir</button>
+                <button type="button" data-dismiss="modal" class="cancel btn btn-secondary">Cancelar</button>
+            </div>
         </div>
-        <div class="modal-body">
-          {{> gradereport_gradeconfigwizard/availablegradeitems }}
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="confirm btn btn-primary mr-3">Añadir</button>
-          <button type="button" data-dismiss="modal" class="cancel btn btn-secondary">Cancelar</button>
-        </div>
-      </div>
     </div>
 </div>
 
 {{!-- END: Modal --}}
 
-<style type="text/css">
-
-.multipleevaluation-table td {
-  vertical-align: middle;
-}
-
-.remove-item-icon {
-  cursor: pointer;
-}
-
-</style>
-
 {{#js}}
-//
-/* require([], function() { */
-
-
-/* START: VARIABLES */
-
-multipleevaluationtable = document.getElementById('multipleevaluation-table');
-multipleevaluationtablebody = multipleevaluationtable.getElementsByTagName('tbody')[0];
-
-addcategorybtn = document.getElementById('multipleevaluations-category-create-btn');
-
-gradeitemsmodal = document.querySelector('#available-gradeitems-modal-id');
-gradeitemsmodalacceptbutton = gradeitemsmodal.querySelector('.confirm');
-
-/* END: VARIABLES */
-
-/* START: TEMPLATES */
-
-newcategoryrow = (randomid) => `
-<tr id="${randomid}" data-randomid="${randomid}" data-depthlevel="1">
-  <td class="category" rowspan="2">
-    fdasfa
-    <i class="fa fa-fw fa-trash-o icon remove-item-icon" data-randomid="${randomid}" title="Remove element" role="img" aria-label="Remove element"></i>
-  </td>
-  <td class="weight-1" rowspan="2">
-    <input type="text" name="weight-1" size="4" value="1">
-  </td>
-  <td class="min-grade-1" rowspan="2">
-    <div class="container">
-      <div class="row">
-        <input type="checkbox" class="mr-2" id="myCheckbox" disabled="">
-        <input type="text" size="4" disabled="">
-      </div>
-    </div></td>
-    
-  <td class="resit-1 add-btn" rowspan="2">
-    <button tyoe="button"
-      class="add-resit-items-btn btn btn-secondary"
-      data-toggle="modal"
-      data-target="#available-gradeitems-modal-id"
-      data-gradeitemaddtarget="categoryresititem"
-      data-addgradeitemdepth="1"
-      disabled="">
-        Añadir elemento
-    </button>
-  </td>
-</tr>
-`
-//not needed
-removeitemiconhtml = (randomid) => `<i class="fa fa-fw fa-trash-o icon remove-item-icon" data-randomid="${randomid}" title="Remove element" role="img" aria-label="Remove element"></i>`;
-newcategoryextracellshtml = `
-<td class="weight-1" rowspan="2">
-  <input type="text" name="weight-1" size="4" value="1">
-</td>
-<td class="min-grade-1" rowspan="2">
-  <div class="container">
-    <div class="row">
-      <input type="checkbox" class="mr-2" id="myCheckbox" disabled>
-      <input type="text" size="4" disabled>
-    </div>
-  </td>
-  </div>
-<td class="resit-1 add-btn" rowspan="2">
-  <button tyoe="button"
-    class="add-resit-items-btn btn btn-secondary"
-    data-toggle="modal"
-    data-target="#available-gradeitems-modal-id"
-    data-gradeitemaddtarget="categoryresititem"
-    data-addgradeitemdepth="1" disabled>
-      Añadir elemento
-  </button>
-</td>
-`;
-addcategoryelementsbuttonrowhtml = (randomid) => `
-<tr data-randomid="${randomid}" data-rowtype="categorygradeitemaddbtn" data-depthlevel="2">
-  <td class="item">
-    <button tyoe="button"
-      data-toggle="modal"
-      data-target="#available-gradeitems-modal-id"
-      data-gradeitemaddtarget="gradeitem"
-      data-addgradeitemdepth="2"
-      class="add-category-items-btn btn btn-secondary">
-        Añadir elementos
-    </button>
-  </td>
-  <td class="weight-2"></td>
-  <td class="min-grade-2"></td>
-  <td class="resit-2"></td>
-</tr>
-`
-categorygradeitemrowhtml = (randomid, gradeitemid, gradeitemname) => `
-<tr data-randomid="${randomid}" data-rowtype="categorygradeitem" data-gradeitemid="${gradeitemid}" data-depthlevel="2">
-  <td class="item"
-    data-gradeitemid="${gradeitemid}"
-    data-gradeitemname="${gradeitemname}"
-    >
-      ${gradeitemname}
-      <i class="fa fa-fw fa-trash-o icon remove-item-icon" data-randomid="${randomid}" data-gradeitemid="${gradeitemid}" title="Remove element" role="img" aria-label="Remove element"></i>
-  </td>
-  <td class="weight-2">
-    <input type="text" name="weight-1" size="4" value="1">
-  </td>
-  <td class="min-grade-2">
-    <div class="container">
-      <div class="row">
-        <input type="checkbox" class="mr-2" id="myCheckbox">
-        <input type="text" id="myTextInput" size="4" disabled>
-      </div>
-    </div>
-  </td>
-  <td class="resit-2"
-    data-gradeitemid="${gradeitemid}"
-    >
-    <button tyoe="button"
-      class="add-grade-item-resit-items-btn btn btn-secondary"
-      data-gradeitemaddtarget="gradeitemresititem"
-      data-toggle="modal"
-      data-target="#available-gradeitems-modal-id"
-      disabled>
-        Añadir elemento
-    </button>
-  </td>
-</tr>
-`
-
-categoryresitgradeitemcellhtml = (gradeitemid, gradeitemname, rowspan) => `
-<td class="resit-1" rowspan="${rowspan}"
-  data-gradeitemid="${gradeitemid}"
-  data-gradeitemname="${gradeitemname}"
-  >
-  ${gradeitemname}
-  <i class="fa fa-fw fa-trash-o icon remove-item-icon" title="Remove element" role="img" aria-label="Remove element"></i>
-</td>
-`
-categorygradeitemresitgradeitemcellhtml = (gradeitemid, gradeitemname) => `
-<td class="resit-2"
-  data-gradeitemid="${gradeitemid}"
-  data-gradeitemname="${gradeitemname}"
-  >
-  ${gradeitemname}
-  <i class="fa fa-fw fa-trash-o icon remove-item-icon" title="Remove element" role="img" aria-label="Remove element"></i>
-</td>
-`
-
-addcategoryresitbuttoncellenabledhtml = `
-<td class="resit-1 add-btn" rowspan="2">
-  <button tyoe="button"
-    class="add-resit-items-btn btn btn-secondary"
-    data-toggle="modal"
-    data-target="#available-gradeitems-modal-id"
-    data-gradeitemaddtarget="categoryresititem"
-    data-addgradeitemdepth="1">
-      Añadir elemento
-  </button>
-</td>
-`
-
-addcategorygradeitemresitgradeitembuttoncellenabledhtml = (gradeitemid) => `
-<td class="resit-2 add-btn"
-  data-gradeitemid="${gradeitemid}"
-  >
-  <button tyoe="button"
-    class="add-grade-item-resit-items-btn btn btn-secondary"
-    data-gradeitemaddtarget="gradeitemresititem"
-    data-toggle="modal"
-    data-target="#available-gradeitems-modal-id">
-      Añadir elemento
-  </button>
-</td>
-`
-
-/* END: TEMPLATES */
-
-/* START: FUNCTIONS */
-
-function generateUniqueId() {
-  let randomid = null;
-  while (randomid === null || document.getElementById(randomid) !== null) {
-    // generate a 8 chars long random id
-    randomid = Math.random().toString(36).substring(2, 10);
-  }
-  return randomid;
-}
-
-function getGradeitemsmodalSelectedItems() {
-  let gradeitems = gradeitemsmodal.querySelectorAll('input[type="checkbox"]:checked:not(.d-none)');
-  return gradeitems;
-}
-
-function removeGradeitemsmodalItems(gradeitems) {
-  gradeitems.forEach( (gradeitem) => {
-    gradeitem.closest('div').classList.add('d-none');
-    gradeitem.checked = false;
-  });
-}
-
-function addGradeitemsmodalItem(gradeitemid) {
-  let gradeitem = gradeitemsmodal.querySelector('[data-id="'+gradeitemid+'"]');
-  gradeitem.closest('div').classList.remove('d-none');
-  gradeitem.checked = false;
-}
-
-function recalculateRowspans(randomid) {
-  let categoryCount = 1;
-  let categoryGradeItemAddBtnCount = multipleevaluationtablebody.querySelectorAll('[data-randomid="'+randomid+'"][data-rowtype="categorygradeitemaddbtn"]').length;
-  let categoryGradeItemCount = multipleevaluationtablebody.querySelectorAll('[data-randomid="'+randomid+'"][data-rowtype="categorygradeitem"]').length;
-  var totalItemCount = categoryGradeItemAddBtnCount + categoryGradeItemCount + categoryCount;
-  multipleevaluationtablebody.querySelectorAll('[data-randomid="'+randomid+'"][data-rowtype="category"] td').forEach(datacell => {
-    datacell.rowSpan = totalItemCount;
-  });
-}
-
-function addCategory(categoryname) {
-  let randomid = generateUniqueId();
-
-  let newcategoryrow = document.createElement('tr');
-  newcategoryrow.id = randomid;
-  newcategoryrow.dataset.randomid = randomid;
-  newcategoryrow.dataset.depthlevel = 1;
-  newcategoryrow.dataset.rowtype = "category";
-
-  let newcategorycell = document.createElement('td');
-  newcategorycell.classList.add('category');
-  newcategorycell.rowSpan = 2;
-  newcategorycell.innerHTML = categoryname + removeitemiconhtml(randomid); //not needed
-
-  newcategoryrow.appendChild(newcategorycell);
-  newcategoryrow.innerHTML += newcategoryextracellshtml;
-
-  multipleevaluationtablebody.appendChild(newcategoryrow);
-
-  newcategoryrow.insertAdjacentHTML('afterend', addcategoryelementsbuttonrowhtml(randomid));
-
-  let removeitemicon = newcategoryrow.querySelector('.remove-item-icon');
-  removeitemicon.addEventListener('click', removeCategoryCallback);
-
-  let categorymingradecheckbox = newcategoryrow.querySelector('.min-grade-1 input[type="checkbox"]');
-  categorymingradecheckbox.addEventListener('change', categoryMinGradeCheckboxChangeCallback);
-
-  let categorymingradetext = newcategoryrow.querySelector('.min-grade-1 input[type="text"]');
-  categorymingradetext.addEventListener('input', categoryMinGradeTextChangeCallback);
-}
-
-function removeCategory(randomid) {
-  removeCategoryResititem(randomid);
-
-  let catgorygradeitemrowstodelete = multipleevaluationtablebody.querySelectorAll('tr[data-rowtype="categorygradeitem"][data-randomid="' + randomid + '"]');
-  catgorygradeitemrowstodelete.forEach(catgorygradeitemrow => {
-    let randomid = catgorygradeitemrow.dataset['randomid'];
-    let gradeitemid = catgorygradeitemrow.dataset['gradeitemid'];
-    removeCategoryGradeitem(randomid, gradeitemid);
-  });
-
-  let categoryrowstodelete = multipleevaluationtablebody.querySelectorAll('tr[data-randomid="' + randomid + '"]');
-  categoryrowstodelete.forEach(row => row.remove());
-}
-
-function addCategoryGradeitems(randomid, gradeitems) {
-  gradeitems.forEach(gradeitem => {
-    addCategoryGradeitem(randomid, gradeitem);
-  });
-}
-
-function addCategoryGradeitem(randomid, gradeitem) {
-  let gradeitemid = gradeitem.dataset['id'];
-  let gradeitemname = gradeitem.dataset['displayname'];
-  let categorygradeitemaddbtn = multipleevaluationtablebody.querySelectorAll('[data-randomid="'+randomid+'"][data-rowtype="categorygradeitemaddbtn"]');
-  categorygradeitemaddbtn[0].insertAdjacentHTML('beforebegin', categorygradeitemrowhtml(randomid, gradeitemid, gradeitemname));
-
-  let newcategorygradeitemrow = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"][data-rowtype="categorygradeitem"][data-gradeitemid="' + gradeitemid + '"]');
-
-  let removeitemicon = newcategorygradeitemrow.querySelector('.remove-item-icon');
-  removeitemicon.addEventListener('click', removeCategoryGradeItemCallback);
-
-  let categorygradeitemmingradecheckbox = newcategorygradeitemrow.querySelector('.min-grade-2 input[type="checkbox"]');
-  categorygradeitemmingradecheckbox.addEventListener('change', categoryGradeitemMinGradeCheckboxChangeCallback);
-
-  let categorygradeitemmingradetext = newcategorygradeitemrow.querySelector('.min-grade-2 input[type="text"]');
-  categorygradeitemmingradetext.addEventListener('input', categoryGradeitemMinGradeTextChangeCallback);
-
-  let categorymingradecheckbox = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"][data-rowtype="category"] .min-grade-1 input[type="checkbox"]');
-  categorymingradecheckbox.disabled = false;
-
-  recalculateRowspans(randomid);
-}
-
-function removeCategoryGradeitem(randomid, gradeitemid) {
-  let rowtodelete = multipleevaluationtablebody.querySelectorAll('tr[data-randomid="' + randomid + '"][data-rowtype="categorygradeitem"][data-gradeitemid="' + gradeitemid + '"]');
-  rowtodelete.forEach(row => {
-    row.querySelectorAll('[data-gradeitemid]').forEach(row => addGradeitemsmodalItem(row.dataset['gradeitemid']));
-    row.remove()
-  });
-
-  let categorygradeitems = multipleevaluationtablebody.querySelectorAll('tr[data-randomid="' + randomid + '"][data-rowtype="categorygradeitem"]');
-  let categorymingradecheckbox = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"][data-rowtype="category"] .min-grade-1 input[type="checkbox"]');
-  if (categorygradeitems.length > 0) {
-    categorymingradecheckbox.disabled = false;
-  } else {
-    categorymingradecheckbox.disabled = true;
-  }
-
-  addGradeitemsmodalItem(gradeitemid);
-  recalculateRowspans(randomid);
-}
-
-function addCategoryresititem(randomid, gradeitem) {
-  let gradeitemid = gradeitem.dataset['id'];
-  let gradeitemname = gradeitem.dataset['displayname'];
-  let categoryresitcell = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"][data-rowtype="category"] td.resit-1');
-  let rowspan = categoryresitcell.getAttribute('rowspan');
-
-  let categoryresitgradeitemaddbtn = multipleevaluationtablebody.querySelector('[data-randomid="'+randomid+'"] td.resit-1 .add-resit-items-btn');
-  let categoryresitgradeitemcell = categoryresitgradeitemaddbtn.closest('td');
-  categoryresitgradeitemcell.insertAdjacentHTML('beforebegin', categoryresitgradeitemcellhtml(gradeitemid, gradeitemname, rowspan));
-  categoryresitgradeitemcell.remove();
-
-  let newcategoryresitgradeitem = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"][data-rowtype="category"] td.resit-1[data-gradeitemid="'+gradeitemid+'"]');
-  newcategoryresitgradeitem.querySelector('.remove-item-icon').addEventListener('click', removeCategoryResitGradeitemCallback);
-}
-
-function removeCategoryResititem(randomid, gradeitemid=null) {
-  let categoryresitgradeitem = null;
-  if (gradeitemid === null) {
-    categoryresitgradeitem = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"] td.resit-1');
-    gradeitemid = categoryresitgradeitem.dataset['gradeitemid'];
-  } else {
-    categoryresitgradeitem = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"] td.resit-1[data-gradeitemid="'+gradeitemid+'"]');
-  }
-  let categoryresitgradeitemcell = categoryresitgradeitem.closest('td');
-  categoryresitgradeitemcell.insertAdjacentHTML('afterend', addcategoryresitbuttoncellenabledhtml);
-  categoryresitgradeitemcell.remove();
-
-  addGradeitemsmodalItem(gradeitemid);
-  recalculateRowspans(randomid);
-}
-
-function enableAddCategoryResititmeBtn(randomid) {
-  let addcategoryresititmebtn = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"] td.resit-1.add-btn button');
-  if (addcategoryresititmebtn) {
-    addcategoryresititmebtn.disabled = false;
-  }
-}
-
-function disableAddCategoryResititmeBtn(randomid) {
-  let addcategoryresititmebtn = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"] td.resit-1.add-btn button');
-  if (addcategoryresititmebtn) {
-    addcategoryresititmebtn.disabled = true;
-  }
-}
-
-function addCategoryGradeitemResititem(randomid, parentgradeitem, gradeitem) {
-  let gradeitemid = gradeitem.dataset['id'];
-  let gradeitemname = gradeitem.dataset['displayname'];
-
-  let categorygradeitemresitgradeitemaddbtn = multipleevaluationtablebody.querySelector('tr[data-randomid="'+randomid+'"] td[data-gradeitemid="'+parentgradeitem+'"] ~ td.resit-2 .add-grade-item-resit-items-btn');
-  let categorygradeitemresitgradeitemcell = categorygradeitemresitgradeitemaddbtn.closest('td');
-  categorygradeitemresitgradeitemcell.insertAdjacentHTML('beforebegin', categorygradeitemresitgradeitemcellhtml(gradeitemid, gradeitemname));
-  categorygradeitemresitgradeitemcell.remove();
-
-  let newcategorygradeitemresitgradeitem = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"][data-rowtype="categorygradeitem"] td.resit-2[data-gradeitemid="'+gradeitemid+'"]');
-  newcategorygradeitemresitgradeitem.querySelector('.remove-item-icon').addEventListener('click', removeCategoryGradeitemResitGradeitemCallback);
-}
-
-function removeCategoryGradeitemResititem(randomid, parentgradeitemid, gradeitemid) {
-  let categoryresitgradeitemcell = multipleevaluationtablebody.querySelector('td.resit-2[data-gradeitemid="'+gradeitemid+'"]');
-  categoryresitgradeitemcell.insertAdjacentHTML('afterend', addcategorygradeitemresitgradeitembuttoncellenabledhtml(parentgradeitemid));
-  categoryresitgradeitemcell.remove();
-
-  addGradeitemsmodalItem(gradeitemid);
-  recalculateRowspans(randomid);
-}
-
-function enableAddCategoryGradeitemResititemBtn(randomid) {
-  let addcategorygradeitemresititembtn = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"] td.resit-2.add-btn button.add-grade-item-resit-items-btn');
-  if (addcategorygradeitemresititembtn) {
-    addcategorygradeitemresititembtn.disabled = false;
-  }
-}
-
-function disableAddCategoryGradeitemResititemBtn(randomid) {
-  let addcategorygradeitemresititembtn = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"] td.resit-2.add-btn button.add-grade-item-resit-items-btn');
-  if (addcategorygradeitemresititembtn) {
-    addcategorygradeitemresititembtn.disabled = true;
-  }
-}
-
-/* END: FUNCTIONS */
-
-/* START: CALLBACKS */
-
-function addCategoryButtonClickCallback(event) {
-  let categorynameinput = document.getElementById('multipleevaluations-category-create-name');
-  categorynameinput.value = categorynameinput.value.trim();
-  let categoryname = categorynameinput.value;
-  if (categoryname === '') {
-    return;
-  }
-  addCategory(categoryname);
-  categorynameinput.value = '';
-}
-
-function removeCategoryCallback() {
-  let randomid = this.dataset.randomid
-  removeCategory(randomid);
-}
-
-function removeCategoryGradeItemCallback() {
-  let randomid = this.dataset.randomid
-  let gradeitemid = this.dataset.gradeitemid
-  removeCategoryGradeitem(randomid, gradeitemid)
-}
-
-function removeCategoryResitGradeitemCallback() {
-  let parenttd = this.closest('td');
-  let parenttr = parenttd.closest('tr');
-  let randomid = parenttr.dataset['randomid'];
-  let gradeitemid = parenttd.dataset['gradeitemid'];
-  removeCategoryResititem(randomid, gradeitemid);
-}
-
-function removeCategoryGradeitemResitGradeitemCallback() {
-  let parenttd = this.closest('td');
-  let parenttr = parenttd.closest('tr');
-  let randomid = parenttr.dataset['randomid'];
-  let gradeitemid = parenttd.dataset['gradeitemid'];
-  let parentgradeitemid = parenttr.querySelector('td.item').dataset['gradeitemid'];
-  removeCategoryGradeitemResititem(randomid, parentgradeitemid, gradeitemid);
-}
-
-function availableGradeItemsModalShowCallback(event) {
-  let button = event.relatedTarget // Button that triggered the modal
-  let callerrandomid = button.closest('tr').dataset['randomid'];
-  let gradeitemaddtarget = button.dataset['gradeitemaddtarget'];
-  let addgradeitemdepth = button.dataset['addgradeitemdepth'];
-  let gradeitemid = button.closest('td').dataset['gradeitemid']
-
-  gradeitemsmodal.dataset['gradeitemaddtarget'] = gradeitemaddtarget;
-  gradeitemsmodal.dataset['addgradeitemdepth'] = addgradeitemdepth;
-  gradeitemsmodal.dataset['callerrandomid'] = callerrandomid;
-  gradeitemsmodal.dataset['gradeitemid'] = gradeitemid;
-}
-
-function availableGradeItemsModalConfirmCallback() {
-  let gradeitemaddtarget = gradeitemsmodal.dataset['gradeitemaddtarget'];
-  let addgradeitemdepth = gradeitemsmodal.dataset['addgradeitemdepth'];
-  let callerrandomid = gradeitemsmodal.dataset['callerrandomid'];
-  let gradeitemid = gradeitemsmodal.dataset['gradeitemid'];
-
-  let randomid = gradeitemsmodal.dataset['callerrandomid']
-  let gradeitems = getGradeitemsmodalSelectedItems();
-
-  switch (gradeitemaddtarget) {
-    case 'gradeitem':
-      addCategoryGradeitems(randomid, gradeitems);
-      removeGradeitemsmodalItems(gradeitems);
-      $(gradeitemsmodal).modal('hide')
-      break;
-    case 'categoryresititem':
-      if (gradeitems.length > 1) {
-        alert('Selecciona solo 1 gradeitem');
-        break;
-      }
-      addCategoryresititem(randomid, gradeitems[0]);
-      removeGradeitemsmodalItems(gradeitems);
-      $(gradeitemsmodal).modal('hide')
-      break;
-    case 'gradeitemresititem':
-      if (gradeitems.length > 1) {
-        alert('Selecciona solo 1 gradeitem');
-        break;
-      }
-      addCategoryGradeitemResititem(randomid, gradeitemid, gradeitems[0]);
-      removeGradeitemsmodalItems(gradeitems);
-      $(gradeitemsmodal).modal('hide')
-      break;
-  }
-}
-
-function categoryMinGradeCheckboxChangeCallback(event) {
-    let categorymingradecheckbox = event.target;
-    let categorymingradecheckboxrow = categorymingradecheckbox.closest('tr');
-    let randomid = categorymingradecheckboxrow.dataset['randomid'];
-
-    let categoryresititemid = categorymingradecheckboxrow.querySelector('.resit-1').dataset['gradeitemid'];
-    if (categoryresititemid) {
-      removeCategoryResititem(randomid, categoryresititemid);
-      disableAddCategoryResititmeBtn(randomid);
-    }
-
-    let categorymingradeinput = categorymingradecheckboxrow.querySelector('.min-grade-1 input[type="text"]');
-    if (categorymingradecheckbox.checked) {
-      categorymingradeinput.disabled = false;
-    } else {
-      categorymingradeinput.disabled = true;
-      categorymingradeinput.value = '';
-    }
-}
-
-function categoryGradeitemMinGradeCheckboxChangeCallback(event) {
-    let categorymingradecheckbox = event.target;
-    let categorygradeitemchangedrow = categorymingradecheckbox.closest('tr');
-    let randomid = categorygradeitemchangedrow.dataset['randomid'];
-
-    let parentgradeitemid = categorygradeitemchangedrow.querySelector('td.item').dataset['gradeitemid'];
-    let resitgradeitemid = categorygradeitemchangedrow.querySelector('td.resit-2').dataset['gradeitemid'];
-    if (resitgradeitemid !== null && parentgradeitemid !== null) {
-      removeCategoryGradeitemResititem(randomid, parentgradeitemid, resitgradeitemid);
-      disableAddCategoryGradeitemResititemBtn(randomid);
-    }
-
-    let categorymingradeinput = categorygradeitemchangedrow.querySelector('.min-grade-2 input[type="text"]');
-
-    if (categorymingradecheckbox.checked) {
-      categorymingradeinput.disabled = false;
-    } else {
-      categorymingradeinput.disabled = true;
-      categorymingradeinput.value = '';
-    }
-}
-
-function categoryMinGradeTextChangeCallback(event) {
-  let mingradetextfield = event.target;
-  let mingradetextfieldrow = mingradetextfield.closest('tr');
-  let randomid = mingradetextfieldrow.dataset['randomid'];
-
-  let addCategoryGradeitemResititemBtn = mingradetextfieldrow.querySelector('.resit-1 button');
-
-  if (mingradetextfield.value.trim() === '') {
-    addCategoryGradeitemResititemBtn.disabled = true;
-  } else {
-    addCategoryGradeitemResititemBtn.disabled = false;
-  }
-}
-
-function categoryGradeitemMinGradeTextChangeCallback(event) {
-  let mingradetextfield = event.target;
-  let mingradetextfieldrow = mingradetextfield.closest('tr');
-  let randomid = mingradetextfieldrow.dataset['randomid'];
-
-  let addCategoryGradeitemResititemBtn = mingradetextfieldrow.querySelector('.resit-2 button');
-
-  if (mingradetextfield.value.trim() === '') {
-    addCategoryGradeitemResititemBtn.disabled = true;
-  } else {
-    addCategoryGradeitemResititemBtn.disabled = false;
-  }
-}
-
-/* END: CALLBACKS */
-
-/* START: EVENT LISTENERS DECLARATION */
-
-addcategorybtn.addEventListener('click', addCategoryButtonClickCallback);
-
-/* show.bs.modal event only works with jquery event listener framework */
-$(gradeitemsmodal).on('show.bs.modal', availableGradeItemsModalShowCallback);
-gradeitemsmodalacceptbutton.addEventListener('click', availableGradeItemsModalConfirmCallback);
-
-/* END: EVENT LISTENERS DECLARATION */
-
-/* }); */
+    require(['gradereport_gradeconfigwizard/multipleevaluations'], function(Multipleevaluations) {
+    Multipleevaluations.init();
+    });
 {{/js}}

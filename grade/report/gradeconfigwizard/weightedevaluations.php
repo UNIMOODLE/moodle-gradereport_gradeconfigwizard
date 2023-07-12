@@ -91,12 +91,14 @@ foreach ($gradeitems as $gradeitemkey => $gradeitem) {
         $availablegradeitem[$requiredfield] = $gradeitem->$requiredfield;
     }
 
-    $availablegradeitems[] = $availablegradeitem;
+    if ($availablegradeitem['ismanual'] || $availablegradeitem['ismod']) {
+        $availablegradeitems[] = $availablegradeitem;
+    }
 }
 
 $data = [
     'availablegradeitems' => $availablegradeitems,
-    'urlsaveexit' => new moodle_url('/grade/report/gradeconfigwizard/processgradebook.php', ['id' => $courseid]),
+    'urlsaveexit' => new moodle_url('/grade/report/gradeconfigwizard/processgradebook.php', ['id' => $courseid, 'type' => 'weighted']),
 ];
 
 echo $OUTPUT->render_from_template('gradereport_gradeconfigwizard/weightedevaluations', $data);

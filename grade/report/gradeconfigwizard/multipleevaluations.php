@@ -77,8 +77,8 @@ foreach ($gradeitems as $gradeitemkey => $gradeitem) {
         case 'category':
             $availablegradeitem['iscategory'] = true;
 
-            $gradecategory = $DB->get_record('grade_categories', ['id' => $gradeitem->iteminstance]);
-            $availablegradeitem['categoryname'] = $gradecategory->fullname;
+            //$gradecategory = $DB->get_record('grade_categories', ['id' => $gradeitem->iteminstance]);
+            //$availablegradeitem['categoryname'] = $gradecategory->fullname;
             break;
 
         case 'manual':
@@ -100,14 +100,16 @@ foreach ($gradeitems as $gradeitemkey => $gradeitem) {
 
     // $availablegradeitem['depth'] = $gradeitem->depth;
 
-    $availablegradeitems[] = $availablegradeitem;
+    if ($availablegradeitem['ismanual'] || $availablegradeitem['ismod']) {
+        $availablegradeitems[] = $availablegradeitem;
+    }
 }
 
 // echo '<pre>'; var_dump($availablegradeitems); echo '</pre>'; die('fd8798f7d89f7d8'); //#DEBUG# remove
 
 $data = [
     'availablegradeitems' => $availablegradeitems,
-    'urlsaveexit' => $CFG->wwwroot . "/grade/report/gradeconfigwizard/index.php?id=" . $courseid,
+    'urlsaveexit' => new moodle_url('/grade/report/gradeconfigwizard/processgradebook.php', ['id' => $courseid, 'type' => 'multiple']),
 ];
 
 echo $OUTPUT->render_from_template('gradereport_gradeconfigwizard/multipleevaluations', $data);

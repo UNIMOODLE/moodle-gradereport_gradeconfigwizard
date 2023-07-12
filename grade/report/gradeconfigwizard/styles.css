@@ -1,4 +1,5 @@
-.weightedevaluations-table td {
+.weightedevaluations-table td,
+.multipleevaluation-table td {
     vertical-align: middle;
 }
 
