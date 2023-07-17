@@ -1,0 +1,233 @@
+<form action="formulacreator.php?id={{courseid}}&gradeitemid={{gradeitemid}}" method="POST">
+<div class="container">
+    <div class="row">
+        <div class="col mt-1">
+            <div class="card h-100 formulacreator-select-items">
+                <div class="card-body">
+                    <h5 class="card-title">Items seleccionables</h5>
+                    {{> gradereport_gradeconfigwizard/availablegradeitems }}
+                </div> <!-- card-body -->
+            </div> <!-- card -->
+
+
+
+        </div> <!-- col -->
+        <div class="col mt-1">
+            <div class="card h-100 formulacreator-aggregation-method disabled-box">
+                <div class="card-body">
+                    <h5 class="card-title">Agregación</h5>
+
+                    <select name="formulaaggregationmethod" class="custom-select">
+                        <option value="0" selected>Selecciona método de agregación</option>
+                        <option value="meangrades">Mean of grades</option>
+                        <option value="weightedmeangrades">Weighted mean of grades</option>
+                        <option value="sum">Sum of grades</option>
+                        <option value="highest">Highest grade</option>
+                        <option value="lowest">Lowest grade</option>
+                    </select> <!-- custom-select -->
+
+                </div> <!-- card-body -->
+            </div> <!-- card -->
+        </div> <!-- col -->
+        <div class="col mt-1">
+            <div class="card h-100 formulacreator-weights-definition disabled-box">
+                <div class="card-body">
+                    <h5 class="card-title">Define the calculation</h5>
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Weight</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table> <!-- table -->
+
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-secondary" id="formulacreator-preview-formula">Generate formula</button>
+                    </div>
+
+                </div> <!-- card-body -->
+            </div> <!-- card -->
+        </div> <!-- col -->
+    </div> <!-- row -->
+    <div class="row">
+        <div class="col mt-1">
+            <div class="card h-100 formulacreator-formula disabled-box">
+                <div class="card-body">
+                    <h5 class="card-title">Fórmula</h5>
+                    <div class="form-group">
+                        <textarea name="formula" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="" readonly></textarea>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary" id="formulacreator-save-formula" >Save formula</button>
+                    </div>
+                </div> <!-- card-body -->
+            </div> <!-- card -->
+        </div> <!-- col -->
+    </div> <!-- row -->
+</div> <!-- container -->
+<button class="btn"></button>
+</form>
+
+<style>
+    .opacity-25 {
+        opacity: .25;
+    }
+
+    .disabled-box {
+        position: relative;
+        background-color: rgba(0,0,0,0.1); /* Fondo semitransparente */
+        opacity: 0.25;
+        pointer-events: none; /* Deshabilitar eventos */
+        z-index: 999;
+    }
+</style>
+
+{{#js}}
+
+    gradeitemid = "{{gradeitemid}}";
+    // Obtener los items seleccionados
+    let selecteditemscheckboxes = document.querySelectorAll('.formulacreator-select-items input[type=checkbox]');
+
+    aggregationmethoddiv = document.querySelector('.formulacreator-aggregation-method');
+    weightsdefinitiondiv = document.querySelector('.formulacreator-weights-definition');
+    weightsdefinitiontable = document.querySelector('.formulacreator-weights-definition table tbody');
+    aggregationmethodselect = document.querySelector('.formulacreator-aggregation-method select');
+
+
+    // Agregar evento change a cada checkbox de select-items
+    for (let i = 0; i < selecteditemscheckboxes.length; i++) {
+    selecteditemscheckboxes[i].addEventListener('change', function(e) {
+
+    // START: Habilitar aggregation methods
+
+    // Verificar si al menos 1 checkbox está marcado
+    let alMenosUnoMarcado = false;
+    for (let j = 0; j < selecteditemscheckboxes.length; j++) {
+    if (selecteditemscheckboxes[j].checked) {
+    alMenosUnoMarcado = true;
+    break;
+    }
+    }
+    // Habilitar o deshabilitar aggregation method selector según corresponda
+    if (alMenosUnoMarcado) {
+    aggregationmethoddiv.classList.remove("disabled-box");
+    if (aggregationmethodselect.value !== "0") {
+    weightsdefinitiondiv.classList.remove("disabled-box");
+    }
+    } else {
+    aggregationmethoddiv.classList.add("disabled-box");
+    // if (aggregationmethodselect.value === "0") {
+    weightsdefinitiondiv.classList.add("disabled-box");
+    // }
+    }
+
+    // END: Habilitar aggregation methods
+
+    // START: Añadir elementos a weights definition
+
+    if (this.checked) {
+    if (aggregationmethodselect.value === 'weightedmeangrades') {
+    weightenabled = '1';
+    } else {
+    weightenabled = '0';
+    }
+
+    let newrow = weightsdefinitiontable.insertRow(-1);
+    newrow.innerHTML = '<th scope="row">' +
+        this.dataset.displayname +
+        '</th>' +
+    '<td>' +
+        '<input type="text"' +
+        ' data-enabled="' + weightenabled + '"' +
+        ' data-itemdisplayname="'+ this.dataset.displayname + '"' +
+        ' data-itemidnumber="' + this.dataset.idnumber + '"' +
+        ' data-itemid="' + this.dataset.id + '"' +
+        ' data-paramtype="weight"' +
+        ' class="form-control" placeholder="">' +
+        '</td>';
+
+    newrow.dataset.id = this.dataset.id;
+    } else {
+    let weightsdefinitionmatchingrow = weightsdefinitiontable.querySelector('[data-id="'+this.dataset.id+'"]');
+    if (weightsdefinitionmatchingrow) {
+    weightsdefinitionmatchingrow.remove();
+    }
+    }
+
+    // END: Añadir elementos a weights definition
+    });
+    }
+
+
+    aggregationmethodselect.addEventListener('change', function(e) {
+    if (this.value === "0") {
+    weightsdefinitiondiv.classList.add("disabled-box");
+    } else {
+    weightsdefinitiondiv.classList.remove("disabled-box");
+    }
+    weightitems = weightsdefinitiondiv.querySelectorAll('[data-paramtype="weight"]');
+
+    switch (this.value) {
+    case 'weightedmeangrades':
+    weightitems.forEach(function(weightitem) {
+    debugger;
+    weightitem.dataset.enabled = 1;
+    weightitem.classList.remove("disabled-box");
+    });
+    break;
+    case 'meangrades':
+    case 'sum':
+    case 'highest':
+    case 'lowest':
+    weightitems.forEach(function(weightitem) {
+    weightitem.dataset.enabled = 0;
+    weightitem.classList.add("disabled-box");
+    });
+    break;
+    }
+
+    });
+
+    formulapreviewbox = document.querySelector('.formulacreator-formula');
+    formulapreviewtextarea = document.querySelector('.formulacreator-formula textarea');
+    previewformulabutton = document.getElementById('formulacreator-preview-formula');
+    previewformulabutton.addEventListener('click', function(e) {
+
+    formulapreviewbox.classList.remove("disabled-box");
+
+    let selectedformulaitems = weightsdefinitiontable.querySelectorAll('[data-paramtype="weight"]'); //@TODO change selector for something less specific
+    let itemsformula = '';
+
+    selectedformulaitems.forEach(function(selectedformulaitem) {
+    itemformula = "  <ITEM>";
+
+        itemformula += "<DISPLAYNAME>" + selectedformulaitem.dataset.itemdisplayname + "</DISPLAYNAME>";
+        itemformula += "<IDNUMBER>" + selectedformulaitem.dataset.itemidnumber + "</IDNUMBER>";
+        itemformula += "<GRADEITEMID>" + selectedformulaitem.dataset.itemid + "</GRADEITEMID>";
+
+        let weightvalue = '';
+        if (selectedformulaitem.dataset.enabled === '1') {
+        itemformula += "<WEIGHT>" + selectedformulaitem.value + "</WEIGHT>";
+        }
+
+        itemformula += "</ITEM>\n";
+
+    itemsformula += itemformula;
+    });
+
+    let exampleformulas = {
+    "meangrades": "<MEANGRADES>\n  "+itemsformula.trim()+"\n</MEANGRADES>",
+    "weightedmeangrades": "<WEIGHTEDMEANGRADES>\n"+itemsformula.trim()+"\n</WEIGHTEDMEANGRADES>",
+    "sum": "<SUM>\n"+itemsformula.trim()+"\n</SUM>",
+    "highest": "<HIGHEST>\n"+itemsformula.trim()+"\n</HIGHEST>",
+    "lowest": "<LOWEST>\n"+itemsformula.trim()+"\n</LOWEST>",
+    };
+
+    formulapreviewtextarea.value = exampleformulas[aggregationmethodselect.value];
+    });
+
+{{/js}}

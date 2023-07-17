@@ -1,0 +1,8 @@
+.weightedevaluations-table td,
+.multipleevaluation-table td {
+    vertical-align: middle;
+}
+
+.remove-item-icon {
+    cursor: pointer;
+}
