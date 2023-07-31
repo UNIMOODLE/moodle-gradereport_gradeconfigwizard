@@ -28,6 +28,29 @@ require_once $CFG->dirroot.'/grade/edit/tree/lib.php';
 
 $courseid = required_param('id', PARAM_INT);
 
+// Check if there is a new created category
+
+
+$relativepaths =  null;
+$subcategoryname = null;
+$gradeitemparent = null;
+$randomnames_dictionary = null;
+if(isset($_POST['relativepaths'])) $relativepaths = $_POST['relativepaths'];
+if(isset($_POST['randomnames_dictionary'])) $randomnames_dictionary = $_POST['randomnames_dictionary'];
+if(isset($_POST['subcategoryname'])) $subcategoryname = $_POST['subcategoryname'];
+if(isset($_POST['gradeitemparent'])) $gradeitemparent = $_POST['gradeitemparent'];
+
+if(isset($_POST['relativepaths']) || isset($_POST['randomnames_dictionary']) || isset($_POST['subcategoryname'])){
+    $gradebookcreations = new gradereport_gradeconfigwizard\gradebookcreations(
+        $courseid,                      // Course id where the gradebook will be configured
+        $relativepaths,                 // Relative paths of the categories to create
+        $randomnames_dictionary,        // Dictionary of random names
+        $subcategoryname,                 // Grade items info to create
+        $gradeitemparent);
+
+    $gradebookcreations->process();
+}
+
 $url = new moodle_url('/grade/report/gradeconfigwizard/index.php', array('id' => $courseid));
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('admin');
@@ -202,6 +225,8 @@ $tpldata->availablegradeitems = gradeconfigwizard_get_grade_items($courseid);
 $tpldata->urlformulacreator = $CFG->wwwroot . "/grade/report/gradeconfigwizard/formulacreator.php?id=" . $courseid;
 $tpldata->urlmultipleevaluations = $CFG->wwwroot . "/grade/report/gradeconfigwizard/multipleevaluations.php?id=" . $courseid;
 $tpldata->urlweightedevaluations = $CFG->wwwroot . "/grade/report/gradeconfigwizard/weightedevaluations.php?id=" . $courseid;
+$tpldata->urlgradereport = $CFG->wwwroot . "/grade/report/grader/index.php?id=" . $courseid;
+$tpldata->actionurl = $CFG->wwwroot . "/grade/report/gradeconfigwizard/index.php?id=" . $courseid;
 
 // $tpldata->table = html_writer::table($grade_edit_tree->table);
 

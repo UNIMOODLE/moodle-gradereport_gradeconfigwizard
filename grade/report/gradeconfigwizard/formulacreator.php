@@ -67,8 +67,6 @@ if (!$grade_item = grade_item::fetch(array('id'=>$gradeitemid, 'courseid'=>$cour
     throw new \moodle_exception('invaliditemid');
 }
 $all_grade_item = grade_item::fetch_all(array('courseid'=>$course->id));
-//print_object($all_grade_item);
-//print_object($grade_item);
 
 if($formulaxml !== ""){
     $item_nota = [
@@ -96,14 +94,22 @@ if($formulaxml !== ""){
         }
     }
 
-    //print_object($grade_items);
     $formula = generate_formula_moodle($grade_items);
     $formula = calc_formula::unlocalize($formula);
     $normalized_formula = grade_item::normalize_formula($formula, $course->id);
     $normalized_formula = str_replace('.#', ',#', $normalized_formula);
+    $old_grade_item = $grade_item->get_calculation();
     $grade_item->set_calculation($normalized_formula);
-    redirect( $CFG->wwwroot . "/grade/report/gradeconfigwizard/index.php?id=" . $courseid . "&gradeitemid=" . $gradeitemid, 'Succesfull Update', null, \core\output\notification::NOTIFY_SUCCESS);
+    $status = grade_regrade_final_grades($course->id, null, null, null);
+    if (is_array($status)){
+        $errormsg = reset($status);
+        $grade_item->set_calculation($old_grade_item ?? "");
+        redirect( $CFG->wwwroot . "/grade/report/gradeconfigwizard/index.php?id=" . $courseid . "&gradeitemid=" . $gradeitemid, $errormsg, null, \core\output\notification::NOTIFY_ERROR);
 
+    }
+    else{
+        redirect( $CFG->wwwroot . "/grade/report/gradeconfigwizard/index.php?id=" . $courseid . "&gradeitemid=" . $gradeitemid, 'Succesfull Update', null, \core\output\notification::NOTIFY_SUCCESS);
+    }
 }
 
 

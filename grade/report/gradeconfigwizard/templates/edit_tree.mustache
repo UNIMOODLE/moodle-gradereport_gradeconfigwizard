@@ -43,13 +43,16 @@
 }}
 
 <div class="container">
-    <div class="row">
-        <a href="{{{urlmultipleevaluations}}}">Acceso al editor de múltiples evaluaciones</a>
-    </div>
-    <div class="row">
-        <a href="{{{urlweightedevaluations}}}">Acceso al editor de múltiples evaluaciones por peso</a>
+    <div class="text-center">
+        <button type="button" class="btn btn-secondary">
+            <a href="{{{urlmultipleevaluations}}}">Acceso al editor de múltiples evaluaciones</a>
+        </button>
+        <button type="button" class="btn btn-secondary">
+            <a href="{{{urlweightedevaluations}}}">Acceso al editor de múltiples evaluaciones por peso</a>
+        </button>
     </div>
 </div>
+<br>
 
 <form id="gradetreeform" method="post" action="{{actionurl}}">
     <div>
@@ -172,7 +175,7 @@
                                     Edit calculation
                                     </a>
                                 {{/istotal}}
-                                <!--&{{gradeitemid}} -->
+
                                 {{#ismanual}}
                                     <a class="dropdown-item" href="{{urlformulacreator}}id={{courseid}}&gradeitemid={{gradeitemid}}">
                                     <i class="fa fa-calculator fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
@@ -202,7 +205,10 @@
         </table>
 
         <div class="text-center">
-            <button tyoe="button" class="btn btn-primary">Guardar cambios</button>
+            <button type="button" class="btn btn-secondary">
+                <a href="{{{urlgradereport}}}">Check Gradebook</a>
+            </button>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
         </div>
 
         <div id="gradetreesubmit">
@@ -278,12 +284,13 @@
 
     removeitemiconhtml = (randomid) => `<i class="fa fa-fw fa-trash-o icon remove-item-icon" data-randomid="${randomid}" title="Remove element" role="img" aria-label="Remove element"></i>`;
 
-    gradeitemrowhtml = (randomid, gradecategoryid, gradeitemid, depth) => `
+    gradeitemrowhtml = (randomid, gradecategoryid, gradeitemid, depth, parentrandomid, alreadycreatedcategory) => `
     <tr data-gradecategoryid="${gradecategoryid}" data-gradeitemid="${gradeitemid}" data-itemtype="manual" data-randomid="${randomid}" id="${randomid}" data-categorydepth="${depth}">
         <td data-id="${gradeitemid}" data-displayname="">
             ${getDepthPadding(depth)}
             <i class="fa fa-square-o fa-fw icon itemicon" title="Category" role="img" aria-label="Category"></i>
-            <input class="subcategoryname" name="subcategoryname" value="">${removeitemiconhtml(randomid)}
+            <input class="subcategoryname" name="subcategoryname[${randomid}]" value="">${removeitemiconhtml(randomid)}
+            ${alreadycreatedcategory} <!-- Variable used to add the parentrandomid to the form or the categoryid of the already created category -->
         </td>
         <td>
             <span class="p-2"></span>
@@ -303,12 +310,13 @@
     </tr>
     `;
 
-    gradeitemcategoryrowhtml = (randomid, gradecategoryid, gradeitemid, depth) => `
-    <tr data-gradecategoryid="${gradecategoryid}" data-gradeitemid="${gradeitemid}" data-itemtype="category" data-randomid="${randomid}" id="${randomid}" data-categorydepth="${depth}">
+    gradeitemcategoryrowhtml = (randomid, gradecategoryid, gradeitemid, depth, parentrelativepath) => `
+    <tr data-gradecategoryid="${gradecategoryid}" data-gradeitemid="${gradeitemid}" data-itemtype="category" data-randomid="${randomid}" id="${randomid}" data-categorydepth="${depth}" data-parentrelativepath="${parentrelativepath}">
         <td data-id="${gradeitemid}" data-displayname="">
             ${getDepthPadding(depth)}
             <i class="fa fa-folder fa-fw icon itemicon" title="Category" role="img" aria-label="Category"></i>
-            <input class="subcategoryname" name="subcategoryname" value="">${removeitemiconhtml(randomid)}
+            <input class="subcategoryname" name="randomnames_dictionary[${randomid}]" value="">${removeitemiconhtml(randomid)}
+            <input type="hidden" name="relativepaths[${randomid}]" value="${parentrelativepath}">
         </td>
         <td>
             <span class="p-2"></span>
@@ -385,6 +393,9 @@
 
     /* START: FUNCTIONS */
 
+    let defaultPathSeparator = '/';
+
+
     function generateUniqueId() {
     let randomid = null;
     while (randomid === null || document.getElementById(randomid) !== null) {
@@ -408,10 +419,22 @@
     let gradeitemid = row.dataset.gradeitemid;
     let depth = row.dataset.categorydepth;
 
+    let parentrandomid = row.dataset.randomid;
+
     let newrandomid = generateUniqueId();
     let newdepth = parseInt(depth) + 1;
 
-    let newgradeitemrowhtml = gradeitemrowhtml(newrandomid, gradecategoryid, gradeitemid, newdepth);
+
+    // The "/" is used to identify that the parent is a category already created and then the value
+    // is the randomid of the category, otherwise if the parent is a category that isn't created yet
+    // the value is the randomid of the parent category.
+    if(parentrandomid == "") {
+    alreadycreatedcategory = `<input type="hidden" name="gradeitemparent[${newrandomid}]" value="/${gradecategoryid}">`;
+    }else{
+    alreadycreatedcategory = `<input type="hidden" name="gradeitemparent[${newrandomid}]" value="${parentrandomid}">`;
+    }
+
+    let newgradeitemrowhtml = gradeitemrowhtml(newrandomid, gradecategoryid, gradeitemid, newdepth, parentrandomid, alreadycreatedcategory);
     row.insertAdjacentHTML('afterend', newgradeitemrowhtml);
 
     let newgradeitemrow = document.getElementById(newrandomid);
@@ -438,7 +461,14 @@
     let newrandomid = generateUniqueId();
     let newdepth = parseInt(depth) + 1;
 
-    let newgradeitemcategoryrowhtml = gradeitemcategoryrowhtml(newrandomid, gradecategoryid, gradeitemid, newdepth);
+    let parentrelativepath = row.dataset.parentrelativepath;
+
+    // In case the new category is a subcategory of an already created category
+    if(parentrelativepath == undefined) parentrelativepath = gradecategoryid;
+
+    parentrelativepath = parentrelativepath + defaultPathSeparator + newrandomid;
+
+    let newgradeitemcategoryrowhtml = gradeitemcategoryrowhtml(newrandomid, gradecategoryid, gradeitemid, newdepth, parentrelativepath);
     row.insertAdjacentHTML('afterend', newgradeitemcategoryrowhtml);
 
     let newgradeitemcategoryrow = document.getElementById(newrandomid);
