@@ -317,7 +317,7 @@ $tpldata->urlweightedevaluations = $CFG->wwwroot . "/grade/report/gradeconfigwiz
 $tpldata->urlgradereport = $CFG->wwwroot . "/grade/report/grader/index.php?id=" . $courseid;
 $tpldata->actionurl = $CFG->wwwroot . "/grade/report/gradeconfigwizard/index.php?id=" . $courseid;
 $tpldata->courseid = $courseid;
-
+$tpldata->wwwroot = $CFG->wwwroot;
 // $tpldata->table = html_writer::table($grade_edit_tree->table);
 
 echo $OUTPUT->render_from_template('gradereport_gradeconfigwizard/edit_tree', $tpldata);

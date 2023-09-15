@@ -583,7 +583,7 @@ function drop() {
 
     console.log('eid: ' + dragged.dataset.eid + ' moveafter ' + target.dataset.eid);
 
-    window.location.href = '/grade/report/gradeconfigwizard/index.php'
+    window.location.href = '{{wwwroot}}/grade/report/gradeconfigwizard/index.php'
                             + '?id=' + "{{courseid}}"
                             + '&draggedid=' + dragged.dataset.eid
                             + '&targetid=' + target.dataset.eid
@@ -596,7 +596,7 @@ function drop() {
         first = true;
     }
 
-    window.location.href = '/grade/report/gradeconfigwizard/index.php'
+    window.location.href = '{{wwwroot}}/grade/report/gradeconfigwizard/index.php'
                             + '?id=' + "{{courseid}}"
                             + '&draggedid=' + dragged.dataset.gradeitemid
                             + '&targetid=' + target.dataset.gradeitemid
