@@ -1,0 +1,698 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template core_grades/edit_tree
+
+    Edit tree template.
+
+    Context variables required for this template:
+    * actionurl - string - Form action URL.
+    * sesskey - string - The session key.
+    * notification - object - Context data for the notification.
+    * showsave - boolean - Whether to show the save changes button.
+    * showbulkmove - boolean - Whether to show the bulk move select menu.
+    * table - string - HTML content of the grade items table.
+    * bulkmoveoptions - array - Key-value pair array for the options of the the bulk move select menu element.
+
+    Example context (json):
+    {
+        "actionurl": "#",
+        "sesskey": "fakesesskey",
+        "notification": "",
+        "table": "<table class='generaltable simple setup-grades' id='grade_edit_tree_table'><thead> <tr><th>Name</th><th>Weights</th><th>Max grade</th><th>Actions</th> </tr></thead><tbody></tbody></table>",
+        "showsave": "true",
+        "showbulkmove": "true",
+        "bulkmoveoptions": "{'value' : '1', 'name' : 'Test grade category'}",
+        "value": "1",
+        "name": "Test grade category"
+    }
+}}
+
+<div class="container">
+    <div class="text-center">
+        <button type="button" class="btn btn-secondary">
+            <a href="{{{urlmultipleevaluations}}}">Acceso al editor de múltiples evaluaciones</a>
+        </button>
+        <button type="button" class="btn btn-secondary">
+            <a href="{{{urlweightedevaluations}}}">Acceso al editor de múltiples evaluaciones por peso</a>
+        </button>
+    </div>
+</div>
+<br>
+
+<form id="gradetreeform" method="post" action="{{actionurl}}">
+    <div>
+        <input type="hidden" name="sesskey" value="{{sesskey}}">
+        {{#notification}}
+            {{>core/notification_info}}
+        {{/notification}}
+
+        <table id="gradeconfigwizard-dashboard-table" class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Weights</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {{#availablegradeitems}}
+
+                <!-- Only the Category and Grade Iteams are draggable things -->
+                <tr data-gradecategoryid="{{gradecategoryid}}" data-gradeitemid="{{gradeitemid}}" data-categorydepth="{{categorydepth}}" data-itemtype="{{itemtype}}" data-istotal="{{istotal}}" data-randomid="" id="" data-eid="{{eid}}"
+                    {{#istotal}}
+                        draggable="false"
+                    {{/istotal}}
+                    {{^istotal}}
+                        {{^iscourse}}
+                            draggable="true"
+                        {{/iscourse}}
+                    {{/istotal}}>
+
+                    {{#iscourse}}
+                        <td data-id="{{id}}" data-displayname="Total curso">
+                            {{#categorydepthloop}}
+                                <span class="p-2"></span>
+                            {{/categorydepthloop}}
+                            <i class="fa fa-folder fa-fw icon itemicon" title="Category" role="img" aria-label="Category"></i>
+                            {{displayname}}
+                        </td>
+                    {{/iscourse}}
+
+                    {{#iscategory}}
+                        <td data-id="{{id}}" data-displayname="{{displayname}}">
+                            {{#categorydepthloop}}
+                                <span class="p-2"></span>
+                            {{/categorydepthloop}}
+                            <i class="icon fa fa-arrows-v fa-fw " title="Move" role="img" aria-label="Move"></i>
+                            <i class="fa fa-folder fa-fw icon itemicon" title="Category" role="img" aria-label="Category"></i>
+                            {{displayname}}
+                        </td>
+                    {{/iscategory}}
+
+                    {{#ismod}}
+                      <td data-id="{{id}}" data-displayname="{{itemname}}">
+                        {{#categorydepthloop}}
+                            <span class="p-2"></span>
+                        {{/categorydepthloop}}
+                        <i class="icon fa fa-arrows-v fa-fw " title="Move" role="img" aria-label="Move"></i>
+                        <i class="fa fa-file-o fa-fw icon itemicon" title="Category" role="img" aria-label="Category"></i>
+                        {{itemname}} ({{eid}})
+                        </td>
+                    {{/ismod}}
+
+                    {{#ismanual}}
+                      <td data-id="{{id}}" data-displayname="{{itemname}}">
+                        {{#categorydepthloop}}
+                            <span class="p-2"></span>
+                        {{/categorydepthloop}}
+                        <i class="icon fa fa-arrows-v fa-fw " title="Move" role="img" aria-label="Move"></i>
+                        <i class="fa fa-square-o fa-fw icon itemicon" title="Category" role="img" aria-label="Category"></i>
+                        {{itemname}}
+                      </td>
+                    {{/ismanual}}
+
+                    {{#istotal}}
+                        <td data-id="{{id}}" data-displayname="Total {{displayname}}">
+                            {{#categorydepthloop}}
+                                <span class="p-2"></span>
+                            {{/categorydepthloop}}
+                            <i class="fa fa-list fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                            Total {{displayname}}
+                        </td>
+                    {{/istotal}}
+
+                    <td> {{!-- Weight datacell --}}
+                        {{^iscourse}}
+                            {{^istotal}}
+                                {{#categorydepthloop}}
+                                    <span class="p-2"></span>
+                                {{/categorydepthloop}}
+                                <input type="text" name="weight" id="" value="{{weight}}" size="4" disabled="" class="gradeitem-weight form-control d-inline-block">
+                            {{/istotal}}
+                        {{/iscourse}}
+                    </td>
+
+                    <td> {{!-- Actions datacell --}}
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-{{gradecategoryid}}-{{gradeitemid}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Edit
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="-{{gradecategoryid}}-{{gradeitemid}}">
+
+                                {{#iscategory}}
+                                    <a class="add-gradeitemcategory-btn dropdown-item" href="#">
+                                        <i class="fa fa-plus fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Add category
+                                    </a>
+                                    <a class="add-gradeitem-btn dropdown-item" href="#">
+                                        <i class="fa fa-plus fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Add grade item
+                                    </a>
+                                    <a class="gradeitem-disable-btn dropdown-item" href="#">
+                                        <i class="fa fa-minus fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Disable
+                                    </a>
+                                {{/iscategory}}
+
+                                {{#iscourse}}
+                                    <a class="add-gradeitemcategory-btn dropdown-item" href="#">
+                                        <i class="fa fa-plus fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Add category
+                                    </a>
+                                    <a class="add-gradeitem-btn dropdown-item" href="#">
+                                        <i class="fa fa-plus fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Add grade item
+                                    </a>
+                                {{/iscourse}}
+
+                                {{#istotal}}
+                                    <a class="dropdown-item" href="{{urlformulacreator}}id={{courseid}}&gradeitemid={{gradeitemid}}">
+                                    <i class="fa fa-calculator fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                    Edit calculation
+                                    </a>
+                                {{/istotal}}
+
+                                {{#ismanual}}
+                                    <a class="dropdown-item" href="{{urlformulacreator}}id={{courseid}}&gradeitemid={{gradeitemid}}">
+                                    <i class="fa fa-calculator fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                    Edit calculation
+                                    </a>
+                                    <a class="gradeitem-disable-btn dropdown-item" href="#">
+                                        <i class="fa fa-minus fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Disable
+                                    </a>
+                                {{/ismanual}}
+
+                                {{#ismod}}
+                                    <a class="gradeitem-disable-btn dropdown-item" href="#">
+                                        <i class="fa fa-minus fa-fw icon itemicon" title="{{displayname}}" role="img" aria-label="{{displayname}}"></i>
+                                        Disable
+                                    </a>
+                                {{/ismod}}
+
+                            </div>
+                        </div>
+                    </td> {{!-- Actions datacell --}}
+
+                </tr>
+
+            {{/availablegradeitems}}
+
+        </table>
+
+        <div class="text-center">
+            <button type="button" class="btn btn-secondary">
+                <a href="{{{urlgradereport}}}">Check Gradebook</a>
+            </button>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+
+        <div id="gradetreesubmit">
+            {{#showsave}}
+                <input class="advanced btn btn-primary" type="submit" value="{{#cleanstr}}savechanges{{/cleanstr}}">
+            {{/showsave}}
+            {{#showbulkmove}}
+                <div class="form-inline mt-3">
+                    <input type="hidden" name="bulkmove" value="0" id="bulkmoveinput">
+                    <label for="menumoveafter">{{#str}}moveselectedto, grades{{/str}}</label>
+                    <select name="moveafter" id="menumoveafter" class="ignoredirty singleselect custom-select form-control"
+                            data-action="toggle" data-toggle="action" data-togglegroup="category" disabled>
+                        {{#bulkmoveoptions}}
+                            <option value="{{value}}">{{{name}}}</option>
+                        {{/bulkmoveoptions}}
+                    </select>
+                </div>
+            {{/showbulkmove}}
+        </div> {{!-- #gradetreesubmit --}}
+
+    </div>
+</form>
+
+<style>
+    #page-grade-report-gradeconfigwizard-index .column-range, #page-grade-report-gradeconfigwizard-index .column-range, #page-grade-report-gradeconfigwizard-index .column-select {
+        display: none;
+    }
+
+    #page-grade-report-gradeconfigwizard-index table.generaltable tbody tr td.column-actions > * {
+        display: none;
+    }
+
+    #page-grade-report-gradeconfigwizard-index table.generaltable tbody tr.categoryitem td.column-actions > * {
+        display:inherit;
+    }
+
+    #page-grade-report-gradeconfigwizard-index table.generaltable tbody tr.category td.column-actions > * {
+        display:inherit;
+    }
+
+    /* START: Show actions on manual gradeitems */
+    #page-grade-report-gradeconfigwizard-index table.generaltable tbody tr.item:not(.categoryitem):has(.fa-square-o) td.column-actions > * {
+        display:inherit;
+    }
+    /* END: Show actions on manual gradeitems */
+
+    #page-grade-report-gradeconfigwizard-index table.generaltable tbody tr.courseitem td.column-actions > * {
+        display:inherit;
+    }
+
+    #page-grade-report-gradeconfigwizard-index .column-weight input[type=checkbox] {
+        display: none;
+    }
+
+    #page-grade-report-gradeconfigwizard-index .column-name .action-icon {
+        display: none;
+    }
+</style>
+
+{{#js}}
+    //
+
+    /* START: VARIABLES */
+
+    gradeconfigwizarddashboardtable = document.getElementById('gradeconfigwizard-dashboard-table');
+    gradeconfigwizarddashboardtablebody = gradeconfigwizarddashboardtable.querySelector('tbody');
+
+    courseid = "{{courseid}}";
+
+    /* END: VARIABLES */
+
+    /* START: TEMPLATES */
+
+    removeitemiconhtml = (randomid) => `<i class="fa fa-fw fa-trash-o icon remove-item-icon" data-randomid="${randomid}" title="Remove element" role="img" aria-label="Remove element"></i>`;
+
+    gradeitemrowhtml = (randomid, gradecategoryid, gradeitemid, depth, parentrandomid, alreadycreatedcategory) => `
+    <tr data-gradecategoryid="${gradecategoryid}" data-gradeitemid="${gradeitemid}" data-itemtype="manual" data-randomid="${randomid}" id="${randomid}" data-categorydepth="${depth}">
+        <td data-id="${gradeitemid}" data-displayname="">
+            ${getDepthPadding(depth)}
+            <i class="fa fa-square-o fa-fw icon itemicon" title="Category" role="img" aria-label="Category"></i>
+            <input class="subcategoryname" name="subcategoryname[${randomid}]" value="">${removeitemiconhtml(randomid)}
+            ${alreadycreatedcategory} <!-- Variable used to add the parentrandomid to the form or the categoryid of the already created category -->
+        </td>
+        <td>
+            <span class="p-2"></span>
+            <input type="text" name="weight" id="" value="1" size="4" disabled="" class="gradeitem-weight form-control d-inline-block">
+        </td>
+        <td>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-${gradecategoryid}-${gradeitemid}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Edit
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${gradecategoryid}-${gradeitemid}">
+                    ${gradeitemeditactioneditcalculationhtml}
+                    ${gradeitemeditactiondisablehtml}
+                </div>
+            </div>
+        </td>
+    </tr>
+    `;
+
+    gradeitemcategoryrowhtml = (randomid, gradecategoryid, gradeitemid, depth, parentrelativepath) => `
+    <tr data-gradecategoryid="${gradecategoryid}" data-gradeitemid="${gradeitemid}" data-itemtype="category" data-randomid="${randomid}" id="${randomid}" data-categorydepth="${depth}" data-parentrelativepath="${parentrelativepath}">
+        <td data-id="${gradeitemid}" data-displayname="">
+            ${getDepthPadding(depth)}
+            <i class="fa fa-folder fa-fw icon itemicon" title="Category" role="img" aria-label="Category"></i>
+            <input class="subcategoryname" name="randomnames_dictionary[${randomid}]" value="">${removeitemiconhtml(randomid)}
+            <input type="hidden" name="relativepaths[${randomid}]" value="${parentrelativepath}">
+        </td>
+        <td>
+            <span class="p-2"></span>
+            <input type="text" name="weight" id="" value="1" size="4" disabled="" class="gradeitem-weight form-control d-inline-block">
+        </td>
+        <td>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-${gradecategoryid}-${gradeitemid}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Edit
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${gradecategoryid}-${gradeitemid}">
+                    ${gradeitemeditactionaddgradeitemcategoryhtml}
+                    ${gradeitemeditactionaddgradeitemhtml}
+                    ${gradeitemeditactiondisablehtml}
+                </div>
+            </div>
+        </td>
+    </tr>
+    `;
+
+    gradeitemcategorytotalrowhtml = (randomid, gradecategoryid, gradeitemid, depth) => `
+    <tr data-gradecategoryid="${gradecategoryid}" data-gradeitemid="${gradeitemid}" data-itemtype="category" data-randomid="${randomid}" data-istotal="1" id="${randomid}" data-categorydepth="${depth}">
+        <td data-id="${gradeitemid}" data-displayname="">
+            ${getDepthPadding(depth)}
+            <i class="fa fa-list fa-fw icon itemicon" title="Category total" role="img" aria-label="Category total"></i>
+            <input class="subcategoryname" name="subcategoryname" value="" disabled="true">
+        </td>
+        <td>
+        </td>
+        <td>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton-${gradecategoryid}-${gradeitemid}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Edit
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton-${gradecategoryid}-${gradeitemid}">
+                    ${gradeitemeditactioneditcalculationhtml}
+                </div>
+            </div>
+        </td>
+    </tr>
+    `;
+
+    gradeitemeditactionaddgradeitemcategoryhtml = `
+    <a class="add-gradeitemcategory-btn dropdown-item" href="#">
+        <i class="fa fa-plus fa-fw icon itemicon" title="Add category" role="img" aria-label="Add category"></i>
+        Add category
+    </a>
+    `;
+
+    gradeitemeditactionaddgradeitemhtml = `
+    <a class="add-gradeitem-btn dropdown-item" href="#">
+        <i class="fa fa-plus fa-fw icon itemicon" title="Add gradeitem" role="img" aria-label="Add gradeitem"></i>
+        Add grade item
+    </a>
+    `;
+
+    gradeitemeditactioneditcalculationhtml = `
+    <a class="dropdown-item" href="{{urlformulacreator}}id={{courseid}}&gradeitemid={{gradeitemid}}">
+    <i class="fa fa-calculator fa-fw icon itemicon" title="" role="img" aria-label=""></i>
+    Edit calculation
+    </a>
+    `;
+
+
+    gradeitemeditactiondisablehtml = `
+    <a class="gradeitem-disable-btn dropdown-item" href="#">
+        <i class="fa fa-minus fa-fw icon itemicon" title="" role="img" aria-label=""></i>
+        Disable
+    </a>
+    `;
+
+
+    /* END: TEMPLATES */
+
+    /* START: FUNCTIONS */
+
+    let defaultPathSeparator = '/';
+
+
+    function generateUniqueId() {
+    let randomid = null;
+    while (randomid === null || document.getElementById(randomid) !== null) {
+    // generate a 8 chars long random id
+    randomid = Math.random().toString(36).substring(2, 10);
+    }
+    return randomid;
+    }
+
+    function getDepthPadding(depth) {
+    depth = parseInt(depth);
+    let response = '';
+    for (let i = 0; i < depth; i++){
+    response += '<span class="p-2"></span>';
+    }
+    return response;
+    }
+
+    function addGradeitemAfterRow(row) {
+    let gradecategoryid = row.dataset.gradecategoryid;
+    let gradeitemid = row.dataset.gradeitemid;
+    let depth = row.dataset.categorydepth;
+
+    let parentrandomid = row.dataset.randomid;
+
+    let newrandomid = generateUniqueId();
+    let newdepth = parseInt(depth) + 1;
+
+
+    // The "/" is used to identify that the parent is a category already created and then the value
+    // is the randomid of the category, otherwise if the parent is a category that isn't created yet
+    // the value is the randomid of the parent category.
+    if(parentrandomid == "") {
+    alreadycreatedcategory = `<input type="hidden" name="gradeitemparent[${newrandomid}]" value="/${gradecategoryid}">`;
+    }else{
+    alreadycreatedcategory = `<input type="hidden" name="gradeitemparent[${newrandomid}]" value="${parentrandomid}">`;
+    }
+
+    let newgradeitemrowhtml = gradeitemrowhtml(newrandomid, gradecategoryid, gradeitemid, newdepth, parentrandomid, alreadycreatedcategory);
+    row.insertAdjacentHTML('afterend', newgradeitemrowhtml);
+
+    let newgradeitemrow = document.getElementById(newrandomid);
+
+    newgradeitemrow.querySelector('.remove-item-icon').addEventListener('click', removeGradeitemButtonClickCallback);
+    newgradeitemrow.querySelector('.gradeitem-disable-btn').addEventListener('click', disableGradeitemButtonClickCallback);
+
+    return newgradeitemrow;
+    }
+
+    function removeGradeitemRow(gradeitemrow) {
+    gradeitemrow.remove();
+    }
+
+function disableGradeitem(gradeitemrow) {
+    let action = 'disablegradeitem';
+    let actiongradeitemid = gradeitemrow.dataset.gradeitemid;
+
+    window.location.href = '{{{actionurl}}}&action='+action+'&actiongradeitemid='+actiongradeitemid;
+}
+
+function disableGradeitemCategory(gradeitemrow) {
+    let action = 'disablegradeitemcategory';
+    let actiongradeitemid = gradeitemrow.dataset.gradeitemid;
+
+    window.location.href = '{{{actionurl}}}&action='+action+'&actiongradeitemid='+actiongradeitemid;
+}
+
+function addGradeitemCategoryAfterRow(row) {
+    let gradecategoryid = row.dataset.gradecategoryid;
+    let gradeitemid = row.dataset.gradeitemid;
+    let depth = row.dataset.categorydepth;
+
+    let newrandomid = generateUniqueId();
+    let newdepth = parseInt(depth) + 1;
+
+    let parentrelativepath = row.dataset.parentrelativepath;
+
+    // In case the new category is a subcategory of an already created category
+    if(parentrelativepath == undefined) parentrelativepath = gradecategoryid;
+    // In case the new category is a subcategory of the course
+    if(gradecategoryid == "" && depth == "0") {
+        parentrelativepath = "{{courseid}}";
+    }
+
+    parentrelativepath = parentrelativepath + defaultPathSeparator + newrandomid;
+
+    let newgradeitemcategoryrowhtml = gradeitemcategoryrowhtml(newrandomid, gradecategoryid, gradeitemid, newdepth, parentrelativepath);
+    row.insertAdjacentHTML('afterend', newgradeitemcategoryrowhtml);
+
+    let newgradeitemcategoryrow = document.getElementById(newrandomid);
+
+    newgradeitemcategoryrow.querySelector('.remove-item-icon').addEventListener('click', removeGradeitemCategoryButtonClickCallback);
+
+    newgradeitemcategoryrow.querySelector('.add-gradeitemcategory-btn').addEventListener('click', addGradeitemCategoryButtonClickCallback);
+    newgradeitemcategoryrow.querySelector('.add-gradeitem-btn').addEventListener('click', addGradeitemButtonClickCallback);
+    newgradeitemcategoryrow.querySelector('.gradeitem-disable-btn').addEventListener('click', disableGradeitemButtonClickCallback);
+
+    let newgradecategorytotaldepth = parseInt(newdepth) + 1;
+    let newgradeitemcategorytotalrowhtml = gradeitemcategorytotalrowhtml(newrandomid, gradecategoryid, gradeitemid, newgradecategorytotaldepth);
+    newgradeitemcategoryrow.insertAdjacentHTML('afterend', newgradeitemcategorytotalrowhtml);
+
+    var newgradeitemcategorytotalrow = gradeconfigwizarddashboardtablebody.querySelector('[data-randomid="'+newrandomid+'"][data-istotal="1"]');
+
+    newgradeitemcategoryrow.querySelector('.subcategoryname').addEventListener('input', function() {
+    newgradeitemcategorytotalrow.querySelector('input.subcategoryname').value = 'Total ' + this.value;
+    });
+
+    return newgradeitemcategoryrow;
+    }
+
+let dragged = null;
+let target = null;
+
+// DRAG EVENTS FUNCTIONS
+function dragstart(event) {
+    // Make the row invisible until the dragend event is fired
+    setTimeout(()=>event.target.className="invisible", 0)
+    dragged = event.target;
+    let flag=false;
+    let currentdepth=dragged.dataset.categorydepth;
+    /*
+    // TODO Display none the childs of the dragged row
+    array = Array.from(gradeconfigwizarddashboardtablebody.querySelectorAll('tr'));
+    array.forEach(element => {
+        if(element.dataset.eid == dragged.dataset.eid) flag=true;
+        if(!flag) return;
+        debugger;
+
+        if(flag && currentdepth >= element.dataset.categorydepth){
+            console.log(element);
+        }
+    });*/
+}
+
+function dragend(event) {
+    //this.style.display = 'block';
+    event.target.className = '';
+    // Ref: moodle/grade/edit/tree/index.php
+}
+
+function dragover(event){
+    // Get the element that is being on the bottom of the dragged element
+    // prevent default to allow drop
+    event.preventDefault();
+
+    target = event.target.closest('tr');
+    target.className = 'big-separator';
+}
+
+function dragleave(event){
+    target = event.target.closest('tr');
+    target.className = 'small-separator';
+}
+
+function drop() {
+    let first = false;
+
+    /*if(target.dataset.istotal == '1'){
+        // Get the parent row
+        array = Array.from(gradeconfigwizarddashboardtablebody.querySelectorAll('tr'));
+        array.forEach(element => {
+            // Get parent element
+            if(element.dataset.gradeitemid == target.dataset.gradeitemid
+                && element.dataset.gradecategoryid != ''){
+                target = element;
+            }
+        });
+    }else{
+        if(target.dataset.itemtype == 'category' || target.dataset.itemtype == 'course' && target.dataset.istotal == '0'){
+            first = true;
+        }
+    }
+
+    console.log('eid: ' + dragged.dataset.eid + ' moveafter ' + target.dataset.eid);
+
+    window.location.href = '/grade/report/gradeconfigwizard/index.php'
+                            + '?id=' + "{{courseid}}"
+                            + '&draggedid=' + dragged.dataset.eid
+                            + '&targetid=' + target.dataset.eid
+                            + '&first=' + first;*/
+
+
+    if(target.dataset.istotal == '0'
+        && target.dataset.itemtype == 'category'
+        || target.dataset.itemtype == 'course'){
+        first = true;
+    }
+
+    window.location.href = '/grade/report/gradeconfigwizard/index.php'
+                            + '?id=' + "{{courseid}}"
+                            + '&draggedid=' + dragged.dataset.gradeitemid
+                            + '&targetid=' + target.dataset.gradeitemid
+                            + '&first=' + first;
+
+}
+
+
+
+function removeGradeitemCategory(gradeitemcategoryrow) {
+    let parentgradecategorydepth = gradeitemcategoryrow.dataset.categorydepth
+
+    while (currentrow = gradeitemcategoryrow.nextElementSibling) {
+    let currentdepth = currentrow.dataset.categorydepth;
+    if (parentgradecategorydepth >= currentdepth) {
+    break;
+    }
+    if (currentrow.dataset.itemtype === 'category' && currentrow.dataset.istotal !== '1') {
+    removeGradeitemCategory(currentrow)
+    } else {
+    removeGradeitemRow(currentrow);
+    }
+    }
+    gradeitemcategoryrow.remove();
+    }
+
+    /* END: FUNCTIONS */
+
+    /* START: CALLBACKS */
+
+    function addGradeitemButtonClickCallback() {
+    let targetrow = this.closest('tr');
+    let newrow = addGradeitemAfterRow(targetrow);
+    newrow.querySelector('input.subcategoryname').focus();
+    }
+
+    function removeGradeitemButtonClickCallback() {
+    let targetrow = this.closest('tr');
+    removeGradeitemRow(targetrow);
+    }
+
+function disableGradeitemButtonClickCallback() {
+    let targetrow = this.closest('tr');
+
+    if (targetrow.dataset.itemtype === 'mod' || targetrow.dataset.itemtype === 'manual') {
+        disableGradeitem(targetrow);
+    } else if (targetrow.dataset.itemtype === 'category') {
+        disableGradeitemCategory(targetrow);
+    }
+}
+
+
+    function addGradeitemCategoryButtonClickCallback() {
+    let targetrow = this.closest('tr');
+    let newrow = addGradeitemCategoryAfterRow(targetrow);
+    newrow.querySelector('input.subcategoryname').focus();
+    }
+
+    function removeGradeitemCategoryButtonClickCallback() {
+    let targetrow = this.closest('tr');
+    removeGradeitemCategory(targetrow);
+    }
+
+    /* END: CALLBACKS */
+
+    /* START: EVENT LISTENERS DECLARATION */
+
+    gradeconfigwizarddashboardtablebody.querySelectorAll('.add-gradeitemcategory-btn').forEach(
+    function(row) {
+    row.addEventListener('click', addGradeitemCategoryButtonClickCallback);
+    }
+    );
+
+    gradeconfigwizarddashboardtablebody.querySelectorAll('.add-gradeitem-btn').forEach(
+    function(row) {
+    row.addEventListener('click', addGradeitemButtonClickCallback);
+    }
+    );
+
+    gradeconfigwizarddashboardtablebody.querySelectorAll('.gradeitem-disable-btn').forEach(
+    function(row) {
+    row.addEventListener('click', disableGradeitemButtonClickCallback);
+    }
+    );
+
+// Drag events listeners
+gradeconfigwizarddashboardtablebody.querySelectorAll('tr').forEach(
+    function(row) {
+        row.addEventListener('dragstart', dragstart);
+        row.addEventListener('dragend', dragend);
+        row.addEventListener('dragover', dragover);
+        row.addEventListener('dragleave', dragleave);
+        row.addEventListener('drop', drop);
+    }
+);
+
+/* END: EVENT LISTENERS DECLARATION */
+
+{{/js}}

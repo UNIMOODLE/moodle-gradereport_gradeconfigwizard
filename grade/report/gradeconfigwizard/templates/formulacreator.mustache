@@ -1,0 +1,82 @@
+<form action="formulacreator.php?id={{courseid}}&gradeitemid={{gradeitemid}}" method="POST">
+<div class="container">
+    <div class="row">
+        <div class="col mt-1">
+            <div class="card h-100 formulacreator-select-items">
+                <div class="card-body">
+                    <h5 class="card-title">Items seleccionables</h5>
+                    {{> gradereport_gradeconfigwizard/availablegradeitems }}
+                </div> <!-- card-body -->
+            </div> <!-- card -->
+
+
+
+        </div> <!-- col -->
+        <div class="col mt-1">
+            <div class="card h-100 formulacreator-aggregation-method disabled-box">
+                <div class="card-body">
+                    <h5 class="card-title">Agregación</h5>
+
+                    <select name="formulaaggregationmethod" class="custom-select">
+                        <option value="0" selected>Selecciona método de agregación</option>
+                        <option value="meangrades">Mean of grades</option>
+                        <option value="weightedmeangrades">Weighted mean of grades</option>
+                        <option value="sum">Sum of grades</option>
+                        <option value="highest">Highest grade</option>
+                        <option value="lowest">Lowest grade</option>
+                    </select> <!-- custom-select -->
+
+                </div> <!-- card-body -->
+            </div> <!-- card -->
+        </div> <!-- col -->
+        <div class="col mt-1">
+            <div class="card h-100 formulacreator-weights-definition disabled-box">
+                <div class="card-body">
+                    <h5 class="card-title">Define the calculation</h5>
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Weight</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table> <!-- table -->
+
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-secondary" id="formulacreator-preview-formula">Generate formula</button>
+                    </div>
+
+                </div> <!-- card-body -->
+            </div> <!-- card -->
+        </div> <!-- col -->
+    </div> <!-- row -->
+    <div class="row">
+        <div class="col mt-1">
+            <div class="card h-100 formulacreator-formula disabled-box">
+                <div class="card-body">
+                    <h5 class="card-title">Fórmula</h5>
+                    <div class="form-group">
+                        <textarea name="formula" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="" readonly></textarea>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary" id="formulacreator-save-formula" >Save formula</button>
+                    </div>
+                </div> <!-- card-body -->
+            </div> <!-- card -->
+        </div> <!-- col -->
+    </div> <!-- row -->
+</div> <!-- container -->
+<button class="btn"></button>
+</form>
+
+{{#js}}
+
+    //gradeitemid = "{{gradeitemid}}";
+    require(['gradereport_gradeconfigwizard/formulacreator'], function(Formulacreator) {
+    Formulacreator.init();
+    });
+
+{{/js}}

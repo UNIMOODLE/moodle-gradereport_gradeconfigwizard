@@ -1,0 +1,70 @@
+<div class="container">
+    <div class="multipleevaluations-category-creation container">
+        <div class="row">CREACIÓN DE CATEGORIAS</div>
+        <div class="row mb-4">
+            <input type="text" id="multipleevaluations-category-create-name" class="mr-3" size="40">
+            <button type="button" id="multipleevaluations-category-create-btn" class="btn btn-primary">Crear</button>
+        </div>
+    </div>
+
+    <form action="{{{urlsaveexit}}}" id="multipleevaluationsform" method="post">
+        <table id="multipleevaluation-table" class="multipleevaluation-table table table-bordered">
+            <thead>
+            <tr>
+                <th>CATEGORÍA</th>
+                <th>PESO</th>
+                <th>NOTA CORTE</th>
+                <th>RECUPERACIÓN</th>
+                <th>ELEMENTOS</th>
+                <th>PESO</th>
+                <th>NOTA CORTE</th>
+                <th>RECUPERACIÓN</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </form>
+    <div class="text-center">
+        <input type="submit" form="multipleevaluationsform" class="btn btn-primary" value="Guardar y salir">
+    </div>
+</div>
+
+{{!-- START: Modal --}}
+
+<div class="modal fade"
+     id="available-gradeitems-modal-id"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="available-gradeitems-modal-label"
+     data-gradeitemaddtarget=""
+     data-gradeitemidrow=""
+     data-gradeitemid=""
+     data-callerrandomid=""
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="available-gradeitems-modal-label">Elegir elementos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{> gradereport_gradeconfigwizard/availablegradeitems }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="confirm btn btn-primary mr-3">Añadir</button>
+                <button type="button" data-dismiss="modal" class="cancel btn btn-secondary">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- END: Modal --}}
+
+{{#js}}
+    require(['gradereport_gradeconfigwizard/multipleevaluations'], function(Multipleevaluations) {
+    Multipleevaluations.init();
+    });
+{{/js}}

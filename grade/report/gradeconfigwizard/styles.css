@@ -1,0 +1,26 @@
+.weightedevaluations-table td,
+.multipleevaluation-table td {
+    vertical-align: middle;
+}
+
+.remove-item-icon {
+    cursor: pointer;
+}
+.opacity-25 {
+    opacity: .25;
+}
+.disabled-box {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.1);
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 999;
+}
+
+.small-separator{
+    margin-bottom: 0px;
+    background-color: white;
+}
+.big-separator{
+    height: 100px;
+}
