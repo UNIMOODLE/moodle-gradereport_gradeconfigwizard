@@ -41,8 +41,8 @@ $string['gradeconfigwizard:view'] = 'Visualitza l\'informe de l\'Assistent per c
 
 // Assistent per configurar qualificacions.
 $string['gradereportheading'] = 'Assistent per configurar qualificacions';
-$string['gradereportmultipleeval'] = 'Avaluacions múltiples'; // Aquest títol és el mateix als 2 tipus d'avaluació.
-$string['gradereportweighteval'] = 'Avaluacions múltiples ponderades';
+$string['gradereportmultipleeval'] = 'Accedeix a l\'editor d\'avaluacions ponderades';
+$string['gradereportweighteval'] = 'Accedeix a l\'editor d\'itineraris d\'avaluació';
 $string['checkbox'] = 'Revisa el llibre de qualificacions';
 $string['savebutton'] = 'Desa els canvis';
 $string['multevalbutton'] = 'Accedeix a l\'editor d\'avaluacions ponderades';
@@ -62,7 +62,7 @@ $string['manualdisable'] = 'Desactiva';
 $string['moddisable'] = 'Desactiva';
 
 // Creador de fórmules.
-$string['heading'] = 'Editor de fórmulas millorat';
+$string['heading'] = 'Editor de fórmules millorat';
 $string['selectitems'] = 'Elements seleccionables';
 $string['aggregation'] = 'Agregació';
 $string['selectaggremethod'] = 'Selecciona un mètode d\'agregació';
@@ -75,7 +75,7 @@ $string['defcalculation'] = 'Defineix el càlcul';
 $string['colitem'] = 'Element';
 $string['colweight'] = 'Ponderació';
 $string['generateformula'] = 'Genera la fórmula';
-$string['formula'] = 'Formula';
+$string['formula'] = 'Fórmula';
 $string['saveformula'] = 'Desa la fórmula';
 $string['cancelbutton3'] = 'Cancel·la';
 
@@ -113,8 +113,8 @@ $string['savebutton2'] = 'Desa i surt';
 $string['chooseelements2'] = 'Tria elements';
 $string['addbutton2'] = 'Afegeix';
 $string['cancelbutton2'] = 'Cancel·la';
-$string['additinerary1'] = 'Afegeix un itinerari';
-$string['additinerary2'] = 'Afegeix un itinerari';
+$string['additinerary1'] = 'Afegeix';
+$string['additinerary2'] = 'Afegeix';
 $string['cancelbutton4'] = 'Cancel·la';
 
 // Elements d'avaluació disponibles.
