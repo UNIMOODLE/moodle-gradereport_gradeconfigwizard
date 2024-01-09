@@ -41,8 +41,8 @@ $string['gradeconfigwizard:view'] = 'View the Grade setup wizard\'s report';
 
 // Grade setup wizard.
 $string['gradereportheading'] = 'Grade setup wizard';
-$string['gradereportmultipleeval'] = 'Multiple assessments';
-$string['gradereportweighteval'] = 'Multiple weighted assessments';
+$string['gradereportmultipleeval'] = 'Access to the weighted assessment editor';
+$string['gradereportweighteval'] = 'Access to the assessment pathways editor';
 $string['checkbox'] = 'Check Gradebook';
 $string['savebutton'] = 'Save changes';
 $string['multevalbutton'] = 'Access to the weighted assessment editor';
@@ -62,7 +62,7 @@ $string['manualdisable'] = 'Disable';
 $string['moddisable'] = 'Disable';
 
 // Formula creator.
-$string['heading'] = 'Improved formula editor';
+$string['heading'] = 'Enhanced formula editor';
 $string['selectitems'] = 'Selectable items';
 $string['aggregation'] = 'Aggregation';
 $string['selectaggremethod'] = 'Select aggregation method';
@@ -113,8 +113,8 @@ $string['savebutton2'] = 'Save and exit';
 $string['chooseelements2'] = 'Choose items';
 $string['addbutton2'] = 'Add';
 $string['cancelbutton2'] = 'Cancel';
-$string['additinerary1'] = 'Add category';
-$string['additinerary2'] = 'Add item';
+$string['additinerary1'] = 'Add';
+$string['additinerary2'] = 'Add';
 $string['cancelbutton4'] = 'Cancel';
 $string['maincontent'] = 'Main Content';
 
