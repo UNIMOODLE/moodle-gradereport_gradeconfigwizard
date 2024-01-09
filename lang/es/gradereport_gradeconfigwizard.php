@@ -41,8 +41,8 @@ $string['gradeconfigwizard:view'] = 'Ver el informe del Asistente para configura
 
 // Asistente para configurar calificaciones.
 $string['gradereportheading'] = 'Asistente para configurar calificaciones';
-$string['gradereportmultipleeval'] = 'Evaluaciones múltiples';
-$string['gradereportweighteval'] = 'Evaluaciones múltiples ponderadas';
+$string['gradereportmultipleeval'] = 'Acceder al editor de evaluaciones ponderadas';
+$string['gradereportweighteval'] = 'Acceder al editor de itinerarios de evaluación';
 $string['checkbox'] = 'Revisar el libro de calificaciones';
 $string['savebutton'] = 'Guardar cambios';
 $string['multevalbutton'] = 'Acceder al editor de evaluaciones ponderadas';
@@ -113,8 +113,8 @@ $string['savebutton2'] = 'Guardar y salir';
 $string['chooseelements2'] = 'Elegir elementos';
 $string['addbutton2'] = 'Añadir';
 $string['cancelbutton2'] = 'Cancelar';
-$string['additinerary1'] = 'Añadir un itinerario';
-$string['additinerary2'] = 'Añadir un itinerario';
+$string['additinerary1'] = 'Añadir';
+$string['additinerary2'] = 'Añadir';
 $string['cancelbutton4'] = 'Cancelar';
 
 // Elementos de evaluación disponibles.
