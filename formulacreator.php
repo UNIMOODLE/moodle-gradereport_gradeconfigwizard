@@ -39,7 +39,6 @@ require_once($CFG->libdir.'/grade/grade_item.php');
 require_once($CFG->dirroot.'/grade/edit/tree/lib.php');
 require_once($CFG->libdir.'/mathslib.php');
 require_once($CFG->libdir . '/xmlize.php');
-require_once($CFG->dirroot.'/grade/report/gradeconfigwizard/lib.php');
 require_once($CFG->dirroot.'/grade/report/gradeconfigwizard/classes/gradebookmanager.php');
 require_once($CFG->dirroot.'/grade/report/gradeconfigwizard/classes/gradebook_action_bar_renderer_formulacreator.php');
 
