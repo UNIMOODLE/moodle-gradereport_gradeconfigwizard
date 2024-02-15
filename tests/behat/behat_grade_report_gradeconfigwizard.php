@@ -648,7 +648,6 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      */
     public function i_should_see_the_following_formulas(TableNode $data) {
         global $CFG;
-        require_once($CFG->dirroot.'/grade/report/gradeconfigwizard/lib.php');
 
         $datahash = $data->getRowsHash();
         unset($datahash["Totals"]);
