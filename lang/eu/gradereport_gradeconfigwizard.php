@@ -41,11 +41,11 @@ $string['gradeconfigwizard:view'] = 'Ikusi Konfiguratu kalifikazioen morroia txo
 
 // Asistente para configurar calificaciones.
 $string['gradereportheading'] = 'Konfiguratu kalifikazioen morroia';
-$string['gradereportmultipleeval'] = 'Sar zaitez haztatutako ebaluazio-editorera';
+$string['gradereportmultipleeval'] = 'Sartu ebaluazio anitzeko editorera';
 $string['gradereportweighteval'] = 'Sar zaitez ebaluazio-ibilbidearen editorea';
 $string['checkbox'] = 'Berrikusi kalifikazio-liburua';
 $string['savebutton'] = 'Aldaketak gorde';
-$string['multevalbutton'] = 'Sar zaitez haztatutako ebaluazio-editorera';
+$string['multevalbutton'] = 'Sartu ebaluazio anitzeko editorera';
 $string['weightevalbutton'] = 'Sar zaitez ebaluazio-ibilbidearen editorea';
 $string['tablename'] = 'Izena';
 $string['tableweight'] = 'Ponderazioa';

@@ -23,7 +23,7 @@ Feature: Multiple_assessments_evaluations
         And I follow "Course 1"
         And I navigate to course grades
         And I navigate to "View > Grade setup wizard" in the course gradebook
-        And I press "Access to the weighted assessment editor"
+        And I press "Access to the multiple assessment editor"
 
     @javascript @single_category_creation
     Scenario: Check if I can create a category with differents resits, cut-off marks, items and weights
