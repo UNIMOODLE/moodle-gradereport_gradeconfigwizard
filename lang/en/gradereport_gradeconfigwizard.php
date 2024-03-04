@@ -41,11 +41,11 @@ $string['gradeconfigwizard:view'] = 'View the Grade setup wizard\'s report';
 
 // Grade setup wizard.
 $string['gradereportheading'] = 'Grade setup wizard';
-$string['gradereportmultipleeval'] = 'Access to the weighted assessment editor';
+$string['gradereportmultipleeval'] = 'Access to the multiple assessment editor';
 $string['gradereportweighteval'] = 'Access to the assessment pathways editor';
 $string['checkbox'] = 'Check Gradebook';
 $string['savebutton'] = 'Save changes';
-$string['multevalbutton'] = 'Access to the weighted assessment editor';
+$string['multevalbutton'] = 'Access to the multiple assessment editor';
 $string['weightevalbutton'] = 'Access to the assessment pathways editor';
 $string['tablename'] = 'Name';
 $string['tableweight'] = 'Weights';

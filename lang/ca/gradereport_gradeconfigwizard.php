@@ -41,11 +41,11 @@ $string['gradeconfigwizard:view'] = 'Visualitza l\'informe de l\'Assistent per c
 
 // Assistent per configurar qualificacions.
 $string['gradereportheading'] = 'Assistent per configurar qualificacions';
-$string['gradereportmultipleeval'] = 'Accedeix a l\'editor d\'avaluacions ponderades';
+$string['gradereportmultipleeval'] = 'Accedeix a l\'editor de múltiples avaluacions';
 $string['gradereportweighteval'] = 'Accedeix a l\'editor d\'itineraris d\'avaluació';
 $string['checkbox'] = 'Revisa el llibre de qualificacions';
 $string['savebutton'] = 'Desa els canvis';
-$string['multevalbutton'] = 'Accedeix a l\'editor d\'avaluacions ponderades';
+$string['multevalbutton'] = 'Accedeix a l\'editor de múltiples avaluacions';
 $string['weightevalbutton'] = 'Accedeix a l\'editor d\'itineraris d\'avaluació';
 $string['tablename'] = 'Nom';
 $string['tableweight'] = 'Ponderacions';
