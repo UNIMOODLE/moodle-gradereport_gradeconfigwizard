@@ -124,7 +124,7 @@ const categorygradeitemrowhtml = (randomid, gradeitemid, gradeitemname, str) => 
       </div>
     </div>
   </td>
-  <td class="resit-2" data-gradeitemid="${gradeitemid}">
+  <td class="resit-2 add-btn" data-gradeitemid="${gradeitemid}">
     <button type="button"
       class="add-grade-item-resit-items-btn btn btn-secondary"
       data-gradeitemaddtarget="gradeitemresititem"
@@ -166,13 +166,13 @@ const addcategoryresitbuttoncellenabledhtml = (randomid, str) => `
 </td>
 `;
 
-const addcategorygradeitemresitgradeitembuttoncellenabledhtml = (gradeitemid, str) => `
+const addcategorygradeitemresitgradeitembuttoncelldisabledhtml = (gradeitemid, str) => `
 <td class="resit-2 add-btn" data-gradeitemid="${gradeitemid}">
   <button type="button"
     class="add-grade-item-resit-items-btn btn btn-secondary"
     data-gradeitemaddtarget="gradeitemresititem"
     data-toggle="modal"
-    data-target="#available-gradeitems-modal-id">
+    data-target="#available-gradeitems-modal-id" disabled>
       ${str}
   </button>
 </td>
@@ -225,11 +225,6 @@ const recalculateRowspans = (randomid) => {
     });
 };
 const addCategory = async (categoryname) => {
-    // In case new category is added, enable save and exit button
-    if(saveandexitbutton.classList.contains('disabled-box')){
-        saveandexitbutton.classList.remove('disabled-box');
-    }
-
     let randomid = generateUniqueId();
 
     let newcategoryrow = document.createElement('tr');
@@ -262,6 +257,9 @@ const addCategory = async (categoryname) => {
 
     let categorymingradetext = newcategoryrow.querySelector('.min-grade-1 input[type="number"]');
     categorymingradetext.addEventListener('input', categoryMinGradeTextChangeCallback);
+
+    // In case new category is added, enable save and exit button
+    refreshButtonsEnabledOrDisabled();
 };
 
 const removeCategory = (randomid) => {
@@ -279,17 +277,14 @@ const removeCategory = (randomid) => {
     let categoryrowstodelete = multipleevaluationtablebody.querySelectorAll('tr[data-randomid="' + randomid + '"]');
     categoryrowstodelete.forEach(row => row.remove());
 
-    // If there are no categories left, disable save and exit button
-    let categorycount = multipleevaluationtablebody.querySelectorAll('tr[data-rowtype="category"]').length;
-    if (categorycount < 1) {
-        saveandexitbutton.classList.add('disabled-box');
-    }
+    refreshButtonsEnabledOrDisabled();
 };
 
 const addCategoryGradeitems = (randomid, gradeitems) => {
     gradeitems.forEach(gradeitem => {
         addCategoryGradeitem(randomid, gradeitem);
     });
+    refreshButtonsEnabledOrDisabled();
 };
 
 const addCategoryGradeitem = async (randomid, gradeitem) => {
@@ -323,6 +318,7 @@ const addCategoryGradeitem = async (randomid, gradeitem) => {
     categorymingradecheckbox.disabled = false;
 
     recalculateRowspans(randomid);
+    refreshButtonsEnabledOrDisabled();
 };
 
 const removeCategoryGradeitem = (randomid, gradeitemid) => {
@@ -348,6 +344,7 @@ const removeCategoryGradeitem = (randomid, gradeitemid) => {
 
     addGradeitemsmodalItem(gradeitemid);
     recalculateRowspans(randomid);
+    refreshButtonsEnabledOrDisabled();
 };
 
 const addCategoryresititem = (randomid, gradeitem) => {
@@ -371,6 +368,7 @@ const addCategoryresititem = (randomid, gradeitem) => {
         'tr[data-randomid="' + randomid + '"][data-rowtype="category"] td.resit-1[data-gradeitemid="' + gradeitemid + '"]'
     );
     newcategoryresitgradeitem.querySelector('.remove-item-icon').addEventListener('click', removeCategoryResitGradeitemCallback);
+    refreshButtonsEnabledOrDisabled();
 };
 
 const removeCategoryResititem = async (randomid, gradeitemid = null) => {
@@ -394,6 +392,7 @@ const removeCategoryResititem = async (randomid, gradeitemid = null) => {
         addGradeitemsmodalItem(gradeitemid);
     }
     recalculateRowspans(randomid);
+    refreshButtonsEnabledOrDisabled();
 };
 
 const disableAddCategoryResititmeBtn = (randomid) => {
@@ -403,6 +402,7 @@ const disableAddCategoryResititmeBtn = (randomid) => {
     if (addcategoryresititmebtn) {
         addcategoryresititmebtn.disabled = true;
     }
+    refreshButtonsEnabledOrDisabled();
 };
 
 const addCategoryGradeitemResititem = (randomid, parentgradeitem, gradeitem) => {
@@ -423,16 +423,20 @@ const addCategoryGradeitemResititem = (randomid, parentgradeitem, gradeitem) => 
     );
     newcategorygradeitemresitgradeitem.querySelector('.remove-item-icon')
         .addEventListener('click', removeCategoryGradeitemResitGradeitemCallback);
+    refreshButtonsEnabledOrDisabled();
 };
 
 const removeCategoryGradeitemResititem = async (randomid, parentgradeitemid, gradeitemid) => {
     let categoryresitgradeitemcell = multipleevaluationtablebody.querySelector(
         'td.resit-2[data-gradeitemid="' + gradeitemid + '"]'
     );
+    if (!categoryresitgradeitemcell) {
+        return;
+    }
     await getString('addelement5', 'gradereport_gradeconfigwizard')
         .then(function (str) {
         categoryresitgradeitemcell.insertAdjacentHTML('afterend',
-            addcategorygradeitemresitgradeitembuttoncellenabledhtml(parentgradeitemid, str));
+            addcategorygradeitemresitgradeitembuttoncelldisabledhtml(parentgradeitemid, str));
         categoryresitgradeitemcell.remove();
     });
 
@@ -442,15 +446,73 @@ const removeCategoryGradeitemResititem = async (randomid, parentgradeitemid, gra
         addGradeitemsmodalItem(gradeitemid);
     }
     recalculateRowspans(randomid);
+    refreshButtonsEnabledOrDisabled();
 };
 
-const disableAddCategoryGradeitemResititemBtn = (randomid) => {
-    let addcategorygradeitemresititembtn = multipleevaluationtablebody.querySelector(
-        'tr[data-randomid="' + randomid + '"] td.resit-2.add-btn button.add-grade-item-resit-items-btn'
-    );
+const disableAddCategoryGradeitemResititemBtn = (randomid, gradeitemid) => {
+    let addcategorygradeitemresititembtnselector = 'tr[data-randomid="' + randomid + '"]';
+    addcategorygradeitemresititembtnselector += ' [data-rowtype="categorygradeitem"][data-gradeitemid="' + gradeitemid + '"]';
+    addcategorygradeitemresititembtnselector += ' td.resit-2.add-btn button.add-grade-item-resit-items-btn';
+    let addcategorygradeitemresititembtn = multipleevaluationtablebody.querySelector(addcategorygradeitemresititembtnselector);
     if (addcategorygradeitemresititembtn) {
         addcategorygradeitemresititembtn.disabled = true;
     }
+    refreshButtonsEnabledOrDisabled();
+};
+
+const refreshButtonsEnabledOrDisabled = () => {
+    refreshAddCategoryGradeitemResititemBtn();
+    refreshSaveButtonEnabledOrDisabled();
+};
+
+const refreshAddCategoryGradeitemResititemBtn = () => {
+    const addcategorygradeitemresititembuttons = multipleevaluationtable.querySelectorAll('.add-grade-item-resit-items-btn');
+    addcategorygradeitemresititembuttons.forEach(addcategorygradeitemresititembutton => {
+        if (checkAddCategoryGradeitemResititemBtnShouldBeEnabled(addcategorygradeitemresititembutton)) {
+            addcategorygradeitemresititembutton.disabled = false;
+        } else {
+            addcategorygradeitemresititembutton.disabled = true;
+        }
+    });
+};
+
+const refreshSaveButtonEnabledOrDisabled = () => {
+    if (checkSaveButtonShouldBeEnabled()) {
+        saveandexitbutton.disabled = false;
+        if(saveandexitbutton.classList.contains('disabled-box')){
+            saveandexitbutton.classList.remove('disabled-box');
+        }
+    } else {
+        saveandexitbutton.disabled = true;
+        if(!saveandexitbutton.classList.contains('disabled-box')){
+            saveandexitbutton.classList.add('disabled-box');
+        }
+    }
+};
+
+const checkAddCategoryGradeitemResititemBtnShouldBeEnabled = (addcategorygradeitemresititembutton) => {
+    const categorygradeitemrow = addcategorygradeitemresititembutton.closest('tr');
+    const categorymingradeinput = categorygradeitemrow.querySelector('.min-grade-2 input[type="number"]');
+
+    if (categorymingradeinput.value === '') {
+        return false;
+    }
+    return true;
+};
+
+const checkSaveButtonShouldBeEnabled = () => {
+    // If there are pending resit items to add
+    if (document.querySelector('.resit-2.add-btn button:not([disabled])')) {
+        return false;
+    }
+
+    // If there are no categories left, disable save and exit button
+    let categorycount = multipleevaluationtablebody.querySelectorAll('tr[data-rowtype="category"]').length;
+    if (categorycount < 1) {
+        return false;
+    }
+
+    return true;
 };
 
 /* END: FUNCTIONS */
@@ -561,18 +623,19 @@ const categoryMinGradeCheckboxChangeCallback = (event) => {
         categorymingradeinput.disabled = true;
         categorymingradeinput.value = '';
     }
+    refreshButtonsEnabledOrDisabled();
 };
 
-const categoryGradeitemMinGradeCheckboxChangeCallback = (event) => {
+const categoryGradeitemMinGradeCheckboxChangeCallback = async (event) => {
     let categorymingradecheckbox = event.target;
     let categorygradeitemchangedrow = categorymingradecheckbox.closest('tr');
     let randomid = categorygradeitemchangedrow.dataset['randomid'];
 
     let parentgradeitemid = categorygradeitemchangedrow.querySelector('td.item').dataset['gradeitemid'];
     let resitgradeitemid = categorygradeitemchangedrow.querySelector('td.resit-2').dataset['gradeitemid'];
-    if (resitgradeitemid !== null && parentgradeitemid !== null) {
-        removeCategoryGradeitemResititem(randomid, parentgradeitemid, resitgradeitemid);
-        disableAddCategoryGradeitemResititemBtn(randomid);
+    let isresitbuttonwithnoresititem = categorygradeitemchangedrow.querySelector('td.resit-2').classList.contains('add-btn');
+    if (resitgradeitemid !== null && parentgradeitemid !== null && !isresitbuttonwithnoresititem) {
+        await removeCategoryGradeitemResititem(randomid, parentgradeitemid, resitgradeitemid);
     }
 
     let categorymingradeinput = categorygradeitemchangedrow.querySelector('.min-grade-2 input[type="number"]');
@@ -582,7 +645,11 @@ const categoryGradeitemMinGradeCheckboxChangeCallback = (event) => {
     } else {
         categorymingradeinput.disabled = true;
         categorymingradeinput.value = '';
+        let addCategoryGradeitemResititemBtn = categorygradeitemchangedrow.querySelector('.resit-2 button');
+        addCategoryGradeitemResititemBtn.disabled = true;
+        disableAddCategoryGradeitemResititemBtn(randomid, parentgradeitemid);
     }
+    refreshButtonsEnabledOrDisabled();
 };
 
 const categoryMinGradeTextChangeCallback = (event) => {
@@ -596,6 +663,7 @@ const categoryMinGradeTextChangeCallback = (event) => {
     } else {
         addCategoryGradeitemResititemBtn.disabled = false;
     }
+    refreshButtonsEnabledOrDisabled();
 };
 
 const categoryGradeitemMinGradeTextChangeCallback = (event) => {
@@ -609,6 +677,7 @@ const categoryGradeitemMinGradeTextChangeCallback = (event) => {
     } else {
         addCategoryGradeitemResititemBtn.disabled = false;
     }
+    refreshButtonsEnabledOrDisabled();
 };
 
 /* END: CALLBACKS */
