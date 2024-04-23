@@ -23,7 +23,7 @@
 // Córdoba, Extremadura, Vigo, Las Palmas de Gran Canaria y Burgos.
 /**
  * Display information about all the gradereport_gradeconfigwizard modules in the requested course. *
- * @package gradeconfigwizard
+ * @package gradereport_gradeconfigwizard
  * @copyright 2023 Proyecto UNIMOODLE
  * @author UNIMOODLE Group (Coordinator) &lt;direccion.area.estrategia.digital@uva.es&gt;
  * @author Joan Carbassa (IThinkUPC) &lt;joan.carbassa@ithinkupc.com&gt;
@@ -33,13 +33,17 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace gradereport_gradeconfigwizard;
+
 use core_grades\output\general_action_bar;
 
-defined('MOODLE_INTERNAL') || die();
 
-require_once('grade/report/gradeconfigwizard/classes/gradebook_action_bar_renderer_formulacreator.php');
-
-class gradeconfigwizard_gradebook_action_bar_renderer_formulacreator_test extends \advanced_testcase {
+/**
+ * Class gradebook_action_bar_renderer_formulacreator_test
+ *
+ * Test cases for the action bar renderer used in the Grade Config Wizard for formula creation.
+ */
+class gradebook_action_bar_renderer_formulacreator_test extends \advanced_testcase {
 
     /**
      * Set up for every test
@@ -51,10 +55,12 @@ class gradeconfigwizard_gradebook_action_bar_renderer_formulacreator_test extend
 
     /**
      * Test get_template.
+     *
+     * @covers \gradereport_gradeconfigwizard\gradebook_action_bar_renderer_formulacreator::get_template
      */
     public function test_get_template() {
-        $context = context_course::instance($this->course1->id);
-        $actionbarformula = new \gradebook_action_bar_renderer_formulacreator($context);
+        $context = \context_course::instance($this->course1->id);
+        $actionbarformula = new gradebook_action_bar_renderer_formulacreator($context);
         $template = $actionbarformula->get_template();
         $result = 'core_grades/gradebook_setup_action_bar';
         $this->assertEquals($result, $template);
@@ -62,17 +68,24 @@ class gradeconfigwizard_gradebook_action_bar_renderer_formulacreator_test extend
 
     /**
      * Test export_for_template.
+     *
+     * @covers \gradereport_gradeconfigwizard\gradebook_action_bar_renderer_formulacreator::export_for_template
      */
     public function test_export_for_template() {
         global $PAGE;
-        $output = new renderer_base($PAGE, "target");
-        $context = context_course::instance($this->course1->id);
-        $generalnavselector = new general_action_bar($context,
-            new moodle_url('grade/report/gradeconfigwizard/index.php',
-                ['id' => $this->course1->id]), 'report', 'gradereport_gradeconfigwizard');
+        $output = new \renderer_base($PAGE, "target");
+        $context = \context_course::instance($this->course1->id);
+        $generalnavselector = new general_action_bar(
+            $context,
+            new \moodle_url(
+                'grade/report/gradeconfigwizard/index.php',
+                ['id' => $this->course1->id]
+            ),
+            'report',
+            'gradereport_gradeconfigwizard'
+        );
         $data = $generalnavselector->export_for_template($output);
         $data['selectedoption'] = get_string('heading', 'gradereport_gradeconfigwizard');
         $this->assertNotEmpty($data, 'navselector not created');
     }
-
 }

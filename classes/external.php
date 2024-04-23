@@ -23,7 +23,7 @@
 // Córdoba, Extremadura, Vigo, Las Palmas de Gran Canaria y Burgos.
 /**
  * Display information about all the gradereport_gradeconfigwizard modules in the requested course. *
- * @package gradeconfigwizard
+ * @package gradereport_gradeconfigwizard
  * @copyright 2023 Proyecto UNIMOODLE
  * @author UNIMOODLE Group (Coordinator) &lt;direccion.area.estrategia.digital@uva.es&gt;
  * @author Joan Carbassa (IThinkUPC) &lt;joan.carbassa@ithinkupc.com&gt;
@@ -56,10 +56,15 @@ class gradereport_gradeconfigwizard_external extends external_api {
      * @since Moodle 3.2
      */
     public static function get_course_grades_parameters() {
-        return new external_function_parameters (
-            array(
-                'userid' => new external_value(PARAM_INT, 'Get grades for this user (optional, default current)', VALUE_DEFAULT, 0),
-            )
+        return new external_function_parameters(
+            [
+                'userid' => new external_value(
+                    PARAM_INT,
+                    'Get grades for this user (optional, default current)',
+                    VALUE_DEFAULT,
+                    0
+                ),
+            ]
         );
     }
 
@@ -77,10 +82,11 @@ class gradereport_gradeconfigwizard_external extends external_api {
         $warnings = [];
 
         // Validate the parameter.
-        $params = self::validate_parameters(self::get_course_grades_parameters(),
-            array(
+        $params = self::validate_parameters(
+            self::get_course_grades_parameters(),
+            [
                 'userid' => $userid,
-            )
+            ]
         );
 
         $userid = $params['userid'];
@@ -105,25 +111,27 @@ class gradereport_gradeconfigwizard_external extends external_api {
         // Force a regrade if required.
         grade_regrade_final_grades_if_required($course);
         // Get the course final grades now.
-        $gpr = new grade_plugin_return(array('type' => 'report', 'plugin' => 'gradeconfigwizard', 'courseid' => $course->id,
-                                        'userid' => $userid));
+        $gpr = new grade_plugin_return([
+            'type' => 'report', 'plugin' => 'gradeconfigwizard', 'courseid' => $course->id,
+            'userid' => $userid,
+        ]);
         $report = new gradereport_gradeconfigwizard\grade_report_gradeconfigwizard($userid, $gpr, $context);
         $coursesgrades = $report->setup_courses_data(true);
 
-        $grades = array();
+        $grades = [];
         foreach ($coursesgrades as $coursegrade) {
-            $gradeinfo = array(
+            $gradeinfo = [
                 'courseid' => $coursegrade['course']->id,
                 'grade' => grade_format_gradevalue($coursegrade['finalgrade'], $coursegrade['courseitem'], true),
                 'rawgrade' => $coursegrade['finalgrade'],
-            );
+            ];
             if (isset($coursegrade['rank'])) {
                 $gradeinfo['rank'] = $coursegrade['rank'];
             }
             $grades[] = $gradeinfo;
         }
 
-        $result = array();
+        $result = [];
         $result['grades'] = $grades;
         $result['warnings'] = $warnings;
         return $result;
@@ -137,19 +145,19 @@ class gradereport_gradeconfigwizard_external extends external_api {
      */
     public static function get_course_grades_returns() {
         return new external_single_structure(
-            array(
+            [
                 'grades' => new external_multiple_structure(
                     new external_single_structure(
-                        array(
+                        [
                             'courseid' => new external_value(PARAM_INT, 'Course id'),
                             'grade' => new external_value(PARAM_RAW, 'Grade formatted'),
                             'rawgrade' => new external_value(PARAM_RAW, 'Raw grade, not formatted'),
                             'rank' => new external_value(PARAM_INT, 'Your rank in the course', VALUE_OPTIONAL),
-                        )
+                        ]
                     )
                 ),
                 'warnings' => new external_warnings(),
-            )
+            ]
         );
     }
 
@@ -161,10 +169,10 @@ class gradereport_gradeconfigwizard_external extends external_api {
      */
     public static function view_grade_report_parameters() {
         return new external_function_parameters(
-            array(
+            [
                 'courseid' => new external_value(PARAM_INT, 'id of the course'),
                 'userid' => new external_value(PARAM_INT, 'id of the user, 0 means current user', VALUE_DEFAULT, 0),
-            )
+            ]
         );
     }
 
@@ -180,14 +188,15 @@ class gradereport_gradeconfigwizard_external extends external_api {
     public static function view_grade_report($courseid, $userid = 0) {
         global $USER;
 
-        $params = self::validate_parameters(self::view_grade_report_parameters(),
-            array(
+        $params = self::validate_parameters(
+            self::view_grade_report_parameters(),
+            [
                 'courseid' => $courseid,
                 'userid' => $userid,
-            )
+            ]
         );
 
-        $warnings = array();
+        $warnings = [];
         $course = get_course($params['courseid']);
 
         $context = context_course::instance($course->id);
@@ -203,8 +212,13 @@ class gradereport_gradeconfigwizard_external extends external_api {
         $systemcontext = context_system::instance();
         $personalcontext = context_user::instance($userid);
 
-        $access = gradereport_gradeconfigwizard\grade_report_gradeconfigwizard::check_access($systemcontext, $context,
-            $personalcontext, $course, $userid);
+        $access = gradereport_gradeconfigwizard\grade_report_gradeconfigwizard::check_access(
+            $systemcontext,
+            $context,
+            $personalcontext,
+            $course,
+            $userid
+        );
 
         if (!$access) {
             throw new moodle_exception('nopermissiontoviewgrades', 'error');
@@ -212,7 +226,7 @@ class gradereport_gradeconfigwizard_external extends external_api {
 
         gradereport_gradeconfigwizard\grade_report_gradeconfigwizard::viewed($context, $course->id, $userid);
 
-        $result = array();
+        $result = [];
         $result['status'] = true;
         $result['warnings'] = $warnings;
         return $result;
@@ -226,10 +240,10 @@ class gradereport_gradeconfigwizard_external extends external_api {
      */
     public static function view_grade_report_returns() {
         return new external_single_structure(
-            array(
+            [
                 'status' => new external_value(PARAM_BOOL, 'status: true if success'),
                 'warnings' => new external_warnings(),
-            )
+            ]
         );
     }
 }

@@ -23,7 +23,7 @@
 // Córdoba, Extremadura, Vigo, Las Palmas de Gran Canaria y Burgos.
 /**
  * Display information about all the gradereport_gradeconfigwizard modules in the requested course. *
- * @package gradeconfigwizard
+ * @package gradereport_gradeconfigwizard
  * @copyright 2023 Proyecto UNIMOODLE
  * @author UNIMOODLE Group (Coordinator) &lt;direccion.area.estrategia.digital@uva.es&gt;
  * @author Joan Carbassa (IThinkUPC) &lt;joan.carbassa@ithinkupc.com&gt;
@@ -54,7 +54,7 @@ $gradeitemidtarget = $gradeitemid;
 
 
 // Make sure they can even access this course.
-if (!$course = $DB->get_record('course', array('id' => $courseid))) {
+if (!$course = $DB->get_record('course', ['id' => $courseid])) {
     throw new \moodle_exception('invalidcourseid');
 }
 
@@ -74,10 +74,10 @@ $gradeitems = $gtree->get_items();
 
 $availablegradeitems = [];
 
-if (!$gradeitem = grade_item::fetch(array('id' => $gradeitemid, 'courseid' => $course->id))) {
+if (!$gradeitem = grade_item::fetch(['id' => $gradeitemid, 'courseid' => $course->id])) {
     throw new \moodle_exception('invaliditemid');
 }
-$allgradeitem = grade_item::fetch_all(array('courseid' => $course->id));
+$allgradeitem = grade_item::fetch_all(['courseid' => $course->id]);
 
 if ($formulaxml !== "") {
     $gradeitems = \gradereport_gradeconfigwizard\formulamanager::preprocess_formula_xml($formulaxml, $allgradeitem);
@@ -116,7 +116,7 @@ $data = [
 ];
 
 $url = new moodle_url('/grade/report/gradeconfigwizard/formulacreator.php',
-    array('id' => $courseid, 'gradeitemid' => $gradeitemid));
+    ['id' => $courseid, 'gradeitemid' => $gradeitemid]);
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('admin');
 

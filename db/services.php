@@ -23,7 +23,7 @@
 // Córdoba, Extremadura, Vigo, Las Palmas de Gran Canaria y Burgos.
 /**
  * Display information about all the gradereport_gradeconfigwizard modules in the requested course. *
- * @package gradeconfigwizard
+ * @package gradereport_gradeconfigwizard
  * @copyright 2023 Proyecto UNIMOODLE
  * @author UNIMOODLE Group (Coordinator) &lt;direccion.area.estrategia.digital@uva.es&gt;
  * @author Joan Carbassa (IThinkUPC) &lt;joan.carbassa@ithinkupc.com&gt;
@@ -35,21 +35,21 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$functions = array(
+$functions = [
 
-    'gradereport_gradeconfigwizard_get_course_grades' => array(
+    'gradereport_gradeconfigwizard_get_course_grades' => [
         'classname' => 'gradereport_gradeconfigwizard_external',
         'methodname' => 'get_course_grades',
         'description' => 'Get the given user courses final grades',
         'type' => 'read',
-        'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
-    ),
-    'gradereport_gradeconfigwizard_view_grade_report' => array(
+        'services' => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
+    'gradereport_gradeconfigwizard_view_grade_report' => [
         'classname' => 'gradereport_gradeconfigwizard_external',
         'methodname' => 'view_grade_report',
         'description' => 'Trigger the report view event',
         'type' => 'write',
         'capabilities' => 'gradereport/gradeconfigwizard:view',
-        'services' => array(MOODLE_OFFICIAL_MOBILE_SERVICE),
-    ),
-);
+        'services' => [MOODLE_OFFICIAL_MOBILE_SERVICE],
+    ],
+];

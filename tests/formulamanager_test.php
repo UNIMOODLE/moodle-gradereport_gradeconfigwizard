@@ -23,7 +23,7 @@
 // Córdoba, Extremadura, Vigo, Las Palmas de Gran Canaria y Burgos.
 /**
  * Display information about all the gradereport_gradeconfigwizard modules in the requested course. *
- * @package gradeconfigwizard
+ * @package gradereport_gradeconfigwizard
  * @copyright 2023 Proyecto UNIMOODLE
  * @author UNIMOODLE Group (Coordinator) &lt;direccion.area.estrategia.digital@uva.es&gt;
  * @author Joan Carbassa (IThinkUPC) &lt;joan.carbassa@ithinkupc.com&gt;
@@ -35,11 +35,15 @@
 
 namespace gradereport_gradeconfigwizard;
 
-defined('MOODLE_INTERNAL') || die();
 
 use grade_item;
 
-class  gradeconfigwizard_formulamanager_test extends \advanced_testcase {
+/**
+ * Class formulamanager_test
+ *
+ * Test cases for the FormulaManager class in the grade configuration wizard.
+ */
+class  formulamanager_test extends \advanced_testcase {
 
     /**
      * Set up for every test
@@ -54,8 +58,8 @@ class  gradeconfigwizard_formulamanager_test extends \advanced_testcase {
 
         $this->course1 = $this->getDataGenerator()->create_course();
 
-        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
-        $teacherrole = $DB->get_record('role', array('shortname' => 'editingteacher'));
+        $studentrole = $DB->get_record('role', ['shortname' => 'student']);
+        $teacherrole = $DB->get_record('role', ['shortname' => 'editingteacher']);
         $this->student1 = $this->getDataGenerator()->create_user();
         $this->teacher = $this->getDataGenerator()->create_user();
         $this->getDataGenerator()->enrol_user($this->teacher->id, $this->course1->id, $teacherrole->id);
@@ -64,19 +68,43 @@ class  gradeconfigwizard_formulamanager_test extends \advanced_testcase {
         $this->student2 = $this->getDataGenerator()->create_user();
         $this->getDataGenerator()->enrol_user($this->student2->id, $this->course1->id, $studentrole->id);
 
-        $assignment1 = $this->getDataGenerator()->create_module('assign', array('name' => "Test assign 1", 'course' => $this->course1->id));
-        $assignment2 = $this->getDataGenerator()->create_module('assign', array('name' => "Test assign 2", 'course' => $this->course1->id));
+        $assignment1 = $this->getDataGenerator()->create_module(
+            'assign',
+            [
+                'name' => "Test assign 1",
+                'course' => $this->course1->id,
+            ]
+        );
+        $assignment2 = $this->getDataGenerator()->create_module(
+            'assign',
+            [
+                'name' => "Test assign 2",
+                'course' => $this->course1->id,
+            ]
+        );
         $modcontext1 = get_coursemodule_from_instance('assign', $assignment1->id, $this->course1->id);
         $modcontext2 = get_coursemodule_from_instance('assign', $assignment2->id, $this->course1->id);
         $assignment1->cmidnumber = $modcontext1->id;
         $assignment2->cmidnumber = $modcontext2->id;
 
-        $this->student1grade1 = array('userid' => $this->student1->id, 'rawgrade' => $student1grade1);
-        $this->student1grade2 = array('userid' => $this->student1->id, 'rawgrade' => $student1grade2);
-        $this->student2grade1 = array('userid' => $this->student2->id, 'rawgrade' => $student2grade1);
-        $studentgrades = array($this->student1->id => $this->student1grade1, $this->student2->id => $this->student2grade1);
+        $this->student1grade1 = [
+            'userid' => $this->student1->id,
+            'rawgrade' => $student1grade1,
+        ];
+        $this->student1grade2 = [
+            'userid' => $this->student1->id,
+            'rawgrade' => $student1grade2,
+        ];
+        $this->student2grade1 = [
+            'userid' => $this->student2->id,
+            'rawgrade' => $student2grade1,
+        ];
+        $studentgrades = [
+            $this->student1->id => $this->student1grade1,
+            $this->student2->id => $this->student2grade1,
+        ];
         assign_grade_item_update($assignment1, $studentgrades);
-        $studentgrades = array($this->student1->id => $this->student1grade2);
+        $studentgrades = [$this->student1->id => $this->student1grade2];
         assign_grade_item_update($assignment2, $studentgrades);
 
         grade_get_setting($this->course1->id, 'report_gradeconfigwizard_showrank', 1);
@@ -84,11 +112,13 @@ class  gradeconfigwizard_formulamanager_test extends \advanced_testcase {
 
     /**
      * Test generate_id_number.
+     *
+     * @covers \gradereport_gradeconfigwizard\formulamanager::generate_id_number
      */
     public function test_generate_id_number() {
-        $assigment1 = grade_item::fetch(array('itemname' => 'Test assign 1'));
+        $assigment1 = grade_item::fetch(['itemname' => 'Test assign 1']);
         $data = formulamanager::generate_id_number($assigment1->id);
-        $result = 'test_assign_1_'. $assigment1->id;
+        $result = 'test_assign_1_' . $assigment1->id;
         $this->assertEquals($result, $data);
     }
 
@@ -101,14 +131,22 @@ class  gradeconfigwizard_formulamanager_test extends \advanced_testcase {
      * @covers \gradereport_gradeconfigwizard\formulamanager::afegir_idnumber
      */
     public function test_preprocess_formula_xml() {
-        $allgradeitem = grade_item::fetch_all(array('courseid' => $this->course1->id));
-        $assigment1 = grade_item::fetch(array('itemname' => 'Test assign 1'));
-        $assigment2 = grade_item::fetch(array('itemname' => 'Test assign 2'));
+        $allgradeitem = grade_item::fetch_all(['courseid' => $this->course1->id]);
+        $assigment1 = grade_item::fetch(['itemname' => 'Test assign 1']);
+        $assigment2 = grade_item::fetch(['itemname' => 'Test assign 2']);
 
         $formula = <<<EOF
         <SUM>
-            <ITEM><DISPLAYNAME>$assigment1->itemname</DISPLAYNAME><IDNUMBER>$assigment1->idnumber</IDNUMBER><GRADEITEMID>$assigment1->id</GRADEITEMID></ITEM>
-            <ITEM><DISPLAYNAME>$assigment2->itemname</DISPLAYNAME><IDNUMBER>$assigment2->idnumber</IDNUMBER><GRADEITEMID>$assigment2->id</GRADEITEMID></ITEM>
+            <ITEM>
+                <DISPLAYNAME>$assigment1->itemname</DISPLAYNAME>
+                <IDNUMBER>$assigment1->idnumber</IDNUMBER>
+                <GRADEITEMID>$assigment1->id</GRADEITEMID>
+            </ITEM>
+            <ITEM>
+                <DISPLAYNAME>$assigment2->itemname</DISPLAYNAME>
+                <IDNUMBER>$assigment2->idnumber</IDNUMBER>
+                <GRADEITEMID>$assigment2->id</GRADEITEMID>
+            </ITEM>
         </SUM>
         EOF;
 
@@ -134,10 +172,12 @@ class  gradeconfigwizard_formulamanager_test extends \advanced_testcase {
 
     /**
      * Test remove_gradeitem.
+     *
+     * @covers \gradereport_gradeconfigwizard\formulamanager::remove_gradeitem
      */
     public function test_remove_gradeitem() {
         $availablegradeitems = \gradereport_gradeconfigwizard\gradebookmanager::get_grade_items($this->course1->id);
-        $assigment2 = grade_item::fetch(array('itemname' => 'Test assign 2'));
+        $assigment2 = grade_item::fetch(['itemname' => 'Test assign 2']);
         $arraysize = \gradereport_gradeconfigwizard\formulamanager::remove_gradeitem($availablegradeitems, $assigment2->id);
         $this->assertEquals(count($availablegradeitems) - 1, count($arraysize));
     }
@@ -145,29 +185,39 @@ class  gradeconfigwizard_formulamanager_test extends \advanced_testcase {
     /**
      * Test generate_formula_moodle.
      *
+     * @covers \gradereport_gradeconfigwizard\formulamanager::generate_formula_moodle
      */
     public function test_generate_formula_moodle() {
-        $allgradeitem = grade_item::fetch_all(array('courseid' => $this->course1->id));
+        $allgradeitem = grade_item::fetch_all(['courseid' => $this->course1->id]);
 
-        $assigment1 = grade_item::fetch(array('itemname' => 'Test assign 1'));
-        $assigment2 = grade_item::fetch(array('itemname' => 'Test assign 2'));
+        $assigment1 = grade_item::fetch(['itemname' => 'Test assign 1']);
+        $assigment2 = grade_item::fetch(['itemname' => 'Test assign 2']);
 
         $formula = <<<EOF
         <SUM>
-            <ITEM><DISPLAYNAME>$assigment1->itemname</DISPLAYNAME><IDNUMBER>$assigment1->idnumber</IDNUMBER><GRADEITEMID>$assigment1->id</GRADEITEMID></ITEM>
-            <ITEM><DISPLAYNAME>$assigment2->itemname</DISPLAYNAME><IDNUMBER>$assigment2->idnumber</IDNUMBER><GRADEITEMID>$assigment2->id</GRADEITEMID></ITEM>
+            <ITEM>
+                <DISPLAYNAME>$assigment1->itemname</DISPLAYNAME>
+                <IDNUMBER>$assigment1->idnumber</IDNUMBER>
+                <GRADEITEMID>$assigment1->id</GRADEITEMID>
+            </ITEM>
+            <ITEM>
+                <DISPLAYNAME>$assigment2->itemname</DISPLAYNAME>
+                <IDNUMBER>$assigment2->idnumber</IDNUMBER>
+                <GRADEITEMID>$assigment2->id</GRADEITEMID>
+            </ITEM>
         </SUM>
         EOF;
 
         $gradeitems = \gradereport_gradeconfigwizard\formulamanager::preprocess_formula_xml($formula, $allgradeitem);
         $processedformula = \gradereport_gradeconfigwizard\formulamanager::generate_formula_moodle($gradeitems);
-        $result = '=sum([['.$assigment1->idnumber.']],[['.$assigment2->idnumber.']])';
+        $result = '=sum([[' . $assigment1->idnumber . ']],[[' . $assigment2->idnumber . ']])';
         $this->assertEquals($result, $processedformula);
     }
 
     /**
      * Test generate_check_operation.
      *
+     * @covers \gradereport_gradeconfigwizard\formulamanager::check_operation
      */
     public function test_check_operation() {
         $op1 = "HIGHEST";
@@ -185,7 +235,5 @@ class  gradeconfigwizard_formulamanager_test extends \advanced_testcase {
         $op5 = "MEANGRADES";
         $res5 = formulamanager::check_operation($op5);
         $this->assertEquals('average', $res5);
-
     }
-
 }

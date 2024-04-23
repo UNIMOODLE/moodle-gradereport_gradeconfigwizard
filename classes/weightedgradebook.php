@@ -23,7 +23,7 @@
 // Córdoba, Extremadura, Vigo, Las Palmas de Gran Canaria y Burgos.
 /**
  * Display information about all the gradereport_gradeconfigwizard modules in the requested course. *
- * @package gradeconfigwizard
+ * @package gradereport_gradeconfigwizard
  * @copyright 2023 Proyecto UNIMOODLE
  * @author UNIMOODLE Group (Coordinator) &lt;direccion.area.estrategia.digital@uva.es&gt;
  * @author Joan Carbassa (IThinkUPC) &lt;joan.carbassa@ithinkupc.com&gt;
@@ -35,14 +35,41 @@
 
 namespace gradereport_gradeconfigwizard;
 
+/**
+ * Class weightedgradebook
+ *
+ * Represents a weighted gradebook for a specific course.
+ */
 class weightedgradebook {
 
+    /**
+     * @var int The ID of the course associated with the gradebook.
+     */
     private $courseid;
 
+    /**
+     * Constructor for the weightedgradebook class.
+     *
+     * Initializes a new instance of the weightedgradebook class
+     * with the provided course ID.
+     *
+     * @param int $courseid The ID of the course associated with the gradebook.
+     */
     public function __construct(int $courseid) {
         $this->courseid = $courseid;
     }
 
+    /**
+     * Processes the categories and items of the gradebook.
+     *
+     * This method processes the provided array of categories and their respective
+     * subcategories and items. It requires grade-related libraries, sets the course
+     * aggregation method, creates categories and subcategories, and moves items
+     * to their corresponding categories.
+     *
+     * @param array $categories An array containing the categories and items of the gradebook.
+     * @return bool Returns true on successful processing.
+     */
     public function process(array $categories): bool {
         $this->require_grade_libs();
         $this->set_course_aggregation();
@@ -64,6 +91,14 @@ class weightedgradebook {
         return true;
     }
 
+    /**
+     * Sets the course aggregation method.
+     *
+     * This method sets the aggregation method for the course grade category
+     * to GRADE_AGGREGATE_MAX.
+     *
+     * @return void
+     */
     private function set_course_aggregation(): void {
         $coursegradecat = new \grade_category(['depth' => 1, 'courseid' => $this->courseid, 'fullname' => '?'], true);
         $properties = [
@@ -73,6 +108,15 @@ class weightedgradebook {
         $coursegradecat->update();
     }
 
+    /**
+     * Creates a category in the gradebook.
+     *
+     * This method creates a category in the gradebook with the provided name
+     * and sets the aggregation method to GRADE_AGGREGATE_WEIGHTED_MEAN.
+     *
+     * @param array $category An array containing information about the category.
+     * @return int The ID of the newly created category.
+     */
     private function create_category(array $category): int {
         $gc = new \grade_category(['courseid' => $this->courseid], false);
         $gc->apply_default_settings();
@@ -85,6 +129,17 @@ class weightedgradebook {
         return $gc->insert();
     }
 
+    /**
+     * Creates a subcategory in the gradebook.
+     *
+     * This method creates a subcategory in the gradebook with the provided name,
+     * sets the aggregation method to GRADE_AGGREGATE_WEIGHTED_MEAN, and assigns
+     * it to the specified parent category.
+     *
+     * @param array $subcategory An array containing information about the subcategory.
+     * @param int $parentid The ID of the parent category.
+     * @return int The ID of the newly created subcategory.
+     */
     private function create_subcategory(array $subcategory, int $parentid): int {
         $gc = new \grade_category(['courseid' => $this->courseid], false);
         $gc->apply_default_settings();
@@ -104,6 +159,16 @@ class weightedgradebook {
         return $id;
     }
 
+    /**
+     * Moves an item to a category in the gradebook.
+     *
+     * This method moves an item to the specified parent category in the gradebook
+     * and assigns the provided weight to the item.
+     *
+     * @param array $item An array containing information about the item.
+     * @param int $parentid The ID of the parent category.
+     * @return void
+     */
     private function move_item(array $item, int $parentid): void {
         $gi = new \grade_item(['id' => $item['id']], true);
         $gi->set_parent($parentid);
@@ -112,6 +177,16 @@ class weightedgradebook {
         $gi->update();
     }
 
+    /**
+     * Requires the inclusion of necessary grade-related libraries.
+     *
+     * This method ensures that the required grade-related libraries are included
+     * before performing any grade-related operations. It includes gradelib.php,
+     * grade_category.php, grade_item.php, and constants.php from the Moodle
+     * library directory.
+     *
+     * @return void
+     */
     public function require_grade_libs() {
         global $CFG;
         require_once($CFG->libdir . '/gradelib.php');
