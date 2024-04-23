@@ -23,7 +23,7 @@
 // Córdoba, Extremadura, Vigo, Las Palmas de Gran Canaria y Burgos.
 /**
  * Display information about all the gradereport_gradeconfigwizard modules in the requested course. *
- * @package gradeconfigwizard
+ * @package gradereport_gradeconfigwizard
  * @copyright 2023 Proyecto UNIMOODLE
  * @author UNIMOODLE Group (Coordinator) &lt;direccion.area.estrategia.digital@uva.es&gt;
  * @author Joan Carbassa (IThinkUPC) &lt;joan.carbassa@ithinkupc.com&gt;
@@ -35,8 +35,8 @@
 
 
 require_once('../../../config.php');
-require_once($CFG->dirroot.'/grade/lib.php');
-require_once($CFG->dirroot.'/grade/edit/tree/lib.php');
+require_once($CFG->dirroot . '/grade/lib.php');
+require_once($CFG->dirroot . '/grade/edit/tree/lib.php');
 require_once($CFG->libdir . '/grade/grade_category.php');
 
 use gradereport_gradeconfigwizard\gradebookmanager;
@@ -60,13 +60,13 @@ switch ($action) {
             if ($disabledgradecategorygradeitem === false) {
                 $disabledgradecategorygradeitem = gradebookmanager::create_disabledcategory($courseid);
             }
-            // gradebookmanager::move_after($actiongradeitemid, $disabledgradecategorygradeitem->id, $courseid, true);
+
             gradebookmanager::move_inside($actiongradeitemid, $disabledgradecategorygradeitem->id, $courseid);
             $actiongradeitem = \grade_item::fetch(['id' => $actiongradeitemid]);
             \grade_item::set_properties($actiongradeitem, ['weightoverride' => 1, 'aggregationcoef' => 0]);
             $actiongradeitem->update();
         }
-    break;
+        break;
 }
 
 
@@ -102,14 +102,16 @@ if (isset($_POST['gradeitemparent'])) {
 }
 
 if (isset($_POST['relativepaths']) || isset($_POST['randomnames_dictionary']) || isset($_POST['subcategoryname'])) {
-    gradereport_gradeconfigwizard\gradebookmanager::process($courseid,
-    $relativepaths,
-    $randomnamesdictionary,
-    $subcategoryname,
-    $gradeitemparent);
+    gradereport_gradeconfigwizard\gradebookmanager::process(
+        $courseid,
+        $relativepaths,
+        $randomnamesdictionary,
+        $subcategoryname,
+        $gradeitemparent
+    );
 
     // Notify the user that the gradebook has been configured correctly.
-    $redirecturl = new moodle_url( '/grade/report/gradeconfigwizard/index.php', ['id' => $courseid]);
+    $redirecturl = new moodle_url('/grade/report/gradeconfigwizard/index.php', ['id' => $courseid]);
     redirect($redirecturl, 'Gradebook configurado correctamente', null, \core\output\notification::NOTIFY_SUCCESS);
 }
 
@@ -132,8 +134,19 @@ $strheadinggraderreport = get_string('gradereportheading', 'gradereport_gradecon
 
 $actionbar = new \core_grades\output\gradebook_setup_action_bar($context);
 $actionbar = null;
-print_grade_page_head($courseid, 'report', 'gradeconfigwizard', $strheadinggraderreport,
-    false, false, true, null, null, null, $actionbar);
+print_grade_page_head(
+    $courseid,
+    'report',
+    'gradeconfigwizard',
+    $strheadinggraderreport,
+    false,
+    false,
+    true,
+    null,
+    null,
+    null,
+    $actionbar
+);
 
 echo $OUTPUT->box_start('gradetreebox generalbox');
 
@@ -143,8 +156,7 @@ $gpr = new grade_plugin_return(['type' => 'edit', 'plugin' => 'tree', 'courseid'
 
 $gradeedittree = new grade_edit_tree($gtree, $movingeid, $gpr);
 
-$tpldata = (object) [
-];
+$tpldata = (object) [];
 
 
 $tpldata->availablegradeitems = \gradereport_gradeconfigwizard\gradebookmanager::gradeconfigwizard_get_grade_items($courseid);

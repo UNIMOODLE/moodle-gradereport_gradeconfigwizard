@@ -23,7 +23,7 @@
 // Córdoba, Extremadura, Vigo, Las Palmas de Gran Canaria y Burgos.
 /**
  * Display information about all the gradereport_gradeconfigwizard modules in the requested course. *
- * @package gradeconfigwizard
+ * @package gradereport_gradeconfigwizard
  * @copyright 2023 Proyecto UNIMOODLE
  * @author UNIMOODLE Group (Coordinator) &lt;direccion.area.estrategia.digital@uva.es&gt;
  * @author Joan Carbassa (IThinkUPC) &lt;joan.carbassa@ithinkupc.com&gt;
@@ -35,14 +35,43 @@
 
 namespace gradereport_gradeconfigwizard;
 
+/**
+ * Class multiplegradebook
+ *
+ * Represents a multiple gradebook for a specific course.
+ */
 class multiplegradebook {
 
+    /**
+     * @var int The ID of the course associated with the gradebook.
+     */
     private $courseid;
 
+    /**
+     * Constructor for the multiplegradebook class.
+     *
+     * Initializes a new instance of the multiplegradebook class with the provided course ID.
+     * The course ID is assigned to the property $courseid.
+     *
+     * @param int $courseid The ID of the course associated with the gradebook.
+     */
     public function __construct(int $courseid) {
         $this->courseid = $courseid;
     }
 
+    /**
+     * Processes the provided categories for the gradebook.
+     *
+     * This method processes the array of categories provided as input. It requires the gradebook libraries,
+     * sets the course aggregation, and iterates through each category. For each category, it creates the category
+     * and its associated grade items. If the category contains a recommended item, it creates a provisional category,
+     * moves the grade item to that category, and sets the cutoff mark calculation. If the category contains items,
+     * it iterates through each item, creates the item category if necessary, moves the grade items, and sets the
+     * cutoff mark calculation. Finally, it returns true to indicate successful processing.
+     *
+     * @param array $categories An array of categories to be processed.
+     * @return bool True if processing is successful, false otherwise.
+     */
     public function process(array $categories): bool {
         $this->require_grade_libs();
         $this->set_course_aggregation();
@@ -77,6 +106,15 @@ class multiplegradebook {
         return true;
     }
 
+    /**
+     * Sets the aggregation method for the course grade category.
+     *
+     * This method initializes a new grade category object representing the course grade category
+     * with a depth of 1 and the provided course ID. It sets the aggregation method to weighted mean
+     * and updates the category in the database.
+     *
+     * @return void
+     */
     private function set_course_aggregation(): void {
         $coursegradecat = new \grade_category(['depth' => 1, 'courseid' => $this->courseid, 'fullname' => '?'], true);
         $properties = [
@@ -86,6 +124,20 @@ class multiplegradebook {
         $coursegradecat->update();
     }
 
+    /**
+     * Creates a new grade category based on the provided category data.
+     *
+     * This method creates a new grade category using the provided category data array.
+     * It initializes a new grade category object with the course ID, applies default and forced
+     * settings, sets the full name and aggregation method, inserts the category into the database,
+     * and then loads the corresponding grade item. It sets the weight override and aggregation
+     * coefficient properties for the grade item before updating it in the database. Finally, it
+     * returns the ID of the newly created category.
+     *
+     * @param array $category The data array containing information about the category.
+     *                        Requires 'name' for the category name and 'weight' for the weight.
+     * @return int The ID of the newly created grade category.
+     */
     private function create_category(array $category): int {
         $gc = new \grade_category(['courseid' => $this->courseid], false);
         $gc->apply_default_settings();
@@ -104,6 +156,18 @@ class multiplegradebook {
         return $id;
     }
 
+    /**
+     * Creates a provisional grade category under the specified parent category.
+     *
+     * This method creates a new provisional grade category under the specified parent category.
+     * It initializes a new grade category object with the course ID, applies default and forced
+     * settings, sets the full name and aggregation method, inserts the category into the database,
+     * and then sets its parent category before updating it in the database. Finally, it returns
+     * the ID of the newly created provisional category.
+     *
+     * @param int $parentid The ID of the parent category under which to create the provisional category.
+     * @return int The ID of the newly created provisional grade category.
+     */
     private function create_provisional_category(int $parentid): int {
         $gc = new \grade_category(['courseid' => $this->courseid], false);
         $gc->apply_default_settings();
@@ -121,6 +185,21 @@ class multiplegradebook {
         return $id;
     }
 
+    /**
+     * Sets the cutoff mark calculation for a grade item within a category.
+     *
+     * This method sets the cutoff mark calculation for a grade item within the specified category.
+     * It loads the grade item associated with the provided item ID, ensures the presence of an ID
+     * number for both the grade item and its referenced item, generates an ID number if not already
+     * present, and then sets the calculation formula based on the provided information. Finally, it
+     * updates the grade item in the database.
+     *
+     * @param int $categoryid The ID of the category containing the grade item.
+     * @param int $itemid The ID of the grade item for which to set the cutoff mark calculation.
+     * @param array $recitem An array containing information about the referenced item and the cutoff grade.
+     *                       It must include 'recitemid' and 'recitemgrade' keys.
+     * @return void
+     */
     private function set_cutoff_mark_calculation(int $categoryid, int $itemid, array $recitem): void {
         $gc = new \grade_category(['id' => $categoryid], true);
         $gi = $gc->load_grade_item();
@@ -139,23 +218,59 @@ class multiplegradebook {
 
         $gi->set_calculation(
             "=IF([[" . $gradeitem->idnumber . "]]>=" . $recitem['recitemgrade'] .
-            ",[[" . $gradeitem->idnumber . "]],[[" . $recgi->idnumber . "]])"
+                ",[[" . $gradeitem->idnumber . "]],[[" . $recgi->idnumber . "]])"
         );
         $gi->update();
     }
 
+    /**
+     * Moves a grade item to the specified category.
+     *
+     * This method moves the grade item identified by the provided grade item ID
+     * to the category identified by the provided category ID. It loads the grade
+     * item, sets its parent category, and updates the grade item in the database.
+     *
+     * @param int $gradeitemid The ID of the grade item to move.
+     * @param int $categoryid The ID of the category to which the grade item will be moved.
+     * @return void
+     */
     private function move_grade_item_to_category(int $gradeitemid, int $categoryid): void {
         $gi = new \grade_item(['id' => $gradeitemid], true);
         $gi->set_parent($categoryid);
         $gi->update();
     }
 
+    /**
+     * Changes the weight of a grade item.
+     *
+     * This method changes the weight of the grade item identified by the provided item ID.
+     * It loads the grade item, sets its weight override and aggregation coefficient properties
+     * to the provided weight, and updates the grade item in the database.
+     *
+     * @param int $itemid The ID of the grade item to change the weight.
+     * @param int $weight The new weight to assign to the grade item.
+     * @return void
+     */
     private function change_item_weight(int $itemid, int $weight): void {
         $gi = new \grade_item(['id' => $itemid], true);
         \grade_item::set_properties($gi, ['weightoverride' => 1, 'aggregationcoef' => $weight]);
         $gi->update();
     }
 
+    /**
+     * Creates a category for a grade item within a parent category.
+     *
+     * This method creates a new category for the grade item identified by the provided
+     * grade item ID. It assigns the category to the specified parent category, sets its
+     * properties including fullname, aggregation method, and parent category ID, and inserts
+     * the category into the database. Additionally, it updates the grade item associated
+     * with the newly created category.
+     *
+     * @param int $gradeitemid The ID of the grade item for which to create a category.
+     * @param int $weight The weight to assign to the grade item within the new category.
+     * @param int $parentid The ID of the parent category for the new category.
+     * @return int The ID of the newly created category.
+     */
     private function create_item_category(int $gradeitemid, int $weight, int $parentid): int {
         $gi = new \grade_item(['id' => $gradeitemid], true);
         $gc = new \grade_category(['courseid' => $this->courseid], false);
@@ -176,6 +291,16 @@ class multiplegradebook {
         return $id;
     }
 
+    /**
+     * Requires the inclusion of necessary grade-related libraries.
+     *
+     * This method ensures that the required grade-related libraries are included
+     * before performing any grade-related operations. It includes gradelib.php,
+     * grade_category.php, grade_item.php, and constants.php from the Moodle
+     * library directory.
+     *
+     * @return void
+     */
     private function require_grade_libs() {
         global $CFG;
         require_once($CFG->libdir . '/gradelib.php');
@@ -183,5 +308,4 @@ class multiplegradebook {
         require_once($CFG->libdir . '/grade/grade_item.php');
         require_once($CFG->libdir . '/grade/constants.php');
     }
-
 }

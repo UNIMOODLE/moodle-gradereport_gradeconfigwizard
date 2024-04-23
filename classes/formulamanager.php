@@ -23,7 +23,7 @@
 // Córdoba, Extremadura, Vigo, Las Palmas de Gran Canaria y Burgos.
 /**
  * Display information about all the gradereport_gradeconfigwizard modules in the requested course. *
- * @package gradeconfigwizard
+ * @package gradereport_gradeconfigwizard
  * @copyright 2023 Proyecto UNIMOODLE
  * @author UNIMOODLE Group (Coordinator) &lt;direccion.area.estrategia.digital@uva.es&gt;
  * @author Joan Carbassa (IThinkUPC) &lt;joan.carbassa@ithinkupc.com&gt;
@@ -37,7 +37,22 @@ namespace gradereport_gradeconfigwizard;
 
 use core\session\exception;
 
+/**
+ * Class formulamanager
+ *
+ * Provides methods for managing formulas in Moodle.
+ */
 class formulamanager {
+
+    /**
+     * Generates a Moodle formula based on the provided items.
+     *
+     * This method generates a formula string for Moodle based on the provided items.
+     *
+     * @param array $items An array of items to include in the formula.
+     * @return string The generated Moodle formula string.
+     * @throws Exception If the total weight is invalid.
+     */
     public static function generate_formula_moodle($items) {
         $formula = "=" . self::check_operation($items[0]['operation']);
         $first = array_shift($items);
@@ -66,6 +81,17 @@ class formulamanager {
         return $formula;
     }
 
+    /**
+     * Obtains the ID number for a grade item.
+     *
+     * This method obtains the ID number for the given grade item ID. If the ID number
+     * is already available in the provided grade items, it returns it directly. Otherwise,
+     * it generates a new ID number and adds it to the grade item before returning it.
+     *
+     * @param int $gradeitemid The ID of the grade item.
+     * @param array $gradeitems An array of grade items.
+     * @return string The ID number of the grade item.
+     */
     public static function obtain_idnumber($gradeitemid, $gradeitems) {
         $item = self::select_grade_item($gradeitems, $gradeitemid);
         if (!empty($item->idnumber)) {
@@ -76,13 +102,24 @@ class formulamanager {
         return $result;
     }
 
+    /**
+     * Generates a unique ID number for a grade item.
+     *
+     * This method generates a unique ID number for the given grade item ID. It fetches
+     * the grade item using the provided ID, then normalizes its name and appends the ID
+     * to it to ensure uniqueness. If the generated ID number is not unique, it appends
+     * "_1", "_2", and so on until a unique ID number is found.
+     *
+     * @param int $gradeitemid The ID of the grade item.
+     * @return string The generated unique ID number for the grade item.
+     */
     public static function generate_id_number($gradeitemid) {
-        $gradeitem = \grade_item::fetch(array('id' => $gradeitemid));
+        $gradeitem = \grade_item::fetch(['id' => $gradeitemid]);
         $normalizedname = self::normalize_string($gradeitem->get_name($gradeitemid) . "_" . ($gradeitemid));
         // Check if the name is unique.
         $isunique = false;
         while (!$isunique) {
-            $uniqueitem = \grade_item::fetch(array('idnumber' => $normalizedname));
+            $uniqueitem = \grade_item::fetch(['idnumber' => $normalizedname]);
             if ($uniqueitem == false) {
                 $isunique = true;
             } else {
@@ -92,6 +129,17 @@ class formulamanager {
         return $normalizedname;
     }
 
+    /**
+     * Removes a grade item from the list of available grade items.
+     *
+     * This method removes the grade item with the specified ID from the array of
+     * available grade items. It iterates through the array and removes the item if
+     * its ID matches the target ID and it's not a category.
+     *
+     * @param array $availablegradeitems An array of available grade items.
+     * @param int $gradeitemidtarget The ID of the grade item to be removed.
+     * @return array The updated array of available grade items after removal.
+     */
     public static function remove_gradeitem($availablegradeitems, $gradeitemidtarget) {
         $size = count($availablegradeitems) - 1;
         for ($i = 0; $i < $size; ++$i) {
@@ -102,6 +150,17 @@ class formulamanager {
         return $availablegradeitems;
     }
 
+    /**
+     * Preprocesses the XML data for formula generation.
+     *
+     * This method preprocesses the XML data representing a formula, extracting relevant
+     * information such as item IDs, names, weights, and operations. It returns an array
+     * of structured data representing each item in the formula.
+     *
+     * @param string $formulaxml The XML data representing the formula.
+     * @param array $allgradeitem An array of all available grade items.
+     * @return array An array of structured data representing each item in the formula.
+     */
     public static function preprocess_formula_xml($formulaxml, $allgradeitem) {
         $itemgrade = [
             'id' => '',
@@ -132,9 +191,16 @@ class formulamanager {
         return $gradeitems;
     }
 
-
-
-
+    /**
+     * Selects a grade item from the list by its ID.
+     *
+     * This method iterates through the list of grade items and returns the item
+     * with the specified ID. If no item is found with the given ID, it returns null.
+     *
+     * @param array $gradeitems An array of grade items.
+     * @param int $gradeitemid The ID of the grade item to select.
+     * @return mixed|null The grade item object if found, otherwise null.
+     */
     private static function select_grade_item($gradeitems, $gradeitemid) {
         foreach ($gradeitems as $item) {
             if ($item->id == $gradeitemid) {
@@ -143,6 +209,20 @@ class formulamanager {
         }
         return null;
     }
+
+
+    /**
+     * Normalizes a string by removing accents, spaces, and converting to lowercase.
+     *
+     * This method takes a string as input and performs the following operations:
+     * 1. Removes accents from characters.
+     * 2. Replaces multiple spaces with a single underscore.
+     * 3. Converts the string to lowercase.
+     * It then returns the normalized string.
+     *
+     * @param string $string The string to be normalized.
+     * @return string The normalized string.
+     */
     private static function normalize_string($string) {
         // Clean accents.
         $cleanstrig = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
@@ -152,6 +232,18 @@ class formulamanager {
         return strtolower($cleanstrig);
     }
 
+    /**
+     * Checks and returns the corresponding operation for a given operation code.
+     *
+     * This method takes an operation code as input and returns the corresponding
+     * operation name based on the code. If the code matches one of the predefined
+     * operations ("HIGHEST", "LOWEST", "SUM", "WEIGHTEDMEANGRADES"), it returns
+     * the corresponding operation name ("max", "min", "sum", "average"). Otherwise,
+     * it returns "average" as the default operation.
+     *
+     * @param string $operation The operation code to check.
+     * @return string The corresponding operation name.
+     */
     public static function check_operation($operation) {
         if ($operation === "HIGHEST") {
             return "max";
@@ -164,6 +256,16 @@ class formulamanager {
         }
     }
 
+    /**
+     * Adds an ID number to a grade item.
+     *
+     * This method adds the provided ID number to the given grade item. If the item
+     * is not null, it calls the `add_idnumber` method on the item and passes the ID
+     * number as a parameter.
+     *
+     * @param mixed $item The grade item object to which the ID number will be added.
+     * @param string $result The ID number to add to the grade item.
+     */
     private static function afegir_idnumber($item, $result) {
         if (isset($item)) {
             $item->add_idnumber($result);

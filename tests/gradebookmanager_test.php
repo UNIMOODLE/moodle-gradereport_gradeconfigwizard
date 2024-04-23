@@ -23,7 +23,7 @@
 // Córdoba, Extremadura, Vigo, Las Palmas de Gran Canaria y Burgos.
 /**
  * Display information about all the gradereport_gradeconfigwizard modules in the requested course. *
- * @package gradeconfigwizard
+ * @package gradereport_gradeconfigwizard
  * @copyright 2023 Proyecto UNIMOODLE
  * @author UNIMOODLE Group (Coordinator) &lt;direccion.area.estrategia.digital@uva.es&gt;
  * @author Joan Carbassa (IThinkUPC) &lt;joan.carbassa@ithinkupc.com&gt;
@@ -37,10 +37,14 @@ namespace gradereport_gradeconfigwizard;
 
 use grade_item;
 
-defined('MOODLE_INTERNAL') || die();
 
 
-class  gradeconfigwizard_gradebookmanager_test extends \advanced_testcase {
+/**
+ * Class gradebookmanager_test
+ *
+ * Test cases for the Gradebook Manager in the Grade Config Wizard.
+ */
+class  gradebookmanager_test extends \advanced_testcase {
 
     /**
      * Set up for every test.
@@ -54,25 +58,43 @@ class  gradeconfigwizard_gradebookmanager_test extends \advanced_testcase {
 
         $this->course1 = $this->getDataGenerator()->create_course();
 
-        $studentrole = $DB->get_record('role', array('shortname' => 'student'));
-        $teacherrole = $DB->get_record('role', array('shortname' => 'editingteacher'));
+        $studentrole = $DB->get_record('role', ['shortname' => 'student']);
+        $teacherrole = $DB->get_record('role', ['shortname' => 'editingteacher']);
         $this->student1 = $this->getDataGenerator()->create_user();
         $this->teacher = $this->getDataGenerator()->create_user();
         $this->getDataGenerator()->enrol_user($this->teacher->id, $this->course1->id, $teacherrole->id);
         $this->getDataGenerator()->enrol_user($this->student1->id, $this->course1->id, $studentrole->id);
 
-        $assignment1 = $this->getDataGenerator()->create_module('assign', array('name' => "Test assign 1", 'course' => $this->course1->id));
-        $assignment2 = $this->getDataGenerator()->create_module('assign', array('name' => "Test assign 2", 'course' => $this->course1->id));
+        $assignment1 = $this->getDataGenerator()->create_module(
+            'assign',
+            [
+                'name' => "Test assign 1",
+                'course' => $this->course1->id,
+            ]
+        );
+        $assignment2 = $this->getDataGenerator()->create_module(
+            'assign',
+            [
+                'name' => "Test assign 2",
+                'course' => $this->course1->id,
+            ]
+        );
         $modcontext1 = get_coursemodule_from_instance('assign', $assignment1->id, $this->course1->id);
         $modcontext2 = get_coursemodule_from_instance('assign', $assignment2->id, $this->course1->id);
         $assignment1->cmidnumber = $modcontext1->id;
         $assignment2->cmidnumber = $modcontext2->id;
 
-        $this->student1grade1 = array('userid' => $this->student1->id, 'rawgrade' => $student1grade1);
-        $this->student1grade2 = array('userid' => $this->student1->id, 'rawgrade' => $student1grade2);
-        $studentgrades = array($this->student1->id => $this->student1grade1);
+        $this->student1grade1 = [
+            'userid' => $this->student1->id,
+            'rawgrade' => $student1grade1,
+        ];
+        $this->student1grade2 = [
+            'userid' => $this->student1->id,
+            'rawgrade' => $student1grade2,
+        ];
+        $studentgrades = [$this->student1->id => $this->student1grade1];
         assign_grade_item_update($assignment1, $studentgrades);
-        $studentgrades = array($this->student1->id => $this->student1grade2);
+        $studentgrades = [$this->student1->id => $this->student1grade2];
         assign_grade_item_update($assignment2, $studentgrades);
 
         grade_get_setting($this->course1->id, 'report_gradeconfigwizard_showrank', 1);
@@ -86,10 +108,10 @@ class  gradeconfigwizard_gradebookmanager_test extends \advanced_testcase {
      * @covers \gradereport_gradeconfigwizard\gradebookmanager::_move_after
      */
     public function test_move_after() {
-        $assigment1 = grade_item::fetch(array('itemname' => 'Test assign 1'));
-        $assigment2 = grade_item::fetch(array('itemname' => 'Test assign 2'));
+        $assigment1 = grade_item::fetch(['itemname' => 'Test assign 1']);
+        $assigment2 = grade_item::fetch(['itemname' => 'Test assign 2']);
         gradebookmanager::move_after($assigment1->id, $assigment2->id, $this->course1->id);
-        $assigment1new = grade_item::fetch(array('itemname' => 'Test assign 1'));
+        $assigment1new = grade_item::fetch(['itemname' => 'Test assign 1']);
         $this->assertNotEquals($assigment1new->sortorder, $assigment1->sortorder);
     }
 
@@ -101,15 +123,17 @@ class  gradeconfigwizard_gradebookmanager_test extends \advanced_testcase {
      * @covers \gradereport_gradeconfigwizard\gradebookmanager::_move_after
      */
     public function test_move_inside() {
-        $assigment1 = grade_item::fetch(array('itemname' => 'Test assign 1'));
-        $assigment2 = grade_item::fetch(array('itemname' => 'Test assign 2'));
+        $assigment1 = grade_item::fetch(['itemname' => 'Test assign 1']);
+        $assigment2 = grade_item::fetch(['itemname' => 'Test assign 2']);
         gradebookmanager::move_inside($assigment1->id, $assigment2->id, $this->course1->id);
-        $assigment1new = grade_item::fetch(array('itemname' => 'Test assign 1'));
+        $assigment1new = grade_item::fetch(['itemname' => 'Test assign 1']);
         $this->assertNotEquals($assigment1new->sortorder, $assigment1->sortorder);
     }
 
     /**
      * Test create_disabledcategory.
+     *
+     * @covers \gradereport_gradeconfigwizard\gradebookmanager::create_disabledcategory
      */
     public function test_create_disabledcategory() {
         $disabledcategory = gradebookmanager::create_disabledcategory($this->course1->id);
@@ -118,6 +142,8 @@ class  gradeconfigwizard_gradebookmanager_test extends \advanced_testcase {
 
     /**
      * Test get_disabledcategory.
+     *
+     * @covers \gradereport_gradeconfigwizard\gradebookmanager::get_disabledcategory
      */
     public function test_get_disabledcategory() {
         gradebookmanager::create_disabledcategory($this->course1->id);
@@ -149,22 +175,32 @@ class  gradeconfigwizard_gradebookmanager_test extends \advanced_testcase {
             'g1' => 'rel1',
             'g2' => 'rel2',
         ];
-        $gradebook = gradebookmanager::process($this->course1->id, $relativepaths,  $randomnamedictionary, $newgrades, $gradeitemparents);
+        $gradebook = gradebookmanager::process(
+            $this->course1->id,
+            $relativepaths,
+            $randomnamedictionary,
+            $newgrades,
+            $gradeitemparents
+        );
         $this->assertEquals(1, $gradebook);
     }
 
     /**
      * Test create_grade_item.
+     *
+     * @covers \gradereport_gradeconfigwizard\gradebookmanager::create_grade_item
      */
     public function test_create_grade_item() {
-        $c1 = $this->getDataGenerator()->create_category(array('idnumber' => 'C1'));
+        $c1 = $this->getDataGenerator()->create_category(['idnumber' => 'C1']);
         gradebookmanager::create_grade_item($c1->id, 'g1', $this->course1->id);
-        $gradeitem = grade_item::fetch(array('itemname' => 'g1'));
+        $gradeitem = grade_item::fetch(['itemname' => 'g1']);
         $this->assertNotEmpty($gradeitem, 'grade item not created');
     }
 
     /**
      * Test get_grade_items
+     *
+     * @covers \gradereport_gradeconfigwizard\gradebookmanager::get_grade_items
      */
     public function test_get_grade_items() {
         $gradeitems = gradebookmanager::get_grade_items($this->course1->id);
@@ -173,10 +209,11 @@ class  gradeconfigwizard_gradebookmanager_test extends \advanced_testcase {
 
     /**
      * Test get_grade_items
+     *
+     * @covers \gradereport_gradeconfigwizard\gradebookmanager::gradeconfigwizard_get_grade_items
      */
     public function test_gradeconfigwizard_get_grade_items() {
         $gradeitems = gradebookmanager::gradeconfigwizard_get_grade_items($this->course1->id);
         $this->assertNotEmpty($gradeitems, 'not get items');
     }
-
 }

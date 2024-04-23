@@ -23,7 +23,7 @@
 // Córdoba, Extremadura, Vigo, Las Palmas de Gran Canaria y Burgos.
 /**
  * Display information about all the gradereport_gradeconfigwizard modules in the requested course. *
- * @package gradeconfigwizard
+ * @package gradereport_gradeconfigwizard
  * @copyright 2023 Proyecto UNIMOODLE
  * @author UNIMOODLE Group (Coordinator) &lt;direccion.area.estrategia.digital@uva.es&gt;
  * @author Joan Carbassa (IThinkUPC) &lt;joan.carbassa@ithinkupc.com&gt;
@@ -37,10 +37,14 @@ namespace gradereport_gradeconfigwizard;
 
 use grade_item;
 
-defined('MOODLE_INTERNAL') || die();
 
 
-class  gradeconfigwizard_multiplegradebook_test extends \advanced_testcase {
+/**
+ * Class multiplegradebook_test
+ *
+ * Test cases for the Multiple Gradebook in the Grade Config Wizard.
+ */
+class  multiplegradebook_test extends \advanced_testcase {
 
     /**
      * Set up for every test
@@ -50,9 +54,27 @@ class  gradeconfigwizard_multiplegradebook_test extends \advanced_testcase {
         $this->resetAfterTest(true);
         $this->course1 = $this->getDataGenerator()->create_course();
 
-        $assignment1 = $this->getDataGenerator()->create_module('assign', array('name' => "Test assign 1", 'course' => $this->course1->id));
-        $assignment2 = $this->getDataGenerator()->create_module('assign', array('name' => "Test assign 2", 'course' => $this->course1->id));
-        $assignment3 = $this->getDataGenerator()->create_module('assign', array('name' => "Test assign 3", 'course' => $this->course1->id));
+        $assignment1 = $this->getDataGenerator()->create_module(
+            'assign',
+            [
+                'name' => "Test assign 1",
+                'course' => $this->course1->id,
+            ]
+        );
+        $assignment2 = $this->getDataGenerator()->create_module(
+            'assign',
+            [
+                'name' => "Test assign 2",
+                'course' => $this->course1->id,
+            ]
+        );
+        $assignment3 = $this->getDataGenerator()->create_module(
+            'assign',
+            [
+                'name' => "Test assign 3",
+                'course' => $this->course1->id,
+            ]
+        );
         $modcontext1 = get_coursemodule_from_instance('assign', $assignment1->id, $this->course1->id);
         $modcontext2 = get_coursemodule_from_instance('assign', $assignment2->id, $this->course1->id);
         $modcontext3 = get_coursemodule_from_instance('assign', $assignment3->id, $this->course1->id);
@@ -74,31 +96,31 @@ class  gradeconfigwizard_multiplegradebook_test extends \advanced_testcase {
      * @covers \grade_category::get_grade_item
      */
     public function test_process() {
-        $assigment1 = grade_item::fetch(array('itemname' => 'Test assign 1'));
-        $assigment2 = grade_item::fetch(array('itemname' => 'Test assign 2'));
-        $assigment3 = grade_item::fetch(array('itemname' => 'Test assign 3'));
+        $assigment1 = grade_item::fetch(['itemname' => 'Test assign 1']);
+        $assigment2 = grade_item::fetch(['itemname' => 'Test assign 2']);
+        $assigment3 = grade_item::fetch(['itemname' => 'Test assign 3']);
         $categories = [
             '0' => [
-               'name' => 'cat1',
-               'weight' => '1',
+                'name' => 'cat1',
+                'weight' => '1',
                 'recitem' => [
                     'recitemgrade' => '2',
                     'recitemid' => $assigment3->id,
                 ],
-               'items' => [
-                   $assigment1->id => [
-                       'id' => $assigment1->id,
-                       'weight' => '3',
-                       'rectitem' => [
-                           'recitemgrade' => '2',
-                           'recitemid' => $assigment2->id,
-                       ],
-                   ],
-                   $assigment2->id => [
-                       'id' => $assigment2->id,
-                       'weight' => '1',
-                   ],
-               ],
+                'items' => [
+                    $assigment1->id => [
+                        'id' => $assigment1->id,
+                        'weight' => '3',
+                        'rectitem' => [
+                            'recitemgrade' => '2',
+                            'recitemid' => $assigment2->id,
+                        ],
+                    ],
+                    $assigment2->id => [
+                        'id' => $assigment2->id,
+                        'weight' => '1',
+                    ],
+                ],
             ],
         ];
 
@@ -106,5 +128,4 @@ class  gradeconfigwizard_multiplegradebook_test extends \advanced_testcase {
         $data = $multiplevaluation->process($categories);
         $this->assertEquals(1, $data);
     }
-
 }

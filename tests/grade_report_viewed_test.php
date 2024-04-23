@@ -23,7 +23,7 @@
 // Córdoba, Extremadura, Vigo, Las Palmas de Gran Canaria y Burgos.
 /**
  * Display information about all the gradereport_gradeconfigwizard modules in the requested course. *
- * @package gradeconfigwizard
+ * @package gradereport_gradeconfigwizard
  * @copyright 2023 Proyecto UNIMOODLE
  * @author UNIMOODLE Group (Coordinator) &lt;direccion.area.estrategia.digital@uva.es&gt;
  * @author Joan Carbassa (IThinkUPC) &lt;joan.carbassa@ithinkupc.com&gt;
@@ -37,13 +37,18 @@ namespace gradereport_gradeconfigwizard;
 
 use gradereport_gradeconfigwizard\event\grade_report_viewed as viewed_gradeconfigwizard;
 
-defined('MOODLE_INTERNAL') || die();
 
-
-class  gradeconfigwizard_grade_report_viewed_test extends \advanced_testcase {
+/**
+ * Class grade_report_viewed_test
+ *
+ * Test cases for the event of viewing the Grade Config Wizard grade report.
+ */
+class  grade_report_viewed_test extends \advanced_testcase {
 
     /**
      * Test get_name.
+     *
+     * @covers \gradereport_gradeconfigwizard\event\grade_report_viewed::get_name
      */
     public function test_get_name() {
         $result = get_string('eventgradereportviewed', 'gradereport_gradeconfigwizard');

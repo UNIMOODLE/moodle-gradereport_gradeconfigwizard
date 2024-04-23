@@ -23,7 +23,7 @@
 // Córdoba, Extremadura, Vigo, Las Palmas de Gran Canaria y Burgos.
 /**
  * Display information about all the gradereport_gradeconfigwizard modules in the requested course. *
- * @package gradeconfigwizard
+ * @package gradereport_gradeconfigwizard
  * @copyright 2023 Proyecto UNIMOODLE
  * @author UNIMOODLE Group (Coordinator) &lt;direccion.area.estrategia.digital@uva.es&gt;
  * @author Joan Carbassa (IThinkUPC) &lt;joan.carbassa@ithinkupc.com&gt;
@@ -49,7 +49,7 @@ use html_writer;
 use moodle_url;
 
 require_once($CFG->dirroot . '/grade/report/lib.php');
-require_once($CFG->libdir.'/tablelib.php');
+require_once($CFG->libdir . '/tablelib.php');
 
 /**
  * Class providing an API for the gradeconfigwizard report building and displaying.
@@ -84,6 +84,7 @@ class grade_report_gradeconfigwizard extends grade_report {
 
     /**
      * show course/category totals if they contain hidden items
+     * @var array $showtotalsifcontainhidden
      */
     public $showtotalsifcontainhidden;
 
@@ -110,30 +111,36 @@ class grade_report_gradeconfigwizard extends grade_report {
         parent::__construct($COURSE->id, $gpr, $context);
 
         // Get the user (for full name).
-        $this->user = $DB->get_record('user', array('id' => $userid));
+        $this->user = $DB->get_record('user', ['id' => $userid]);
 
         // Load the user's courses.
         $this->courses = enrol_get_users_courses($this->user->id, false, 'id, shortname, showgrades');
 
-        $this->showrank = array();
+        $this->showrank = [];
         $this->showrank['any'] = false;
 
-        $this->showtotalsifcontainhidden = array();
+        $this->showtotalsifcontainhidden = [];
 
-        $this->studentcourseids = array();
-        $this->teachercourses = array();
+        $this->studentcourseids = [];
+        $this->teachercourses = [];
         $roleids = explode(',', get_config('moodle', 'gradebookroles'));
 
         if ($this->courses) {
             foreach ($this->courses as $course) {
-                $this->showrank[$course->id] = grade_get_setting($course->id,
-                    'report_gradeconfigwizard_showrank', !empty($CFG->grade_report_gradeconfigwizard_showrank));
+                $this->showrank[$course->id] = grade_get_setting(
+                    $course->id,
+                    'report_gradeconfigwizard_showrank',
+                    !empty($CFG->grade_report_gradeconfigwizard_showrank)
+                );
                 if ($this->showrank[$course->id]) {
                     $this->showrank['any'] = true;
                 }
 
-                $this->showtotalsifcontainhidden[$course->id] = grade_get_setting($course->id,
-                    'report_gradeconfigwizard_showtotalsifcontainhidden', $CFG->grade_report_gradeconfigwizard_showtotalsifcontainhidden);
+                $this->showtotalsifcontainhidden[$course->id] = grade_get_setting(
+                    $course->id,
+                    'report_gradeconfigwizard_showtotalsifcontainhidden',
+                    $CFG->grade_report_gradeconfigwizard_showtotalsifcontainhidden
+                );
 
                 $coursecontext = context_course::instance($course->id);
 
@@ -152,11 +159,11 @@ class grade_report_gradeconfigwizard extends grade_report {
         }
 
         // Base url for sorting by first/last name.
-        $this->baseurl = $CFG->wwwroot.'/grade/gradeconfigwizard/index.phppp?id='.$userid;
+        $this->baseurl = $CFG->wwwroot . '/grade/gradeconfigwizard/index.phppp?id=' . $userid;
         $this->pbarurl = $this->baseurl;
         // Set up link to preferences page.
         $courseid = SITEID;
-        $this->preferences_page = $CFG->wwwroot.'/grade/report/grader/preferencesss.php?id='.$courseid;
+        $this->preferences_page = $CFG->wwwroot . '/grade/report/grader/preferencesss.php?id=' . $courseid;
 
         $this->setup_table();
     }
@@ -172,16 +179,20 @@ class grade_report_gradeconfigwizard extends grade_report {
 
         // Setting up table headers.
         if ($this->showrank['any']) {
-            $tablecolumns = array('coursename', 'grade', 'rank');
-            $tableheaders = array($this->get_lang_string('coursename', 'grades'),
-                                  $this->get_lang_string('gradenoun'),
-                                  $this->get_lang_string('rank', 'grades'));
+            $tablecolumns = ['coursename', 'grade', 'rank'];
+            $tableheaders = [
+                $this->get_lang_string('coursename', 'grades'),
+                $this->get_lang_string('gradenoun'),
+                $this->get_lang_string('rank', 'grades'),
+            ];
         } else {
-            $tablecolumns = array('coursename', 'grade');
-            $tableheaders = array($this->get_lang_string('coursename', 'grades'),
-                                  $this->get_lang_string('gradenoun'));
+            $tablecolumns = ['coursename', 'grade'];
+            $tableheaders = [
+                $this->get_lang_string('coursename', 'grades'),
+                $this->get_lang_string('gradenoun'),
+            ];
         }
-        $this->table = new flexible_table('grade-report-gradeconfigwizard-'.$this->user->id);
+        $this->table = new flexible_table('grade-report-gradeconfigwizard-' . $this->user->id);
 
         $this->table->define_columns($tablecolumns);
         $this->table->define_headers($tableheaders);
@@ -203,7 +214,7 @@ class grade_report_gradeconfigwizard extends grade_report {
     public function setup_courses_data($studentcoursesonly) {
         global $USER, $DB;
 
-        $coursesdata = array();
+        $coursesdata = [];
         $numusers = $this->get_numusers(false);
 
         foreach ($this->courses as $course) {
@@ -223,9 +234,11 @@ class grade_report_gradeconfigwizard extends grade_report {
                 continue;
             }
 
-            if (!has_capability('moodle/user:viewuseractivitiesreport', context_user::instance($this->user->id)) &&
-                    ((!has_capability('moodle/grade:view', $coursecontext) || $this->user->id != $USER->id) &&
-                    !has_capability('moodle/grade:viewall', $coursecontext))) {
+            if (
+                !has_capability('moodle/user:viewuseractivitiesreport', context_user::instance($this->user->id)) &&
+                ((!has_capability('moodle/grade:view', $coursecontext) || $this->user->id != $USER->id) &&
+                    !has_capability('moodle/grade:viewall', $coursecontext))
+            ) {
                 continue;
             }
 
@@ -238,17 +251,19 @@ class grade_report_gradeconfigwizard extends grade_report {
             $courseitem = grade_item::fetch_course_item($course->id);
 
             // Get the stored grade.
-            $coursegrade = new grade_grade(array('itemid' => $courseitem->id, 'userid' => $this->user->id));
-            $coursegrade->grade_item =& $courseitem;
+            $coursegrade = new grade_grade(['itemid' => $courseitem->id, 'userid' => $this->user->id]);
+            $coursegrade->grade_item = &$courseitem;
             $finalgrade = $coursegrade->finalgrade;
 
             if (!$canviewhidden && !is_null($finalgrade)) {
                 if ($coursegrade->is_hidden()) {
                     $finalgrade = null;
                 } else {
-                    $adjustedgrade = $this->blank_hidden_total_and_adjust_bounds($course->id,
-                                                                                 $courseitem,
-                                                                                 $finalgrade);
+                    $adjustedgrade = $this->blank_hidden_total_and_adjust_bounds(
+                        $course->id,
+                        $courseitem,
+                        $finalgrade
+                    );
 
                     // We temporarily adjust the view of this grade item - because the min and
                     // max are affected by the hidden values in the aggregation.
@@ -271,7 +286,7 @@ class grade_report_gradeconfigwizard extends grade_report {
             if ($this->showrank['any'] && $this->showrank[$course->id] && !is_null($finalgrade)) {
                 // Find the number of users with a higher grade.
                 // Please note this can not work if hidden grades involved :-( to be fixed in 2.0.
-                $params = array($finalgrade, $courseitem->id);
+                $params = [$finalgrade, $courseitem->id];
                 $sql = "SELECT COUNT(DISTINCT(userid))
                           FROM {grade_grades}
                          WHERE finalgrade IS NOT NULL AND finalgrade > ?
@@ -285,11 +300,24 @@ class grade_report_gradeconfigwizard extends grade_report {
         return $coursesdata;
     }
 
-    // Interface needed by grade_report.
+    /**
+     * Interface needed by grade_report.
+     *
+     * @param mixed $data Data to process.
+     * @return void
+     */
     public function process_data($data) {
         return;
     }
-    // Interface needed by grade_report.
+
+
+    /**
+     * Interface needed by grade_report.
+     *
+     * @param mixed $target The target.
+     * @param mixed $action The action to perform.
+     * @return void
+     */
     public function process_action($target, $action) {
         return;
     }
@@ -306,16 +334,13 @@ class grade_report_gradeconfigwizard extends grade_report {
         if (has_capability('moodle/grade:viewall', $systemcontext)) {
             // Ok - can view all course grades.
             $access = true;
-
         } else if (has_capability('moodle/grade:viewall', $context)) {
             // Ok - can view any grades in context.
             $access = true;
-
         } else if ($userid == $USER->id && ((has_capability('moodle/grade:view', $context) && $course->showgrades)
-                || $course->id == SITEID)) {
+            || $course->id == SITEID)) {
             // Ok - can view own course grades.
             $access = true;
-
         } else if (has_capability('moodle/grade:viewall', $personalcontext) && $course->showgrades) {
             // Ok - can view grades of this user - parent most probably.
             $access = true;
@@ -335,11 +360,11 @@ class grade_report_gradeconfigwizard extends grade_report {
      */
     public static function viewed($context, $courseid, $userid) {
         $event = \gradereport_gradeconfigwizard\event\grade_report_viewed::create(
-            array(
+            [
                 'context' => $context,
                 'courseid' => $courseid,
                 'relateduserid' => $userid,
-            )
+            ]
         );
         $event->trigger();
     }
