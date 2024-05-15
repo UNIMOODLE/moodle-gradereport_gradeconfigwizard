@@ -72,7 +72,7 @@ class gradebook_action_bar_renderer_formulacreator extends gradebook_setup_actio
         // Get the data used to output the general navigation selector.
         $generalnavselector = new general_action_bar(
             $this->context,
-            new moodle_url(
+            new \moodle_url(
                 'grade/report/gradeconfigwizard/index.php',
                 ['id' => $courseid]
             ),

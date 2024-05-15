@@ -33,6 +33,8 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use gradereport_gradeconfigwizard\gradebook_action_bar_renderer_formulacreator;
+
 require_once('../../../config.php');
 require_once($CFG->dirroot.'/grade/lib.php');
 require_once($CFG->libdir.'/grade/grade_item.php');
@@ -65,7 +67,6 @@ require_capability('moodle/grade:manage', $context);
 
 $strgrades             = get_string('grades');
 $strgraderreport       = get_string('graderreport', 'grades');
-
 $actionbar = new gradebook_action_bar_renderer_formulacreator($context);
 
 
