@@ -33,10 +33,11 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use gradereport_gradeconfigwizard\gradebook_action_bar_renderer_multiplevaluation;
+
 require_once('../../../config.php');
 require_once($CFG->dirroot . '/grade/lib.php');
 require_once($CFG->dirroot . '/grade/edit/tree/lib.php');
-require_once($CFG->dirroot.'/grade/report/gradeconfigwizard/classes/gradebook_action_bar_renderer_multiplevaluation.php');
 
 require_login();
 
@@ -58,7 +59,6 @@ require_capability('moodle/grade:manage', $context);
 $strgrades = get_string('grades');
 $strgraderreport = get_string('graderreport', 'grades');
 $strheadinggradereport = get_string('gradereportmultipleeval', 'gradereport_gradeconfigwizard');
-
 $actionbar = new gradebook_action_bar_renderer_multiplevaluation($context);
 
 print_grade_page_head($courseid, 'report', 'gradeconfigwizard', $strheadinggradereport,
