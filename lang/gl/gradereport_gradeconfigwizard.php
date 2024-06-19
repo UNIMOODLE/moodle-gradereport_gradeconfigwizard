@@ -33,90 +33,80 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['eventgradereportviewed'] = 'Visto o informe de cualificación do asistente de configuración de cualificación';
-$string['gradesgradeconfigwizard'] = 'Cualificacións do asistente de configuración de cualificacións';
-$string['pluginname'] = 'Asistente de configuración de notas';
-$string['privacy:metadata'] = 'O informe de cualificación do Asistente de configuración de cualificación só mostra os datos almacenados noutras localizacións.';
-$string['gradeconfigwizard:view'] = 'Consulta o informe do asistente de configuración de cualificacións';
-
-// Asistente para configurar calificaciones.
-$string['gradereportheading'] = 'Asistente de configuración de notas';
-$string['gradereportmultipleeval'] = 'Acceda ao editor de avaliación múltiple';
-$string['gradereportweighteval'] = 'Acceda ao editor de itinerarios de avaliación';
-$string['checkbox'] = 'Revisa o libro de cualificacións';
-$string['savebutton'] = 'Gardar cambios';
-$string['multevalbutton'] = 'Acceda ao editor de avaliación múltiple';
-$string['weightevalbutton'] = 'Acceda ao editor de itinerarios de avaliación';
-$string['tablename'] = 'Nome';
-$string['tableweight'] = 'Ponderacións';
-$string['tableactions'] = 'Accións';
-$string['editbutton'] = 'Editar';
-$string['cataddcategory'] = 'Engade unha categoría';
-$string['cataddgradeitem'] = 'Engade un elemento de valoración';
-$string['catdisable'] = 'Desactivar';
-$string['courseaddcategory'] = 'Engade unha categoría';
-$string['coursedisable'] = 'Engade un elemento de valoración';
-$string['totaleditcalucation'] = 'Editar cálculo';
-$string['manualeditcalucation'] = 'Editar cálculo';
-$string['manualdisable'] = 'Desactivar';
-$string['moddisable'] = 'Desactivar';
-
-// Creador de fórmulas.
-$string['heading'] = 'Editor de fórmulas mellorado';
-$string['selectitems'] = 'Elementos seleccionables';
-$string['aggregation'] = 'Agregación';
-$string['selectaggremethod'] = 'Seleccione un método de agregación';
-$string['meangrades'] = 'Media das puntuacións';
-$string['weightmeangrades'] = 'Media ponderada das puntuacións';
-$string['sumgrades'] = 'Suma das puntuacións';
-$string['highestgrade'] = 'Valoración máis alta';
-$string['lowestgrade'] = 'Valoración máis baixa';
-$string['defcalculation'] = 'Definir o cálculo';
-$string['colitem'] = 'Elemento';
-$string['colweight'] = 'Pesaxe';
-$string['generateformula'] = 'Xera a fórmula';
-$string['formula'] = 'Fórmula';
-$string['saveformula'] = 'Garda a fórmula';
-$string['cancelbutton3'] = 'Cancelar';
-
-// Evaluación múltiple.
-$string['catcreation'] = 'CREACIÓN DE CATEGORÍAS';
-$string['createbutton'] = 'Crear';
-$string['multitablecategory'] = 'CATEGORÍA';
-$string['multitableweight1'] = 'PESAXE';
-$string['multitablecutoffgrade1'] = 'MARCA DE CORTE';
-$string['multitablerecovery1'] = 'RECUPERACIÓN';
-$string['multitableelements'] = 'ELEMENTOS';
-$string['multitableweight2'] = 'PESAXE';
-$string['multitablecutoffgrade2'] = 'MARCA DE CORTE';
-$string['multitablerecovery2'] = 'RECUPERACIÓN';
-$string['chooseelements'] = 'Escolle elementos';
 $string['addbutton'] = 'Añadir';
-$string['cancelbutton'] = 'Engadir';
-$string['savebutton'] = 'Garda e sae';
+$string['addbutton2'] = 'Engadir';
 $string['addelement1'] = 'Engade un elemento';
 $string['addelement2'] = 'Engade un elemento';
 $string['addelement3'] = 'Engade un elemento';
 $string['addelement4'] = 'Engade un elemento';
 $string['addelement5'] = 'Engade un elemento';
-$string['cancelbutton5'] = 'Cancelar';
-
-// Evaluación múltiple ponderada.
-$string['wcatcreation'] = 'CREACIÓN DE ITINERARIOS';
-$string['wcreatebutton'] = 'Crear';
-$string['wmultitableitineraries'] = 'ITINERARIOS';
-$string['wmultitablecategories'] = 'CATEGORÍAS';
-$string['wmultitableweight1'] = 'PESAXE';
-$string['wmultitableelements'] = 'ELEMENTOS';
-$string['wmultitableweight2'] = 'PESAXE';
-$string['savebutton2'] = 'Garda e sae';
-$string['chooseelements2'] = 'Escolle elementos';
-$string['addbutton2'] = 'Engadir';
-$string['cancelbutton2'] = 'Cancelar';
 $string['additinerary1'] = 'Engadir';
 $string['additinerary2'] = 'Engadir';
+$string['aggregation'] = 'Agregación';
+$string['cancelbutton'] = 'Engadir';
+$string['cancelbutton2'] = 'Cancelar';
+$string['cancelbutton3'] = 'Cancelar';
 $string['cancelbutton4'] = 'Cancelar';
-$string['maincontent'] = 'Contido principal';
-
-// Elementos de evaluación disponibles.
+$string['cancelbutton5'] = 'Cancelar';
+$string['cataddcategory'] = 'Engade unha categoría';
+$string['cataddgradeitem'] = 'Engade un elemento de valoración';
+$string['catcreation'] = 'CREACIÓN DE CATEGORÍAS';
+$string['catdisable'] = 'Desactivar';
 $string['cattotal'] = 'Total';
+$string['checkbox'] = 'Revisa o libro de cualificacións';
+$string['chooseelements'] = 'Escolle elementos';
+$string['chooseelements2'] = 'Escolle elementos';
+$string['colitem'] = 'Elemento';
+$string['colweight'] = 'Pesaxe';
+$string['courseaddcategory'] = 'Engade unha categoría';
+$string['coursedisable'] = 'Engade un elemento de valoración';
+$string['createbutton'] = 'Crear';
+$string['defcalculation'] = 'Definir o cálculo';
+$string['editbutton'] = 'Editar';
+$string['eventgradereportviewed'] = 'Visto o informe de cualificación do asistente de configuración de cualificación';
+$string['formula'] = 'Fórmula';
+$string['generateformula'] = 'Xera a fórmula';
+$string['gradeconfigwizard:view'] = 'Consulta o informe do asistente de configuración de cualificacións';
+$string['gradereportheading'] = 'Asistente de configuración de notas';
+$string['gradereportmultipleeval'] = 'Acceda ao editor de avaliación múltiple';
+$string['gradereportweighteval'] = 'Acceda ao editor de itinerarios de avaliación';
+$string['gradesgradeconfigwizard'] = 'Cualificacións do asistente de configuración de cualificacións';
+$string['heading'] = 'Editor de fórmulas mellorado';
+$string['highestgrade'] = 'Valoración máis alta';
+$string['lowestgrade'] = 'Valoración máis baixa';
+$string['maincontent'] = 'Contido principal';
+$string['manualdisable'] = 'Desactivar';
+$string['manualeditcalucation'] = 'Editar cálculo';
+$string['meangrades'] = 'Media das puntuacións';
+$string['moddisable'] = 'Desactivar';
+$string['multevalbutton'] = 'Acceda ao editor de avaliación múltiple';
+$string['multitablecategory'] = 'CATEGORÍA';
+$string['multitablecutoffgrade1'] = 'MARCA DE CORTE';
+$string['multitablecutoffgrade2'] = 'MARCA DE CORTE';
+$string['multitableelements'] = 'ELEMENTOS';
+$string['multitablerecovery1'] = 'RECUPERACIÓN';
+$string['multitablerecovery2'] = 'RECUPERACIÓN';
+$string['multitableweight1'] = 'PESAXE';
+$string['multitableweight2'] = 'PESAXE';
+$string['pluginname'] = 'Asistente de configuración de notas';
+$string['privacy:metadata'] = 'O informe de cualificación do Asistente de configuración de cualificación só mostra os datos almacenados noutras localizacións.';
+$string['savebutton'] = 'Garda e sae';
+$string['savebutton2'] = 'Garda e sae';
+$string['saveformula'] = 'Garda a fórmula';
+$string['selectaggremethod'] = 'Seleccione un método de agregación';
+$string['selectitems'] = 'Elementos seleccionables';
+$string['sumgrades'] = 'Suma das puntuacións';
+$string['tableactions'] = 'Accións';
+$string['tablename'] = 'Nome';
+$string['tableweight'] = 'Ponderacións';
+$string['totaleditcalucation'] = 'Editar cálculo';
+$string['wcatcreation'] = 'CREACIÓN DE ITINERARIOS';
+$string['wcreatebutton'] = 'Crear';
+$string['weightevalbutton'] = 'Acceda ao editor de itinerarios de avaliación';
+$string['weightmeangrades'] = 'Media ponderada das puntuacións';
+$string['wmultitablecategories'] = 'CATEGORÍAS';
+$string['wmultitableelements'] = 'ELEMENTOS';
+$string['wmultitableitineraries'] = 'ITINERARIOS';
+$string['wmultitableweight1'] = 'PESAXE';
+$string['wmultitableweight2'] = 'PESAXE';
+

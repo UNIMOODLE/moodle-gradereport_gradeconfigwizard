@@ -49,7 +49,49 @@ use grade_plugin_return;
  *
  * Test cases for the Grade Config Wizard grade report in the gradebook.
  */
-class  grade_report_gradeconfigwizard_test extends \advanced_testcase {
+final class grade_report_gradeconfigwizard_test extends \advanced_testcase {
+
+    /**
+     * The object course1
+     * @var object $course1
+     */
+    public $course1;
+
+    /**
+     * The object teacher
+     * @var object $teacher
+     */
+    public $teacher;
+
+    /**
+     * The object student1
+     * @var object $student1
+     */
+    public $student1;
+
+    /**
+     * The object student2
+     * @var object $student2
+     */
+    public $student2;
+
+    /**
+     * The object student1grade1
+     * @var object $student1grade1
+     */
+    public $student1grade1;
+
+    /**
+     * The object student2grade1
+     * @var object $student2grade1
+     */
+    public $student2grade1;
+
+    /**
+     * The object student1grade2
+     * @var object $student1grade2
+     */
+    public $student1grade2;
 
     /**
      * Set up for every test
@@ -110,7 +152,7 @@ class  grade_report_gradeconfigwizard_test extends \advanced_testcase {
      *
      * @covers \gradereport_gradeconfigwizard\grade_report_gradeconfigwizard::setup_table
      */
-    public function test_grade_report_configwizard() {
+    public function test_grade_report_configwizard(): void {
         $context = context_course::instance($this->course1->id);
         $gpr = new grade_plugin_return([
             'type' => 'report',
@@ -127,7 +169,7 @@ class  grade_report_gradeconfigwizard_test extends \advanced_testcase {
      *
      * @covers \gradereport_gradeconfigwizard\grade_report_gradeconfigwizard::setup_courses_data
      */
-    public function test_setup_courses_data() {
+    public function test_setup_courses_data(): void {
         $context = context_course::instance($this->course1->id);
         $gpr = new grade_plugin_return(
             [

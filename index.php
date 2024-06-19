@@ -90,15 +90,39 @@ $gradeitemparent = null;
 $randomnamesdictionary = null;
 if (isset($_POST['relativepaths'])) {
     $relativepaths = $_POST['relativepaths'];
+    array_walk_recursive(
+        $relativepaths,
+        function (&$valor, $clave) {
+            $valor = clean_param($valor, PARAM_TEXT);
+        }
+    );
 }
 if (isset($_POST['randomnames_dictionary'])) {
     $randomnamesdictionary = $_POST['randomnames_dictionary'];
+    array_walk_recursive(
+        $randomnamesdictionary,
+        function (&$valor, $clave) {
+            $valor = clean_param($valor, PARAM_TEXT);
+        }
+    );
 }
 if (isset($_POST['subcategoryname'])) {
     $subcategoryname = $_POST['subcategoryname'];
+    array_walk_recursive(
+        $subcategoryname,
+        function (&$valor, $clave) {
+            $valor = clean_param($valor, PARAM_TEXT);
+        }
+    );
 }
 if (isset($_POST['gradeitemparent'])) {
     $gradeitemparent = $_POST['gradeitemparent'];
+    array_walk_recursive(
+        $gradeitemparent,
+        function (&$valor, $clave) {
+            $valor = clean_param($valor, PARAM_TEXT);
+        }
+    );
 }
 
 if (isset($_POST['relativepaths']) || isset($_POST['randomnames_dictionary']) || isset($_POST['subcategoryname'])) {
