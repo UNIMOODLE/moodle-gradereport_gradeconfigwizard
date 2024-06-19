@@ -38,6 +38,7 @@ namespace gradereport_gradeconfigwizard;
 use externallib_advanced_testcase;
 use gradereport_gradeconfigwizard_external;
 
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -48,8 +49,62 @@ require_once($CFG->dirroot . '/webservice/tests/helpers.php');
  * Class externallib_test
  *
  * Test cases for the external API functions related to grade reports.
+ *
+ * @runTestsInSeparateProcesses
  */
-class externallib_test extends externallib_advanced_testcase {
+final class externallib_test extends externallib_advanced_testcase {
+    /**
+     * The object course1
+     * @var object $course1
+     */
+    public $course1;
+
+    /**
+     * The object course2
+     * @var object $course2
+     */
+    public $course2;
+
+    /**
+     * The object teacher
+     * @var object $teacher
+     */
+    public $teacher;
+
+    /**
+     * The object student1
+     * @var object $student1
+     */
+    public $student1;
+
+    /**
+     * The object student2
+     * @var object $student2
+     */
+    public $student2;
+    /**
+     * The object student1grade1
+     * @var object $student1grade1
+     */
+    public $student1grade1;
+
+    /**
+     * The object student2grade1
+     * @var object $student2grade1
+     */
+    public $student2grade1;
+
+    /**
+     * The object student2grade
+     * @var object $student2grade
+     */
+    public $student2grade;
+
+    /**
+     * The object student1grade2
+     * @var object $student1grade2
+     */
+    public $student1grade2;
 
     /**
      * Set up for every test
@@ -106,9 +161,10 @@ class externallib_test extends externallib_advanced_testcase {
 
     /**
      * Test get_course_grades function case student
+     *
      * @covers \gradereport_gradeconfigwizard_external::get_course_grades_student
      */
-    public function test_get_course_grades_student() {
+    public function test_get_course_grades_student(): void {
 
         // A user can see his own grades in both courses.
         $this->setUser($this->student1);
@@ -159,7 +215,7 @@ class externallib_test extends externallib_advanced_testcase {
      * Test get_course_grades function case admin
      * @covers \gradereport_gradeconfigwizard_external::get_course_grades
      */
-    public function test_get_course_grades_admin() {
+    public function test_get_course_grades_admin(): void {
 
         // A admin must see all student grades.
         $this->setAdminUser();
@@ -204,7 +260,7 @@ class externallib_test extends externallib_advanced_testcase {
      *
      * @covers \gradereport_gradeconfigwizard_external::get_course_grades
      */
-    public function test_get_course_grades_teacher() {
+    public function test_get_course_grades_teacher(): void {
         // Teachers don't see grades.
         $this->setUser($this->teacher);
 
@@ -222,7 +278,7 @@ class externallib_test extends externallib_advanced_testcase {
      *
      * @covers \gradereport_gradeconfigwizard_external::get_course_grades
      */
-    public function test_get_course_grades_permissions() {
+    public function test_get_course_grades_permissions(): void {
         // Student can't see other student grades.
         $this->setUser($this->student2);
 
@@ -236,7 +292,7 @@ class externallib_test extends externallib_advanced_testcase {
      * @covers \gradereport_gradeconfigwizard_external::view_grade_report
      * @covers \gradereport_gradeconfigwizard_external::view_grade_report_returns
      */
-    public function test_view_grade_report() {
+    public function test_view_grade_report(): void {
         global $USER;
 
         // Redirect events to the sink, so we can recover them later.
@@ -278,7 +334,7 @@ class externallib_test extends externallib_advanced_testcase {
      *
      * @covers \gradereport_gradeconfigwizard_external::view_grade_report
      */
-    public function test_view_grade_report_permissions() {
+    public function test_view_grade_report_permissions(): void {
         $this->setUser($this->student2);
 
         $this->expectException('moodle_exception');

@@ -44,7 +44,48 @@ use grade_item;
  *
  * Test cases for the Gradebook Manager in the Grade Config Wizard.
  */
-class  gradebookmanager_test extends \advanced_testcase {
+final class  gradebookmanager_test extends \advanced_testcase {
+    /**
+     * The object course1
+     * @var object $course1
+     */
+    public $course1;
+
+    /**
+     * The object teacher
+     * @var object $teacher
+     */
+    public $teacher;
+
+    /**
+     * The object student1
+     * @var object $student1
+     */
+    public $student1;
+
+    /**
+     * The object student2
+     * @var object $student2
+     */
+    public $student2;
+
+    /**
+     * The object student1grade1
+     * @var object $student1grade1
+     */
+    public $student1grade1;
+
+    /**
+     * The object student2grade1
+     * @var object $student2grade1
+     */
+    public $student2grade1;
+
+    /**
+     * The object student1grade2
+     * @var object $student1grade2
+     */
+    public $student1grade2;
 
     /**
      * Set up for every test.
@@ -107,7 +148,7 @@ class  gradebookmanager_test extends \advanced_testcase {
      * @covers \gradereport_gradeconfigwizard\gradebookmanager::generate_eid_dragndrop
      * @covers \gradereport_gradeconfigwizard\gradebookmanager::_move_after
      */
-    public function test_move_after() {
+    public function test_move_after(): void {
         $assigment1 = grade_item::fetch(['itemname' => 'Test assign 1']);
         $assigment2 = grade_item::fetch(['itemname' => 'Test assign 2']);
         gradebookmanager::move_after($assigment1->id, $assigment2->id, $this->course1->id);
@@ -122,7 +163,7 @@ class  gradebookmanager_test extends \advanced_testcase {
      * @covers \gradereport_gradeconfigwizard\gradebookmanager::generate_eid_dragndrop
      * @covers \gradereport_gradeconfigwizard\gradebookmanager::_move_after
      */
-    public function test_move_inside() {
+    public function test_move_inside(): void {
         $assigment1 = grade_item::fetch(['itemname' => 'Test assign 1']);
         $assigment2 = grade_item::fetch(['itemname' => 'Test assign 2']);
         gradebookmanager::move_inside($assigment1->id, $assigment2->id, $this->course1->id);
@@ -135,7 +176,7 @@ class  gradebookmanager_test extends \advanced_testcase {
      *
      * @covers \gradereport_gradeconfigwizard\gradebookmanager::create_disabledcategory
      */
-    public function test_create_disabledcategory() {
+    public function test_create_disabledcategory(): void {
         $disabledcategory = gradebookmanager::create_disabledcategory($this->course1->id);
         $this->assertNotEmpty($disabledcategory, 'disabled category not created');
     }
@@ -145,7 +186,7 @@ class  gradebookmanager_test extends \advanced_testcase {
      *
      * @covers \gradereport_gradeconfigwizard\gradebookmanager::get_disabledcategory
      */
-    public function test_get_disabledcategory() {
+    public function test_get_disabledcategory(): void {
         gradebookmanager::create_disabledcategory($this->course1->id);
         $disabledcategory = gradebookmanager::get_disabledcategory($this->course1->id);
         $this->assertNotEmpty($disabledcategory, 'not get the disabled category');
@@ -158,7 +199,7 @@ class  gradebookmanager_test extends \advanced_testcase {
      * @covers \gradereport_gradeconfigwizard\gradebookmanager::get_max_depth
      * @covers \gradereport_gradeconfigwizard\gradebookmanager::create_grade_items
      */
-    public function test_process() {
+    public function test_process(): void {
         $relativepaths = [
             'rel1' => '3/rel1',
             'rel2' => '3/rel1/rel2',
@@ -190,7 +231,7 @@ class  gradebookmanager_test extends \advanced_testcase {
      *
      * @covers \gradereport_gradeconfigwizard\gradebookmanager::create_grade_item
      */
-    public function test_create_grade_item() {
+    public function test_create_grade_item(): void {
         $c1 = $this->getDataGenerator()->create_category(['idnumber' => 'C1']);
         gradebookmanager::create_grade_item($c1->id, 'g1', $this->course1->id);
         $gradeitem = grade_item::fetch(['itemname' => 'g1']);
@@ -202,7 +243,7 @@ class  gradebookmanager_test extends \advanced_testcase {
      *
      * @covers \gradereport_gradeconfigwizard\gradebookmanager::get_grade_items
      */
-    public function test_get_grade_items() {
+    public function test_get_grade_items(): void {
         $gradeitems = gradebookmanager::get_grade_items($this->course1->id);
         $this->assertNotEmpty($gradeitems, 'not get the items');
     }
@@ -212,7 +253,7 @@ class  gradebookmanager_test extends \advanced_testcase {
      *
      * @covers \gradereport_gradeconfigwizard\gradebookmanager::gradeconfigwizard_get_grade_items
      */
-    public function test_gradeconfigwizard_get_grade_items() {
+    public function test_gradeconfigwizard_get_grade_items(): void {
         $gradeitems = gradebookmanager::gradeconfigwizard_get_grade_items($this->course1->id);
         $this->assertNotEmpty($gradeitems, 'not get items');
     }

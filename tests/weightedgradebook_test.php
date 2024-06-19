@@ -44,7 +44,13 @@ use grade_item;
  *
  * Test cases for the Weighted Gradebook in the Grade Config Wizard.
  */
-class  weightedgradebook_test extends \advanced_testcase {
+final class weightedgradebook_test extends \advanced_testcase {
+
+    /**
+     * The object course1
+     * @var object $course1
+     */
+    public $course1;
 
     /**
      * Set up for every test
@@ -85,13 +91,12 @@ class  weightedgradebook_test extends \advanced_testcase {
 
     /**
      * Test process.
-     * @covers \gradereport_gradeconfigwizard\weightedgradebook::require_grade_libs
      * @covers \gradereport_gradeconfigwizard\weightedgradebook::set_course_aggregation
      * @covers \gradereport_gradeconfigwizard\weightedgradebook::create_category
      * @covers \gradereport_gradeconfigwizard\weightedgradebook::create_subcategory
      * @covers \gradereport_gradeconfigwizard\weightedgradebook::move_item
      */
-    public function test_process() {
+    public function test_process(): void {
         $assigment1 = grade_item::fetch(['itemname' => 'Test assign 1']);
         $assigment2 = grade_item::fetch(['itemname' => 'Test assign 2']);
         $assigment3 = grade_item::fetch(['itemname' => 'Test assign 3']);
