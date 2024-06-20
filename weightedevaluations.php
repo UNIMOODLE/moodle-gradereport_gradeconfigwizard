@@ -33,11 +33,12 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use gradereport_gradeconfigwizard\gradebook_action_bar_renderer_weightevaluation;
+use gradereport_gradeconfigwizard\gradebook_action_bar_renderer;
 
 require_once('../../../config.php');
 require_once($CFG->dirroot . '/grade/lib.php');
 require_once($CFG->dirroot . '/grade/edit/tree/lib.php');
+
 
 require_login();
 
@@ -59,7 +60,8 @@ require_capability('moodle/grade:manage', $context);
 $strgrades = get_string('grades');
 $strgraderreport = get_string('graderreport', 'grades');
 $strheadinggradereport = get_string('gradereportweighteval', 'gradereport_gradeconfigwizard');
-$actionbar = new gradebook_action_bar_renderer_weightevaluation($context);
+$actionbar = new gradebook_action_bar_renderer($context);
+$actionbar->set_heading_menu(get_string('gradereportweighteval', 'gradereport_gradeconfigwizard'));
 
 print_grade_page_head($courseid, 'report', 'gradeconfigwizard', $strheadinggradereport,
     false, false, true, null, null, null, $actionbar);

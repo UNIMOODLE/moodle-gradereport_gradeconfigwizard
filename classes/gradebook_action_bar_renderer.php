@@ -39,13 +39,29 @@ use core_grades\output\general_action_bar;
 use core_grades\output\gradebook_setup_action_bar;
 
 /**
- * Class gradebook_action_bar_renderer_multiplevaluation
+ * Class gradebook_action_bar_renderer
  *
  * This class extends the gradebook_setup_action_bar class and provides methods for rendering
- * the action bar and exporting data for the mustache template used in the Multiple Evaluation
- * tool within the gradebook setup.
+ * the action bar and exporting data for the mustache template used in the Formula/Multigradebook/Weightgradebook Creator tool
+ * within the gradebook setup.
  */
-class gradebook_action_bar_renderer_multiplevaluation extends gradebook_setup_action_bar {
+class gradebook_action_bar_renderer extends gradebook_setup_action_bar {
+
+    /**
+     * The title of the menu
+     * @var string $headingmenu
+     */
+    private $headingmenu = "";
+
+    /**
+     * Sets the menu title..
+     *
+     * @param string $headingmenu The new menu title.
+     * @return void
+     */
+    public function set_heading_menu(string $headingmenu): void {
+        $this->headingmenu = $headingmenu;
+    }
 
     /**
      * Returns the template for the action bar.
@@ -80,7 +96,7 @@ class gradebook_action_bar_renderer_multiplevaluation extends gradebook_setup_ac
             'gradereport_gradeconfigwizard'
         );
         $data = $generalnavselector->export_for_template($output);
-        $data['selectedoption'] = get_string('gradereportmultipleeval', 'gradereport_gradeconfigwizard');
+        $data['selectedoption'] = $this->headingmenu;
         return $data;
     }
 }

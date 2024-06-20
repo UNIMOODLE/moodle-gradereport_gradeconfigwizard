@@ -33,91 +33,81 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['eventgradereportviewed'] = 'Informe de calificación del Asistente para configurar calificaciones visto';
-$string['gradesgradeconfigwizard'] = 'Calificaciones del Asistente para configurar calificaciones';
-$string['pluginname'] = 'Asistente para configurar calificaciones';
-$string['privacy:metadata'] = 'El informe de calificación del Asistente para configurar calificaciones sólo muestra datos almacenados en otras ubicaciones.';
-$string['gradeconfigwizard:view'] = 'Ver el informe del Asistente para configurar calificaciones';
-
-// Asistente para configurar calificaciones.
-$string['gradereportheading'] = 'Asistente para configurar calificaciones';
-$string['gradereportmultipleeval'] = 'Acceder al editor de múltiples evaluaciones';
-$string['gradereportweighteval'] = 'Acceder al editor de itinerarios de evaluación';
-$string['checkbox'] = 'Revisar el libro de calificaciones';
-$string['savebutton'] = 'Guardar cambios';
-$string['multevalbutton'] = 'Acceder al editor de múltiples evaluaciones';
-$string['weightevalbutton'] = 'Acceder al editor de itinerarios de evaluación';
-$string['tablename'] = 'Nombre';
-$string['tableweight'] = 'Ponderaciones';
-$string['tableactions'] = 'Acciones';
-$string['editbutton'] = 'Editar';
-$string['cataddcategory'] = 'Añadir una categoría';
-$string['cataddgradeitem'] = 'Añadir un elemento de calificación';
-$string['catdisable'] = 'Desactivar';
-$string['courseaddcategory'] = 'Añadir una categoría';
-$string['coursedisable'] = 'Añadir un elemento de calificación';
-$string['totaleditcalucation'] = 'Editar el cálculo';
-$string['manualeditcalucation'] = 'Editar el cálculo';
-$string['manualdisable'] = 'Desactivar';
-$string['moddisable'] = 'Desactivar';
-
-// Creador de fórmulas.
-$string['heading'] = 'Editor de fórmulas mejorado';
-$string['selectitems'] = 'Elementos seleccionables';
-$string['aggregation'] = 'Agregación';
-$string['selectaggremethod'] = 'Seleccionar un método de agregación';
-$string['meangrades'] = 'Media de las calificaciones';
-$string['weightmeangrades'] = 'Media ponderada de las calificaciones';
-$string['sumgrades'] = 'Suma de las calificaciones';
-$string['highestgrade'] = 'Calificación más alta';
-$string['lowestgrade'] = 'Calificación más baja';
-$string['defcalculation'] = 'Definir el cálculo';
-$string['colitem'] = 'Elemento';
-$string['colweight'] = 'Ponderación';
-$string['generateformula'] = 'Generar la fórmula';
-$string['formula'] = 'Fórmula';
-$string['saveformula'] = 'Guardar la fórmula';
-$string['cancelbutton3'] = 'Cancelar';
-
-// Evaluación múltiple.
-$string['catcreation'] = 'CREACIÓN DE CATEGORÍAS';
-$string['createbutton'] = 'Crear';
-$string['multitablecategory'] = 'CATEGORÍA';
-$string['multitableweight1'] = 'PONDERACIÓN';
-$string['multitablecutoffgrade1'] = 'NOTA DE CORTE';
-$string['multitablerecovery1'] = 'RECUPERACIÓN';
-$string['multitableelements'] = 'ELEMENTOS';
-$string['multitableweight2'] = 'PONDERACIÓN';
-$string['multitablecutoffgrade2'] = 'NOTA DE CORTE';
-$string['multitablerecovery2'] = 'RECUPERACIÓN';
-$string['chooseelements'] = 'Elegir elementos';
 $string['addbutton'] = 'Añadir';
-$string['cancelbutton'] = 'Cancelar';
-$string['savebutton'] = 'Guardar y salir';
+$string['addbutton2'] = 'Añadir';
 $string['addelement1'] = 'Añadir un elemento';
 $string['addelement2'] = 'Añadir un elemento';
 $string['addelement3'] = 'Añadir un elemento';
 $string['addelement4'] = 'Añadir un elemento';
 $string['addelement5'] = 'Añadir un elemento';
-$string['cancelbutton5'] = 'Cancelar';
-
-// Evaluación múltiple ponderada.
-$string['wcatcreation'] = 'CREACIÓN DE ITINERARIOS';
-$string['wcreatebutton'] = 'Crear';
-$string['wmultitableitineraries'] = 'ITINERARIOS';
-$string['wmultitablecategories'] = 'CATEGORÍAS';
-$string['wmultitableweight1'] = 'PONDERACIÓN';
-$string['wmultitableelements'] = 'ELEMENTOS';
-$string['wmultitableweight2'] = 'PONDERACIÓN';
-$string['savebutton2'] = 'Guardar y salir';
-$string['chooseelements2'] = 'Elegir elementos';
-$string['addbutton2'] = 'Añadir';
-$string['cancelbutton2'] = 'Cancelar';
 $string['additinerary1'] = 'Añadir';
 $string['additinerary2'] = 'Añadir';
+$string['aggregation'] = 'Agregación';
+$string['cancelbutton'] = 'Cancelar';
+$string['cancelbutton2'] = 'Cancelar';
+$string['cancelbutton3'] = 'Cancelar';
 $string['cancelbutton4'] = 'Cancelar';
-$string['maincontent'] = 'Contenido principal';
-
-// Elementos de evaluación disponibles.
+$string['cancelbutton5'] = 'Cancelar';
+$string['cataddcategory'] = 'Añadir una categoría';
+$string['cataddgradeitem'] = 'Añadir un elemento de calificación';
+$string['catcreation'] = 'CREACIÓN DE CATEGORÍAS';
+$string['catdisable'] = 'Desactivar';
 $string['cattotal'] = 'Total';
+$string['checkbox'] = 'Revisar el libro de calificaciones';
+$string['chooseelements'] = 'Elegir elementos';
+$string['chooseelements2'] = 'Elegir elementos';
+$string['colitem'] = 'Elemento';
+$string['colweight'] = 'Ponderación';
+$string['courseaddcategory'] = 'Añadir una categoría';
+$string['coursedisable'] = 'Añadir un elemento de calificación';
+$string['createbutton'] = 'Crear';
+$string['defcalculation'] = 'Definir el cálculo';
+$string['editbutton'] = 'Editar';
+$string['eventgradereportviewed'] = 'Informe de calificación del Asistente para configurar calificaciones visto';
+$string['formula'] = 'Fórmula';
+$string['generateformula'] = 'Generar la fórmula';
+$string['gradeconfigwizard:view'] = 'Ver el informe del Asistente para configurar calificaciones';
+$string['gradereportheading'] = 'Asistente para configurar calificaciones';
+$string['gradereportmultipleeval'] = 'Acceder al editor de múltiples evaluaciones';
+$string['gradereportweighteval'] = 'Acceder al editor de itinerarios de evaluación';
+$string['gradesgradeconfigwizard'] = 'Calificaciones del Asistente para configurar calificaciones';
+$string['heading'] = 'Editor de fórmulas mejorado';
+$string['highestgrade'] = 'Calificación más alta';
+$string['lowestgrade'] = 'Calificación más baja';
+$string['maincontent'] = 'Contenido principal';
+$string['manualdisable'] = 'Desactivar';
+$string['manualeditcalucation'] = 'Editar el cálculo';
+$string['meangrades'] = 'Media de las calificaciones';
+$string['moddisable'] = 'Desactivar';
+$string['multevalbutton'] = 'Acceder al editor de múltiples evaluaciones';
+$string['multitablecategory'] = 'CATEGORÍA';
+$string['multitablecutoffgrade1'] = 'NOTA DE CORTE';
+$string['multitablecutoffgrade2'] = 'NOTA DE CORTE';
+$string['multitableelements'] = 'ELEMENTOS';
+$string['multitablerecovery1'] = 'RECUPERACIÓN';
+$string['multitablerecovery2'] = 'RECUPERACIÓN';
+$string['multitableweight1'] = 'PONDERACIÓN';
+$string['multitableweight2'] = 'PONDERACIÓN';
+$string['pluginname'] = 'Asistente para configurar calificaciones';
+$string['privacy:metadata'] = 'El informe de calificación del Asistente para configurar calificaciones sólo muestra datos almacenados en otras ubicaciones.';
+$string['savebutton'] = 'Guardar y salir';
+$string['savebutton2'] = 'Guardar y salir';
+$string['saveformula'] = 'Guardar la fórmula';
+$string['selectaggremethod'] = 'Seleccionar un método de agregación';
+$string['selectitems'] = 'Elementos seleccionables';
+$string['sumgrades'] = 'Suma de las calificaciones';
+$string['tableactions'] = 'Acciones';
+$string['tablename'] = 'Nombre';
+$string['tableweight'] = 'Ponderaciones';
+$string['totaleditcalucation'] = 'Editar el cálculo';
+$string['wcatcreation'] = 'CREACIÓN DE ITINERARIOS';
+$string['wcreatebutton'] = 'Crear';
+$string['weightevalbutton'] = 'Acceder al editor de itinerarios de evaluación';
+$string['weightmeangrades'] = 'Media ponderada de las calificaciones';
+$string['wmultitablecategories'] = 'CATEGORÍAS';
+$string['wmultitableelements'] = 'ELEMENTOS';
+$string['wmultitableitineraries'] = 'ITINERARIOS';
+$string['wmultitableweight1'] = 'PONDERACIÓN';
+$string['wmultitableweight2'] = 'PONDERACIÓN';
+
 
