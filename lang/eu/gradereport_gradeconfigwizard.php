@@ -33,90 +33,80 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['eventgradereportviewed'] = 'Kalifikazioa konfiguratzeko morroia Kalifikazio-txostena ikusi da';
-$string['gradesgradeconfigwizard'] = 'Kalifikazioak konfiguratzeko laguntzailearen kalifikazioak';
-$string['pluginname'] = 'Konfiguratu kalifikazioen morroia';
-$string['privacy:metadata'] = 'Grade Setup Wizard kalifikazio-txostenak beste kokapen batzuetan gordetako datuak soilik bistaratzen ditu.';
-$string['gradeconfigwizard:view'] = 'Ikusi Konfiguratu kalifikazioen morroia txostena';
-
-// Asistente para configurar calificaciones.
-$string['gradereportheading'] = 'Konfiguratu kalifikazioen morroia';
-$string['gradereportmultipleeval'] = 'Sartu ebaluazio anitzeko editorera';
-$string['gradereportweighteval'] = 'Sar zaitez ebaluazio-ibilbidearen editorea';
-$string['checkbox'] = 'Berrikusi kalifikazio-liburua';
-$string['savebutton'] = 'Aldaketak gorde';
-$string['multevalbutton'] = 'Sartu ebaluazio anitzeko editorera';
-$string['weightevalbutton'] = 'Sar zaitez ebaluazio-ibilbidearen editorea';
-$string['tablename'] = 'Izena';
-$string['tableweight'] = 'Ponderazioa';
-$string['tableactions'] = 'Ekintzak';
-$string['editbutton'] = 'Editatu';
-$string['cataddcategory'] = 'Gehitu kategoria bat';
-$string['cataddgradeitem'] = 'Gehitu balorazio-elementu bat';
-$string['catdisable'] = 'Desaktibatu';
-$string['courseaddcategory'] = 'Gehitu kategoria bat';
-$string['coursedisable'] = 'Gehitu balorazio-elementu bat';
-$string['totaleditcalucation'] = 'Editatu kalkulua';
-$string['manualeditcalucation'] = 'Editatu kalkulua';
-$string['manualdisable'] = 'Desaktibatu';
-$string['moddisable'] = 'Desaktibatu';
-
-// Creador de fórmulas.
-$string['heading'] = 'Formula editorea hobetua';
-$string['selectitems'] = 'Aukera daitezkeen elementuak';
-$string['aggregation'] = 'Agregazioa';
-$string['selectaggremethod'] = 'Hautatu agregazio-metodo bat';
-$string['meangrades'] = 'Notaren batez bestekoa';
-$string['weightmeangrades'] = 'Puntuazioen batez besteko haztatua';
-$string['sumgrades'] = 'Noten batura';
-$string['highestgrade'] = 'Balorazio altuena';
-$string['lowestgrade'] = 'Balorazio baxuena';
-$string['defcalculation'] = 'Definitu kalkulua';
-$string['colitem'] = 'Elementua';
-$string['colweight'] = 'Pisatzea';
-$string['generateformula'] = 'Sortu formula';
-$string['formula'] = 'Formula';
-$string['saveformula'] = 'Gorde formula';
-$string['cancelbutton3'] = 'Utzi';
-
-// Evaluación múltiple.
-$string['catcreation'] = 'KATEGORIAK SORTZEA';
-$string['createbutton'] = 'Sortu';
-$string['multitablecategory'] = 'KATEGORIA';
-$string['multitableweight1'] = 'PISATZEA';
-$string['multitablecutoffgrade1'] = 'EBATZEKO MARKA';
-$string['multitablerecovery1'] = 'BERRESKURATZEA';
-$string['multitableelements'] = 'ELEMENTUAK';
-$string['multitableweight2'] = 'PISATZEA';
-$string['multitablecutoffgrade2'] = 'EBATZEKO MARKA';
-$string['multitablerecovery2'] = 'BERRESKURATZEA';
-$string['chooseelements'] = 'Aukeratu elementuak';
 $string['addbutton'] = 'Gehitu';
-$string['cancelbutton'] = 'Utzi';
-$string['savebutton'] = 'Gorde eta irten';
+$string['addbutton2'] = 'Gehitu';
 $string['addelement1'] = 'Gehitu elementu bat';
 $string['addelement2'] = 'Gehitu elementu bat';
 $string['addelement3'] = 'Gehitu elementu bat';
 $string['addelement4'] = 'Gehitu elementu bat';
 $string['addelement5'] = 'Gehitu elementu bat';
-$string['cancelbutton5'] = 'Utzi';
-
-// Evaluación múltiple ponderada.
-$string['wcatcreation'] = 'IBILBIDEAK SORTZEA';
-$string['wcreatebutton'] = 'Sortu';
-$string['wmultitableitineraries'] = 'IBILBIDEAK';
-$string['wmultitablecategories'] = 'KATEGORIAK';
-$string['wmultitableweight1'] = 'PISATZEA';
-$string['wmultitableelements'] = 'ELEMENTUAK';
-$string['wmultitableweight2'] = 'PISATZEA';
-$string['savebutton2'] = 'Gorde eta irten';
-$string['chooseelements2'] = 'Aukeratu elementuak';
-$string['addbutton2'] = 'Gehitu';
-$string['cancelbutton2'] = 'Utzi';
 $string['additinerary1'] = 'Gehitu';
 $string['additinerary2'] = 'Gehitu';
+$string['aggregation'] = 'Agregazioa';
+$string['cancelbutton'] = 'Utzi';
+$string['cancelbutton2'] = 'Utzi';
+$string['cancelbutton3'] = 'Utzi';
 $string['cancelbutton4'] = 'Utzi';
-$string['maincontent'] = 'Eduki nagusia';
-
-// Elementos de evaluación disponibles.
+$string['cancelbutton5'] = 'Utzi';
+$string['cataddcategory'] = 'Gehitu kategoria bat';
+$string['cataddgradeitem'] = 'Gehitu balorazio-elementu bat';
+$string['catcreation'] = 'KATEGORIAK SORTZEA';
+$string['catdisable'] = 'Desaktibatu';
 $string['cattotal'] = 'Guztira';
+$string['checkbox'] = 'Berrikusi kalifikazio-liburua';
+$string['chooseelements'] = 'Aukeratu elementuak';
+$string['chooseelements2'] = 'Aukeratu elementuak';
+$string['colitem'] = 'Elementua';
+$string['colweight'] = 'Pisatzea';
+$string['courseaddcategory'] = 'Gehitu kategoria bat';
+$string['coursedisable'] = 'Gehitu balorazio-elementu bat';
+$string['createbutton'] = 'Sortu';
+$string['defcalculation'] = 'Definitu kalkulua';
+$string['editbutton'] = 'Editatu';
+$string['eventgradereportviewed'] = 'Kalifikazioa konfiguratzeko morroia Kalifikazio-txostena ikusi da';
+$string['formula'] = 'Formula';
+$string['generateformula'] = 'Sortu formula';
+$string['gradeconfigwizard:view'] = 'Ikusi Konfiguratu kalifikazioen morroia txostena';
+$string['gradereportheading'] = 'Konfiguratu kalifikazioen morroia';
+$string['gradereportmultipleeval'] = 'Sartu ebaluazio anitzeko editorera';
+$string['gradereportweighteval'] = 'Sar zaitez ebaluazio-ibilbidearen editorea';
+$string['gradesgradeconfigwizard'] = 'Kalifikazioak konfiguratzeko laguntzailearen kalifikazioak';
+$string['heading'] = 'Formula editorea hobetua';
+$string['highestgrade'] = 'Balorazio altuena';
+$string['lowestgrade'] = 'Balorazio baxuena';
+$string['maincontent'] = 'Eduki nagusia';
+$string['manualdisable'] = 'Desaktibatu';
+$string['manualeditcalucation'] = 'Editatu kalkulua';
+$string['meangrades'] = 'Notaren batez bestekoa';
+$string['moddisable'] = 'Desaktibatu';
+$string['multevalbutton'] = 'Sartu ebaluazio anitzeko editorera';
+$string['multitablecategory'] = 'KATEGORIA';
+$string['multitablecutoffgrade1'] = 'EBATZEKO MARKA';
+$string['multitablecutoffgrade2'] = 'EBATZEKO MARKA';
+$string['multitableelements'] = 'ELEMENTUAK';
+$string['multitablerecovery1'] = 'BERRESKURATZEA';
+$string['multitablerecovery2'] = 'BERRESKURATZEA';
+$string['multitableweight1'] = 'PISATZEA';
+$string['multitableweight2'] = 'PISATZEA';
+$string['pluginname'] = 'Konfiguratu kalifikazioen morroia';
+$string['privacy:metadata'] = 'Grade Setup Wizard kalifikazio-txostenak beste kokapen batzuetan gordetako datuak soilik bistaratzen ditu.';
+$string['savebutton'] = 'Gorde eta irten';
+$string['savebutton2'] = 'Gorde eta irten';
+$string['saveformula'] = 'Gorde formula';
+$string['selectaggremethod'] = 'Hautatu agregazio-metodo bat';
+$string['selectitems'] = 'Aukera daitezkeen elementuak';
+$string['sumgrades'] = 'Noten batura';
+$string['tableactions'] = 'Ekintzak';
+$string['tablename'] = 'Izena';
+$string['tableweight'] = 'Ponderazioa';
+$string['totaleditcalucation'] = 'Editatu kalkulua';
+$string['wcatcreation'] = 'IBILBIDEAK SORTZEA';
+$string['wcreatebutton'] = 'Sortu';
+$string['weightevalbutton'] = 'Sar zaitez ebaluazio-ibilbidearen editorea';
+$string['weightmeangrades'] = 'Puntuazioen batez besteko haztatua';
+$string['wmultitablecategories'] = 'KATEGORIAK';
+$string['wmultitableelements'] = 'ELEMENTUAK';
+$string['wmultitableitineraries'] = 'IBILBIDEAK';
+$string['wmultitableweight1'] = 'PISATZEA';
+$string['wmultitableweight2'] = 'PISATZEA';
+

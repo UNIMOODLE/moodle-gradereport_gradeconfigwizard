@@ -55,7 +55,7 @@ class gradereport_gradeconfigwizard_external extends external_api {
      * @return external_function_parameters
      * @since Moodle 3.2
      */
-    public static function get_course_grades_parameters() {
+    public static function get_course_grades_parameters(): external_function_parameters {
         return new external_function_parameters(
             [
                 'userid' => new external_value(
@@ -76,7 +76,7 @@ class gradereport_gradeconfigwizard_external extends external_api {
      * @return array the grades tables
      * @since Moodle 3.2
      */
-    public static function get_course_grades($userid = 0) {
+    public static function get_course_grades(int $userid = 0): array {
         global $USER;
 
         $warnings = [];
@@ -143,15 +143,15 @@ class gradereport_gradeconfigwizard_external extends external_api {
      * @return external_single_structure
      * @since Moodle 3.2
      */
-    public static function get_course_grades_returns() {
+    public static function get_course_grades_returns(): external_single_structure {
         return new external_single_structure(
             [
                 'grades' => new external_multiple_structure(
                     new external_single_structure(
                         [
                             'courseid' => new external_value(PARAM_INT, 'Course id'),
-                            'grade' => new external_value(PARAM_RAW, 'Grade formatted'),
-                            'rawgrade' => new external_value(PARAM_RAW, 'Raw grade, not formatted'),
+                            'grade' => new external_value(PARAM_TEXT, 'Grade formatted'),
+                            'rawgrade' => new external_value(PARAM_TEXT, 'Raw grade, not formatted'),
                             'rank' => new external_value(PARAM_INT, 'Your rank in the course', VALUE_OPTIONAL),
                         ]
                     )
@@ -167,7 +167,7 @@ class gradereport_gradeconfigwizard_external extends external_api {
      * @return external_function_parameters
      * @since Moodle 3.2
      */
-    public static function view_grade_report_parameters() {
+    public static function view_grade_report_parameters(): external_function_parameters {
         return new external_function_parameters(
             [
                 'courseid' => new external_value(PARAM_INT, 'id of the course'),
@@ -185,7 +185,7 @@ class gradereport_gradeconfigwizard_external extends external_api {
      * @since Moodle 3.2
      * @throws moodle_exception
      */
-    public static function view_grade_report($courseid, $userid = 0) {
+    public static function view_grade_report(int $courseid, int $userid = 0): array {
         global $USER;
 
         $params = self::validate_parameters(
@@ -238,7 +238,7 @@ class gradereport_gradeconfigwizard_external extends external_api {
      * @return external_description
      * @since Moodle 3.2
      */
-    public static function view_grade_report_returns() {
+    public static function view_grade_report_returns(): external_single_structure {
         return new external_single_structure(
             [
                 'status' => new external_value(PARAM_BOOL, 'status: true if success'),

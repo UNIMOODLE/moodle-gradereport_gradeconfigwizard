@@ -53,7 +53,7 @@ class formulamanager {
      * @return string The generated Moodle formula string.
      * @throws Exception If the total weight is invalid.
      */
-    public static function generate_formula_moodle($items) {
+    public static function generate_formula_moodle(array $items): string {
         $formula = "=" . self::check_operation($items[0]['operation']);
         $first = array_shift($items);
         $totalweight = (int)$first['weight'];
@@ -92,7 +92,7 @@ class formulamanager {
      * @param array $gradeitems An array of grade items.
      * @return string The ID number of the grade item.
      */
-    public static function obtain_idnumber($gradeitemid, $gradeitems) {
+    public static function obtain_idnumber(int $gradeitemid, array $gradeitems): string {
         $item = self::select_grade_item($gradeitems, $gradeitemid);
         if (!empty($item->idnumber)) {
             return $item->idnumber;
@@ -113,7 +113,7 @@ class formulamanager {
      * @param int $gradeitemid The ID of the grade item.
      * @return string The generated unique ID number for the grade item.
      */
-    public static function generate_id_number($gradeitemid) {
+    public static function generate_id_number(int $gradeitemid): string {
         $gradeitem = \grade_item::fetch(['id' => $gradeitemid]);
         $normalizedname = self::normalize_string($gradeitem->get_name($gradeitemid) . "_" . ($gradeitemid));
         // Check if the name is unique.
@@ -140,7 +140,7 @@ class formulamanager {
      * @param int $gradeitemidtarget The ID of the grade item to be removed.
      * @return array The updated array of available grade items after removal.
      */
-    public static function remove_gradeitem($availablegradeitems, $gradeitemidtarget) {
+    public static function remove_gradeitem(array $availablegradeitems, int $gradeitemidtarget): array {
         $size = count($availablegradeitems) - 1;
         for ($i = 0; $i < $size; ++$i) {
             if (!$availablegradeitems[$i]['iscategory'] && $availablegradeitems[$i]['id'] == $gradeitemidtarget) {
@@ -161,7 +161,7 @@ class formulamanager {
      * @param array $allgradeitem An array of all available grade items.
      * @return array An array of structured data representing each item in the formula.
      */
-    public static function preprocess_formula_xml($formulaxml, $allgradeitem) {
+    public static function preprocess_formula_xml(string $formulaxml, array $allgradeitem): array {
         $itemgrade = [
             'id' => '',
             'idnumber' => '',
@@ -201,7 +201,7 @@ class formulamanager {
      * @param int $gradeitemid The ID of the grade item to select.
      * @return mixed|null The grade item object if found, otherwise null.
      */
-    private static function select_grade_item($gradeitems, $gradeitemid) {
+    private static function select_grade_item(array $gradeitems, int $gradeitemid) {
         foreach ($gradeitems as $item) {
             if ($item->id == $gradeitemid) {
                 return $item;
@@ -223,7 +223,7 @@ class formulamanager {
      * @param string $string The string to be normalized.
      * @return string The normalized string.
      */
-    private static function normalize_string($string) {
+    private static function normalize_string(string $string): string {
         // Clean accents.
         $cleanstrig = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
         // Replace multiple spaces with single underscore.
@@ -244,7 +244,7 @@ class formulamanager {
      * @param string $operation The operation code to check.
      * @return string The corresponding operation name.
      */
-    public static function check_operation($operation) {
+    public static function check_operation(string $operation): string {
         if ($operation === "HIGHEST") {
             return "max";
         } else if ($operation === "LOWEST") {
@@ -266,7 +266,7 @@ class formulamanager {
      * @param mixed $item The grade item object to which the ID number will be added.
      * @param string $result The ID number to add to the grade item.
      */
-    private static function afegir_idnumber($item, $result) {
+    private static function afegir_idnumber($item, $result): void {
         if (isset($item)) {
             $item->add_idnumber($result);
         }

@@ -43,7 +43,49 @@ use grade_item;
  *
  * Test cases for the FormulaManager class in the grade configuration wizard.
  */
-class  formulamanager_test extends \advanced_testcase {
+final class formulamanager_test extends \advanced_testcase {
+
+    /**
+     * The object course1
+     * @var object $course1
+     */
+    public $course1;
+
+    /**
+     * The object teacher
+     * @var object $teacher
+     */
+    public $teacher;
+
+    /**
+     * The object student1
+     * @var object $student1
+     */
+    public $student1;
+
+    /**
+     * The object student2
+     * @var object $student2
+     */
+    public $student2;
+
+    /**
+     * The object student1grade1
+     * @var object $student1grade1
+     */
+    public $student1grade1;
+
+    /**
+     * The object student2grade1
+     * @var object $student2grade1
+     */
+    public $student2grade1;
+
+    /**
+     * The object student1grade2
+     * @var object $student1grade2
+     */
+    public $student1grade2;
 
     /**
      * Set up for every test
@@ -115,7 +157,7 @@ class  formulamanager_test extends \advanced_testcase {
      *
      * @covers \gradereport_gradeconfigwizard\formulamanager::generate_id_number
      */
-    public function test_generate_id_number() {
+    public function test_generate_id_number(): void {
         $assigment1 = grade_item::fetch(['itemname' => 'Test assign 1']);
         $data = formulamanager::generate_id_number($assigment1->id);
         $result = 'test_assign_1_' . $assigment1->id;
@@ -130,7 +172,7 @@ class  formulamanager_test extends \advanced_testcase {
      * @covers \gradereport_gradeconfigwizard\formulamanager::normalize_string
      * @covers \gradereport_gradeconfigwizard\formulamanager::afegir_idnumber
      */
-    public function test_preprocess_formula_xml() {
+    public function test_preprocess_formula_xml(): void {
         $allgradeitem = grade_item::fetch_all(['courseid' => $this->course1->id]);
         $assigment1 = grade_item::fetch(['itemname' => 'Test assign 1']);
         $assigment2 = grade_item::fetch(['itemname' => 'Test assign 2']);
@@ -175,7 +217,7 @@ class  formulamanager_test extends \advanced_testcase {
      *
      * @covers \gradereport_gradeconfigwizard\formulamanager::remove_gradeitem
      */
-    public function test_remove_gradeitem() {
+    public function test_remove_gradeitem(): void {
         $availablegradeitems = \gradereport_gradeconfigwizard\gradebookmanager::get_grade_items($this->course1->id);
         $assigment2 = grade_item::fetch(['itemname' => 'Test assign 2']);
         $arraysize = \gradereport_gradeconfigwizard\formulamanager::remove_gradeitem($availablegradeitems, $assigment2->id);
@@ -187,7 +229,7 @@ class  formulamanager_test extends \advanced_testcase {
      *
      * @covers \gradereport_gradeconfigwizard\formulamanager::generate_formula_moodle
      */
-    public function test_generate_formula_moodle() {
+    public function test_generate_formula_moodle(): void {
         $allgradeitem = grade_item::fetch_all(['courseid' => $this->course1->id]);
 
         $assigment1 = grade_item::fetch(['itemname' => 'Test assign 1']);
@@ -219,7 +261,7 @@ class  formulamanager_test extends \advanced_testcase {
      *
      * @covers \gradereport_gradeconfigwizard\formulamanager::check_operation
      */
-    public function test_check_operation() {
+    public function test_check_operation(): void {
         $op1 = "HIGHEST";
         $res1 = formulamanager::check_operation($op1);
         $this->assertEquals('max', $res1);

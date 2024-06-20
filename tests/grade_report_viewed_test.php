@@ -43,14 +43,14 @@ use gradereport_gradeconfigwizard\event\grade_report_viewed as viewed_gradeconfi
  *
  * Test cases for the event of viewing the Grade Config Wizard grade report.
  */
-class  grade_report_viewed_test extends \advanced_testcase {
+final class  grade_report_viewed_test extends \advanced_testcase {
 
     /**
      * Test get_name.
      *
      * @covers \gradereport_gradeconfigwizard\event\grade_report_viewed::get_name
      */
-    public function test_get_name() {
+    public function test_get_name(): void {
         $result = get_string('eventgradereportviewed', 'gradereport_gradeconfigwizard');
         $data = viewed_gradeconfigwizard::get_name();
         $this->assertEquals($result, $data);

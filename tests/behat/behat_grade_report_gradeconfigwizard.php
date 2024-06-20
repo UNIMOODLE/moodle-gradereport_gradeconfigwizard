@@ -63,6 +63,10 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * Given I drag row number :arg1 to row number :arg2
      *
      * @Given I drag row number :arg1 to row number :arg2
+     * @param int $arg1 The source row number.
+     * @param int $arg2 The destination row number.     *
+     *
+     * @throws ExpectationException If either row is not visible.
      */
     public function i_drag_row_number_to_row_number($arg1, $arg2) {
         // Get the table.
@@ -86,6 +90,10 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * Given I drag row with text :arg1 to row with text :arg2
      *
      * @Given I drag row with text :arg1 to row with text :arg2
+     * @param string $arg1 The CSS selector or text of the source row.
+     * @param string $arg2 The CSS selector or text of the target row.
+     *
+     * @throws ExpectationException If either the source or target row is not visible.
      */
     public function i_drag_row_with_text_with_text($arg1, $arg2) {
         $source = $this->find("css", $arg1);
@@ -107,6 +115,9 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * Choose the Edit calculation of an evaluable element
      *
      * @When /^I choose disable "([^""]*)"$/
+     * @param string $item The name of the item to disable.
+     *
+     * @throws ExpectationException If the selected aggregation method is not 'Weighted mean of grades'.
      */
     public function i_choose_disable($item) {
         $row = $this->getSession()->getPage()->find('css', 'tr:contains("'.$item.'")');
@@ -122,6 +133,8 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * Choose the Edit calculation of an evaluable element
      *
      * @When /^I choose Edit calculation in the dropdown "([^""]*)"$/
+     * @param string $item The name of the item to edit the calcu
+     * lation for.
      */
     public function i_choose_edit_calculation($item) {
         $row = $this->getSession()->getPage()->find('css', 'tr:contains("'.$item.'")');
@@ -134,6 +147,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * Choose the method in the custom-select "Select aggregation method"
      *
      * @When /^In Select aggregation method I choose "([^""]*)"$/
+     * @param string $methodid The ID of the aggregation method to select.
      */
     public function i_choose_select_aggregation_method($methodid) {
         $elem = $this->getSession()->getPage()->find('css', 'select:contains("Select aggregation method")');
@@ -144,6 +158,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * Choose the student in the select
      *
      * @When /^In Select student "([^""]*)"$/
+     * @param string $student The name of the student to select.
      */
     public function i_choose_student($student) {
         if ($this->getSession()->getPage()->find('css', 'select:contains("Choose...")')) {
@@ -159,6 +174,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * Choose the student in the box selector
      *
      * @When /^In select student "([^""]*)"$/
+     * @param string $student The name of the student to select.
      */
     public function i_select_student($student) {
         $user = "user";
@@ -169,6 +185,8 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * Choose the method in the custom-select "Select aggregation method"
      *
      * @When /^I add weight "([^""]*)" value to item "([^""]*)"$/
+     * @param string $value    The weight value to add.
+     * @param string $itemname The name of the item to add the weight value to.
      */
     public function i_add_weight_value($value, $itemname) {
         $row = $this->getSession()->getPage()->find('css', sprintf('table tr:contains("%s")', $itemname));
@@ -181,6 +199,8 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * Check formula value
      *
      * @When /^I check formula is correct in "([^""]*)" for elements:$/
+     * @param string     $course The name of the course to check the formula for.
+     * @param TableNode  $data   The table containing the elements and their corresponding formula values.
      */
     public function i_check_formula_is_correct($course, TableNode $data) {
         GLOBAL $DB;
@@ -234,6 +254,9 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * Create a new category or grade item under a row
      *
      * @When /^I create a new "([^""]*)" under "([^""]*)" called "([^""]*)"$/
+     * @param string $itemtype The type of the new item to create (category or grade item).
+     * @param string $under    The name of the row under which the new item will be created.
+     * @param string $name     The name of the new item.
      */
     public function i_create_a_new_under_called($itemtype, $under, $name) {
         $row = $this->getSession()->getPage()->find('css', 'tr:contains("'.$under.'")');
@@ -268,6 +291,8 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * another row with selected text.
      *
      * @When /^I should see "([^""]*)" under "([^""]*)"$/
+     * @param string $tosee The text to be seen under.
+     * @param string $under The text under which the other text should be seen.
      */
     public function i_should_see_under_in_the_table($tosee, $under) {
         $tablenode = $this->get_selected_node("table", "gradeconfigwizard-dashboard-table");
@@ -286,6 +311,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * Disables the selected item
      *
      * @When /^I disable the "([^""]*)" item$/
+     * @param string $category The name of the item to disable.
      */
     public function i_disable_the_item($category) {
         $tablenode = $this->get_selected_node("table", "gradeconfigwizard-dashboard-table");
@@ -300,6 +326,8 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * Drag an item under another item
      *
      * @When /^I drag "([^""]*)" under "([^""]*)"$/
+     * @param string $draged The name of the item to be dragged.
+     * @param string $under  The name of the item under which the other item will be dragged.     *
      */
     public function i_drag_under($draged, $under) {
         $dragged = $this->getSession()->getPage()->find('css', 'tr:contains("'.$draged.'")');
@@ -314,6 +342,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * on the multiple weighted evaluations.
      *
      * @When /^I create a pathway named "([^""]*)"$/
+     * @param string $category The name of the pathway to create.
      */
     public function i_create_a_pathway_named($category) {
         // Write the name of the category in the input.
@@ -328,6 +357,9 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * on the multiple weighted evaluations.
      *
      * @When /^I add a pathway to the "([^""]*)" category named "([^""]*)" with weight "([^""]*)"$/
+     * @param string $category The name of the category to which the pathway will be added.
+     * @param string $pathway  The name of the pathway to create.
+     * @param string $weight   The weight of the pathway.
      */
     public function i_add_a_pathway_to_the_category_named_with_weight($category, $pathway, $weight) {
         // Find the category.
@@ -342,6 +374,8 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * on the multiple weighted evaluations.
      *
      * @When /^I add categories to the "([^""]*)" with the following values:$/
+     * @param string    $category The name of the category to which subcategories will be added.
+     * @param TableNode $data     TableNode object containing the names and values of the subcategories to add.
      */
     public function i_add_categories_to_the_with_the_following_values($category, TableNode $data) {
         // Get the data.
@@ -402,6 +436,8 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * on the multiple weighted evaluations.
      *
      * @When /^I add the following items to the "([^""]*)" with the following values:$/
+     * @param string    $category The name of the category to which items will be added.
+     * @param TableNode $data     TableNode object containing the names of the items to add and their corresponding values.
      */
     public function i_add_the_following_items_to_the_with_the_following_values($category, TableNode $data) {
         // Get the data.
@@ -471,6 +507,8 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * in the modal dialog.
      *
      * @Then /^I should not see "([^""]*)" in the modal dialog$/
+     * @param string $item The item to check for in the modal dialog.
+     * @throws ExpectationException When the item is found in the modal dialog.
      */
     public function i_should_not_see_in_the_modal_dialog($item) {
         // Get the checkboxes options.
@@ -488,6 +526,8 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * has the class "disabled-box" aka is disabled.
      *
      * @Then /^I should not be able to press "([^""]*)"$/
+     * @param string $button The label of the button to check.
+     * @throws ExpectationException When the button is not disabled.
      */
     public function i_should_not_be_able_to_press($button) {
         $buttonnode = $this->find_button($button);
@@ -501,6 +541,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * Function used to remove an item from the table
      *
      * @Then /^I remove the item "([^""]*)" from the table$/
+     * @param string $item The name of the item to be removed from the table.
      */
     public function i_remove_the_item_from_the_table($item) {
         $tablenode = $this->get_selected_node("table", "weightedevaluations-table");
@@ -527,6 +568,8 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * Function used to create a new category
      * on the multiple assessments evaluations.
      * @When /^I create a category named "([^""]*)" with weight "([^""]*)"$/
+     * @param string $category The name of the category to create.
+     * @param int $weight The weight of the category.
      */
     public function i_create_a_category_named_with_weight($category, $weight) {
         // Write the name of the category in the input.
@@ -550,6 +593,8 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * on the multiple assessments evaluations.
      *
      * @When /^I add the following items to the "([^""]*)" category:$/
+     * @param string $category The name of the category to which the items will be added.
+     * @param TableNode $data The table containing the items to be added along with their details.
      */
     public function i_add_the_following_items_to_the_category($category, TableNode $data) {
         $datahash = $data->getRowsHash();
@@ -613,6 +658,9 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * and a resit element to a category.
      *
      * @When /^I add a cut-off mark of "([^""]*)" to the "([^""]*)" category with resit "([^""]*)"$/
+     * @param string $mark The cut-off mark to be added.
+     * @param string $category The name of the category to which the cut-off mark will be added.
+     * @param string $resit The name of the resit element to be added.
      */
     public function i_add_a_cut_off_mark_of_to_the_category_with_resit($mark, $category, $resit) {
         $tablenode = $this->get_selected_node("table", "multipleevaluation-table");
@@ -645,6 +693,8 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * are correct.
      *
      * @Then /^I should see the following formulas:$/
+     * @param TableNode $data A table containing the expected formulas.
+     * @throws ExpectationException If any of the observed formulas does not match the expected value.
      */
     public function i_should_see_the_following_formulas(TableNode $data) {
         global $CFG;
@@ -674,6 +724,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * Navigate to item formula
      *
      * @Then /^I navigate to formula in the item "([^""]*)"$/
+     * @param string $item The name of the item to navigate to its formula.
      */
     public function i_navigate_to_formula_item($item) {
         GLOBAL $DB;

@@ -49,6 +49,13 @@ require_capability('moodle/grade:manage', $context);
 
 $categories = $_POST['categories'];
 
+array_walk_recursive(
+    $categories,
+    function (&$valor, $clave) {
+        $valor = clean_param($valor, PARAM_TEXT);
+    }
+);
+
 if ($categories) {
     if ($type == 'multiple') {
         $multiplegradebook = new gradereport_gradeconfigwizard\multiplegradebook($courseid);
