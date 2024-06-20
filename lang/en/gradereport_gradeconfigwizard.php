@@ -33,91 +33,79 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['eventgradereportviewed'] = 'Grade setup wizard\'s grading report has been viewed';
-$string['gradesgradeconfigwizard'] = 'Grade setup wizard\'s grades';
-$string['pluginname'] = 'Grade setup wizard';
-$string['privacy:metadata'] = 'Grade setup wizard\'s grading report only shows data stored in other locations.';
-$string['gradeconfigwizard:view'] = 'View the Grade setup wizard\'s report';
-
-// Grade setup wizard.
-$string['gradereportheading'] = 'Grade setup wizard';
-$string['gradereportmultipleeval'] = 'Access to the multiple assessment editor';
-$string['gradereportweighteval'] = 'Access to the assessment pathways editor';
-$string['checkbox'] = 'Check Gradebook';
-$string['savebutton'] = 'Save changes';
-$string['multevalbutton'] = 'Access to the multiple assessment editor';
-$string['weightevalbutton'] = 'Access to the assessment pathways editor';
-$string['tablename'] = 'Name';
-$string['tableweight'] = 'Weights';
-$string['tableactions'] = 'Actions';
-$string['editbutton'] = 'Edit';
-$string['cataddcategory'] = 'Add category';
-$string['cataddgradeitem'] = 'Add grade item';
-$string['catdisable'] = 'Disable';
-$string['courseaddcategory'] = 'Add category';
-$string['coursedisable'] = 'Add grade item';
-$string['totaleditcalucation'] = 'Edit calculation';
-$string['manualeditcalucation'] = 'Edit calculation';
-$string['manualdisable'] = 'Disable';
-$string['moddisable'] = 'Disable';
-
-// Formula creator.
-$string['heading'] = 'Enhanced formula editor';
-$string['selectitems'] = 'Selectable items';
-$string['aggregation'] = 'Aggregation';
-$string['selectaggremethod'] = 'Select aggregation method';
-$string['meangrades'] = 'Mean of grades';
-$string['weightmeangrades'] = 'Weighted mean of grades';
-$string['sumgrades'] = 'Sum of grades';
-$string['highestgrade'] = 'Highest grade';
-$string['lowestgrade'] = 'Lowest grade';
-$string['defcalculation'] = 'Define calculation';
-$string['colitem'] = 'Item';
-$string['colweight'] = 'Weight';
-$string['generateformula'] = 'Generate formula';
-$string['formula'] = 'Formula';
-$string['saveformula'] = 'Save formula';
-$string['cancelbutton3'] = 'Cancel';
-
-// Multiple assessment.
-$string['catcreation'] = 'CATEGORY CREATION';
-$string['createbutton'] = 'Create';
-$string['multitablecategory'] = 'CATEGORY';
-$string['multitableweight1'] = 'CATEGORY WEIGHT';
-$string['multitablecutoffgrade1'] = 'CATEGORY CUT-OFF MARK';
-$string['multitablerecovery1'] = 'CATEGORY RESIT';
-$string['multitableelements'] = 'ITEMS';
-$string['multitableweight2'] = 'WEIGHT';
-$string['multitablecutoffgrade2'] = 'CUT-OFF MARK';
-$string['multitablerecovery2'] = 'RESIT';
-$string['chooseelements'] = 'Choose items';
 $string['addbutton'] = 'Add';
-$string['cancelbutton'] = 'Cancel';
-$string['savebutton'] = 'Save and exit';
+$string['addbutton2'] = 'Add';
 $string['addelement1'] = 'Add item';
 $string['addelement2'] = 'Add item';
 $string['addelement3'] = 'Add item';
 $string['addelement4'] = 'Add item';
 $string['addelement5'] = 'Add item';
-$string['cancelbutton5'] = 'Cancel';
-
-// Multiple weighted assessment.
-$string['wcatcreation'] = 'PATHWAY CREATION';
-$string['wcreatebutton'] = 'Create';
-$string['wmultitableitineraries'] = 'PATHWAYS';
-$string['wmultitablecategories'] = 'CATEGORIES';
-$string['wmultitableweight1'] = 'WEIGHT';
-$string['wmultitableelements'] = 'ITEMS';
-$string['wmultitableweight2'] = 'WEIGHT';
-$string['savebutton2'] = 'Save and exit';
-$string['chooseelements2'] = 'Choose items';
-$string['addbutton2'] = 'Add';
-$string['cancelbutton2'] = 'Cancel';
 $string['additinerary1'] = 'Add';
 $string['additinerary2'] = 'Add';
+$string['aggregation'] = 'Aggregation';
+$string['cancelbutton'] = 'Cancel';
+$string['cancelbutton2'] = 'Cancel';
+$string['cancelbutton3'] = 'Cancel';
 $string['cancelbutton4'] = 'Cancel';
-$string['maincontent'] = 'Main Content';
-
-
-// Available grade items.
+$string['cancelbutton5'] = 'Cancel';
+$string['cataddcategory'] = 'Add category';
+$string['cataddgradeitem'] = 'Add grade item';
+$string['catcreation'] = 'CATEGORY CREATION';
+$string['catdisable'] = 'Disable';
 $string['cattotal'] = 'Total';
+$string['checkbox'] = 'Check Gradebook';
+$string['chooseelements'] = 'Choose items';
+$string['chooseelements2'] = 'Choose items';
+$string['colitem'] = 'Item';
+$string['colweight'] = 'Weight';
+$string['courseaddcategory'] = 'Add category';
+$string['coursedisable'] = 'Add grade item';
+$string['createbutton'] = 'Create';
+$string['defcalculation'] = 'Define calculation';
+$string['editbutton'] = 'Edit';
+$string['eventgradereportviewed'] = 'Grade setup wizard\'s grading report has been viewed';
+$string['formula'] = 'Formula';
+$string['generateformula'] = 'Generate formula';
+$string['gradeconfigwizard:view'] = 'View the Grade setup wizard\'s report';
+$string['gradereportheading'] = 'Grade setup wizard';
+$string['gradereportmultipleeval'] = 'Access to the multiple assessment editor';
+$string['gradereportweighteval'] = 'Access to the assessment pathways editor';
+$string['gradesgradeconfigwizard'] = 'Grade setup wizard\'s grades';
+$string['heading'] = 'Enhanced formula editor';
+$string['highestgrade'] = 'Highest grade';
+$string['lowestgrade'] = 'Lowest grade';
+$string['maincontent'] = 'Main Content';
+$string['manualdisable'] = 'Disable';
+$string['manualeditcalucation'] = 'Edit calculation';
+$string['meangrades'] = 'Mean of grades';
+$string['moddisable'] = 'Disable';
+$string['multevalbutton'] = 'Access to the multiple assessment editor';
+$string['multitablecategory'] = 'CATEGORY';
+$string['multitablecutoffgrade1'] = 'CATEGORY CUT-OFF MARK';
+$string['multitablecutoffgrade2'] = 'CUT-OFF MARK';
+$string['multitableelements'] = 'ITEMS';
+$string['multitablerecovery1'] = 'CATEGORY RESIT';
+$string['multitablerecovery2'] = 'RESIT';
+$string['multitableweight1'] = 'CATEGORY WEIGHT';
+$string['multitableweight2'] = 'WEIGHT';
+$string['pluginname'] = 'Grade setup wizard';
+$string['privacy:metadata'] = 'Grade setup wizard\'s grading report only shows data stored in other locations.';
+$string['savebutton'] = 'Save and exit';
+$string['savebutton2'] = 'Save and exit';
+$string['saveformula'] = 'Save formula';
+$string['selectaggremethod'] = 'Select aggregation method';
+$string['selectitems'] = 'Selectable items';
+$string['sumgrades'] = 'Sum of grades';
+$string['tableactions'] = 'Actions';
+$string['tablename'] = 'Name';
+$string['tableweight'] = 'Weights';
+$string['totaleditcalucation'] = 'Edit calculation';
+$string['wcatcreation'] = 'PATHWAY CREATION';
+$string['wcreatebutton'] = 'Create';
+$string['weightevalbutton'] = 'Access to the assessment pathways editor';
+$string['weightmeangrades'] = 'Weighted mean of grades';
+$string['wmultitablecategories'] = 'CATEGORIES';
+$string['wmultitableelements'] = 'ITEMS';
+$string['wmultitableitineraries'] = 'PATHWAYS';
+$string['wmultitableweight1'] = 'WEIGHT';
+$string['wmultitableweight2'] = 'WEIGHT';

@@ -44,7 +44,13 @@ use grade_item;
  *
  * Test cases for the Multiple Gradebook in the Grade Config Wizard.
  */
-class  multiplegradebook_test extends \advanced_testcase {
+final class multiplegradebook_test extends \advanced_testcase {
+
+    /**
+     * The object course1
+     * @var object $course1
+     */
+    public $course1;
 
     /**
      * Set up for every test
@@ -85,7 +91,6 @@ class  multiplegradebook_test extends \advanced_testcase {
 
     /**
      * Test process.
-     * @covers \gradereport_gradeconfigwizard\multiplegradebook::require_grade_libs
      * @covers \gradereport_gradeconfigwizard\multiplegradebook::set_course_aggregation
      * @covers \gradereport_gradeconfigwizard\multiplegradebook::create_category
      * @covers \gradereport_gradeconfigwizard\multiplegradebook::create_provisional_category
@@ -95,7 +100,7 @@ class  multiplegradebook_test extends \advanced_testcase {
      * @covers \gradereport_gradeconfigwizard\multiplegradebook::change_item_weight
      * @covers \grade_category::get_grade_item
      */
-    public function test_process() {
+    public function test_process(): void {
         $assigment1 = grade_item::fetch(['itemname' => 'Test assign 1']);
         $assigment2 = grade_item::fetch(['itemname' => 'Test assign 2']);
         $assigment3 = grade_item::fetch(['itemname' => 'Test assign 3']);

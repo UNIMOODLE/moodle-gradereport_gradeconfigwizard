@@ -101,6 +101,12 @@ class grade_report_gradeconfigwizard extends grade_report {
     public $teachercourses;
 
     /**
+     * Report card preferences page of the current course.
+     * @var string
+     */
+    public $preferencespage;
+
+    /**
      * Constructor. Sets local copies of user preferences and initialises grade_tree.
      * @param int $userid
      * @param object $gpr grade plugin return tracking object
@@ -163,7 +169,7 @@ class grade_report_gradeconfigwizard extends grade_report {
         $this->pbarurl = $this->baseurl;
         // Set up link to preferences page.
         $courseid = SITEID;
-        $this->preferences_page = $CFG->wwwroot . '/grade/report/grader/preferencesss.php?id=' . $courseid;
+        $this->preferencespage = $CFG->wwwroot . '/grade/report/grader/preferencesss.php?id=' . $courseid;
 
         $this->setup_table();
     }
@@ -181,15 +187,15 @@ class grade_report_gradeconfigwizard extends grade_report {
         if ($this->showrank['any']) {
             $tablecolumns = ['coursename', 'grade', 'rank'];
             $tableheaders = [
-                $this->get_lang_string('coursename', 'grades'),
-                $this->get_lang_string('gradenoun'),
-                $this->get_lang_string('rank', 'grades'),
+                get_string('coursename', 'grades'),
+                get_string('gradenoun'),
+                get_string('rank', 'grades'),
             ];
         } else {
             $tablecolumns = ['coursename', 'grade'];
             $tableheaders = [
-                $this->get_lang_string('coursename', 'grades'),
-                $this->get_lang_string('gradenoun'),
+                get_string('coursename', 'grades'),
+                get_string('gradenoun'),
             ];
         }
         $this->table = new flexible_table('grade-report-gradeconfigwizard-' . $this->user->id);
@@ -324,6 +330,12 @@ class grade_report_gradeconfigwizard extends grade_report {
 
     /**
      * Check if the user can access the report.
+     *
+     * @param context $systemcontext The system context.
+     * @param context $context The context.
+     * @param context $personalcontext The personal context.
+     * @param object $course The course object.
+     * @param int $userid The user ID.
      * @return bool true if the user can access the report
      * @since  Moodle 3.2
      */
@@ -354,8 +366,9 @@ class grade_report_gradeconfigwizard extends grade_report {
     /**
      * Trigger the grade_report_viewed event
      *
-     * @param  int $courseid      course id
-     * @param  int $userid        user id
+     * @param context $context The context.
+     * @param int $courseid The course ID.
+     * @param int $userid The user ID.
      * @since Moodle 3.2
      */
     public static function viewed($context, $courseid, $userid) {

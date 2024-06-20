@@ -33,23 +33,22 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use gradereport_gradeconfigwizard\gradebook_action_bar_renderer_formulacreator;
+use gradereport_gradeconfigwizard\gradebook_action_bar_renderer;
 
 require_once('../../../config.php');
-require_once($CFG->dirroot.'/grade/lib.php');
-require_once($CFG->libdir.'/grade/grade_item.php');
-require_once($CFG->dirroot.'/grade/edit/tree/lib.php');
-require_once($CFG->libdir.'/mathslib.php');
+require_once($CFG->dirroot . '/grade/lib.php');
+require_once($CFG->libdir . '/grade/grade_item.php');
+require_once($CFG->dirroot . '/grade/edit/tree/lib.php');
+require_once($CFG->libdir . '/mathslib.php');
 require_once($CFG->libdir . '/xmlize.php');
-require_once($CFG->dirroot.'/grade/report/gradeconfigwizard/classes/gradebookmanager.php');
-require_once($CFG->dirroot.'/grade/report/gradeconfigwizard/classes/gradebook_action_bar_renderer_formulacreator.php');
+require_once($CFG->dirroot . '/grade/report/gradeconfigwizard/classes/gradebookmanager.php');
+
 
 require_login();
 
 // Url params.
 $courseid = required_param('id', PARAM_INT);
 $gradeitemid = optional_param('gradeitemid', null, PARAM_INT);
-
 $formulaxml = optional_param('formula', '', PARAM_RAW);
 
 $gradeitemidtarget = $gradeitemid;
@@ -60,14 +59,14 @@ if (!$course = $DB->get_record('course', ['id' => $courseid])) {
     throw new \moodle_exception('invalidcourseid');
 }
 
-require_login($course);
 $context = context_course::instance($course->id);
 require_capability('moodle/grade:manage', $context);
 
 
 $strgrades             = get_string('grades');
 $strgraderreport       = get_string('graderreport', 'grades');
-$actionbar = new gradebook_action_bar_renderer_formulacreator($context);
+$actionbar = new gradebook_action_bar_renderer($context, $stroption);
+$actionbar->set_heading_menu(get_string('heading', 'gradereport_gradeconfigwizard'));
 
 
 $gtree = new grade_tree($courseid, false, false);
@@ -92,11 +91,10 @@ if ($formulaxml !== "") {
     if (is_array($status)) {
         $errormsg = reset($status);
         $gradeitem->set_calculation($oldgradeitem ?? "");
-        redirect( $CFG->wwwroot . "/grade/report/gradeconfigwizard/index.php?id=" . $courseid .
+        redirect($CFG->wwwroot . "/grade/report/gradeconfigwizard/index.php?id=" . $courseid .
             "&gradeitemid=" . $gradeitemid, $errormsg, null, \core\output\notification::NOTIFY_ERROR);
-
     } else {
-        redirect( $CFG->wwwroot . "/grade/report/gradeconfigwizard/index.php?id=" . $courseid .
+        redirect($CFG->wwwroot . "/grade/report/gradeconfigwizard/index.php?id=" . $courseid .
             "&gradeitemid=" . $gradeitemid, 'Succesfull Update', null, \core\output\notification::NOTIFY_SUCCESS);
     }
 }
@@ -116,13 +114,26 @@ $data = [
     'urlcancelformulacreator' => $CFG->wwwroot . "/grade/report/gradeconfigwizard/index.php?id=" . $courseid,
 ];
 
-$url = new moodle_url('/grade/report/gradeconfigwizard/formulacreator.php',
-    ['id' => $courseid, 'gradeitemid' => $gradeitemid]);
+$url = new moodle_url(
+    '/grade/report/gradeconfigwizard/formulacreator.php',
+    ['id' => $courseid, 'gradeitemid' => $gradeitemid]
+);
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('admin');
 
-print_grade_page_head($courseid, 'report', 'gradeconfigwizard', get_string('heading', 'gradereport_gradeconfigwizard' ),
-    false, false, true, null, null, null, $actionbar);
+print_grade_page_head(
+    $courseid,
+    'report',
+    'gradeconfigwizard',
+    get_string('heading', 'gradereport_gradeconfigwizard'),
+    false,
+    false,
+    true,
+    null,
+    null,
+    null,
+    $actionbar
+);
 
 echo $OUTPUT->render_from_template('gradereport_gradeconfigwizard/formulacreator', $data);
 

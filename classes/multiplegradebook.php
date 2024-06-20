@@ -35,6 +35,13 @@
 
 namespace gradereport_gradeconfigwizard;
 
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->libdir . '/gradelib.php');
+require_once($CFG->libdir . '/grade/grade_category.php');
+require_once($CFG->libdir . '/grade/grade_item.php');
+require_once($CFG->libdir . '/grade/constants.php');
+
 /**
  * Class multiplegradebook
  *
@@ -73,7 +80,6 @@ class multiplegradebook {
      * @return bool True if processing is successful, false otherwise.
      */
     public function process(array $categories): bool {
-        $this->require_grade_libs();
         $this->set_course_aggregation();
 
         foreach ($categories as $category) {
@@ -291,21 +297,4 @@ class multiplegradebook {
         return $id;
     }
 
-    /**
-     * Requires the inclusion of necessary grade-related libraries.
-     *
-     * This method ensures that the required grade-related libraries are included
-     * before performing any grade-related operations. It includes gradelib.php,
-     * grade_category.php, grade_item.php, and constants.php from the Moodle
-     * library directory.
-     *
-     * @return void
-     */
-    private function require_grade_libs() {
-        global $CFG;
-        require_once($CFG->libdir . '/gradelib.php');
-        require_once($CFG->libdir . '/grade/grade_category.php');
-        require_once($CFG->libdir . '/grade/grade_item.php');
-        require_once($CFG->libdir . '/grade/constants.php');
-    }
 }
