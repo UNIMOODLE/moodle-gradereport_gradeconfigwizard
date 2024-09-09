@@ -502,7 +502,8 @@ const checkAddCategoryGradeitemResititemBtnShouldBeEnabled = (addcategorygradeit
 
 const checkSaveButtonShouldBeEnabled = () => {
     // If there are pending resit items to add
-    if (document.querySelector('.resit-2.add-btn button:not([disabled])')) {
+    if (document.querySelector('.resit-2.add-btn button:not([disabled])')
+        || document.querySelector('.resit-1.add-btn button:not([disabled])')) {
         return false;
     }
 
@@ -622,6 +623,10 @@ const categoryMinGradeCheckboxChangeCallback = (event) => {
     } else {
         categorymingradeinput.disabled = true;
         categorymingradeinput.value = '';
+        //TODO Colocar aquí el apagado del boton
+        let categoryresititemidBtn = categorymingradecheckboxrow.querySelector('.resit-1 button');
+        categoryresititemidBtn.disabled = true;
+
     }
     refreshButtonsEnabledOrDisabled();
 };
