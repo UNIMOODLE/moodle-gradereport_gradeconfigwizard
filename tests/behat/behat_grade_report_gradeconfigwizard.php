@@ -154,6 +154,48 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
 
 
     /**
+     * The HTML element representing a table row (<tr>) found during the test.
+     *
+     * This property stores the <tr> element that contains the specified text, which is located
+     * during the test execution. It is used to interact with elements within the same row, such
+     * as buttons or other HTML elements.
+     *
+     * @var \Behat\Mink\Element\NodeElement|null The located table row (<tr>) element or null if not found.
+     */
+    private $trElement;
+
+    /**
+     * @When I find the "tr" containing :text
+     */
+    public function iFindTheTrContaining($text)
+    {
+        $session = $this->getSession();
+        $page = $session->getPage();
+        $tr = $page->find('xpath', "//tr[contains(., '$text')]");
+
+        if (null === $tr) {
+            throw new Exception("No tr containing '$text' was found.");
+        }
+
+        $this->trElement = $tr;
+    }
+
+    /**
+     * @When I click the button with title "Cell actions"
+     */
+    public function iClickTheCellActionsButton()
+    {
+        $button = $this->trElement->find('css', '.cellmenubtn');
+
+        if (null === $button) {
+            throw new Exception("Cell actions button not found.");
+        }
+
+        $button->click();
+    }
+
+
+    /**
      * Choose the method in the custom-select "Select aggregation method"
      *
      * @When /^In Select aggregation method I choose "([^""]*)"$/

@@ -34,18 +34,27 @@ Feature: Multiple_assessments_evaluations
             | Test assign 2    | 10       | 20             | Test assign 4           |
         And I add a cut-off mark of "10" to the "Category 1" category with resit "Test assign 5"
         And I press "Save and exit"
+
         Then I navigate to "Setup > Gradebook setup" in the course gradebook
-        And I navigate to formula in the item "Test assign 1 total"
+        And I find the "tr" containing "Test assign 1 total"
+        And I click the button with title "Cell actions"
+        And I choose "Edit calculation" in the open action menu
         And I check formula is correct in "Course 1" for elements:
             | Totals                   | Formulas                                         | Elements                      |
             | Test assign 1 total      | =IF([[test_assign_1_!1]]>=15,[[test_assign_1_!1]],[[test_assign_3_!2]])| Test assign 1,Test assign 3 |
+        
         Then I navigate to "Setup > Gradebook setup" in the course gradebook
-        And I navigate to formula in the item "Test assign 2 total"
+        And I find the "tr" containing "Test assign 2 total"
+        And I click the button with title "Cell actions"
+        And I choose "Edit calculation" in the open action menu
         And I check formula is correct in "Course 1" for elements:
             | Totals                   | Formulas                                         | Elements                      |
             | Test assign 2 total      | =IF([[test_assign_2_!1]]>=20,[[test_assign_2_!1]],[[test_assign_4_!2]])| Test assign 2,Test assign 4 |
+        
         Then I navigate to "Setup > Gradebook setup" in the course gradebook
-        And I navigate to formula in the item "Category 1 total"
+        And I find the "tr" containing "Category 1 total"
+        And I click the button with title "Cell actions"
+        And I choose "Edit calculation" in the open action menu
         And I check formula is correct in "Course 1" for elements:
             | Totals                   | Formulas                                         | Elements                      |
             | Category 1 total      | =IF([[main_content_total_!1]]>=10,[[main_content_total_!1]],[[test_assign_5_!2]])| main_content_total,Test assign 5 |

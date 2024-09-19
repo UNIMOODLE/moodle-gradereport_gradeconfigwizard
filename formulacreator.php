@@ -65,7 +65,7 @@ require_capability('moodle/grade:manage', $context);
 
 $strgrades             = get_string('grades');
 $strgraderreport       = get_string('graderreport', 'grades');
-$actionbar = new gradebook_action_bar_renderer($context, $stroption);
+$actionbar = new gradebook_action_bar_renderer($context);
 $actionbar->set_heading_menu(get_string('heading', 'gradereport_gradeconfigwizard'));
 
 
@@ -120,6 +120,9 @@ $url = new moodle_url(
 );
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('admin');
+
+//$context = context_system::instance();
+$PAGE->set_context($context);
 
 print_grade_page_head(
     $courseid,
