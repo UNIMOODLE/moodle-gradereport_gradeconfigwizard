@@ -32,6 +32,21 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 }}
+{{!
+    @template gradereport_gradeconfigwizard/multipleevaluations
+
+    Multipleevaluations template
+
+    Context variables required for this template:
+    * urlsaveexit - string -  URL to save and exit the multiple evaluations configuration.
+    * urlcancelmultipleval - string - URL to cancel the multiple evaluations configuration and return to the main page.
+
+    Example context (json):
+    {
+        "urlsaveexit": "/moodle/grade/report/gradeconfigwizard/processgradebook.php?id=3&type=multiple",
+        "urlcancelmultipleval": "/moodle/grade/report/gradeconfigwizard/index.php?id=3"
+    }
+}}
 
 <div class="container">
     <div class="multipleevaluations-category-creation container">

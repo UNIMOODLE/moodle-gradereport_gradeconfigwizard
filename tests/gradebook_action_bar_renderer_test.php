@@ -55,6 +55,7 @@ final class gradebook_action_bar_renderer_test extends \advanced_testcase {
      * Set up for every test
      */
     public function setUp(): void {
+        parent::setUp();
         $this->resetAfterTest(true);
         $this->course1 = $this->getDataGenerator()->create_course();
     }

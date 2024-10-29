@@ -120,11 +120,11 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * @throws ExpectationException If the selected aggregation method is not 'Weighted mean of grades'.
      */
     public function i_choose_disable($item) {
-        $row = $this->getSession()->getPage()->find('css', 'tr:contains("'.$item.'")');
+        $row = $this->getSession()->getPage()->find('css', 'tr:contains("' . $item . '")');
         $row->find('css', 'button[data-toggle="dropdown"][data-type="category"]')->click();
         $row->find('css', 'a:contains("Edit category")')->click();
 
-        $this->getSession()->getPage()->waitFor(5000, function() {
+        $this->getSession()->getPage()->waitFor(5000, function () {
             return $this->getSession()->getPage()->find('css', 'select[name="aggregation"]') !== null;
         });
 
@@ -135,7 +135,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
         }
         $cmptext = str_replace(' ', '', strtolower(trim($elem->getText())));
         if ($cmptext !== 'weightedmeanofgrades') {
-            throw new ExpectationException("Not weighted value selected. Selected is: ". $cmptext, $this->getSession());
+            throw new ExpectationException("Not weighted value selected. Selected is: " . $cmptext, $this->getSession());
         }
     }
 
@@ -147,7 +147,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * lation for.
      */
     public function i_choose_edit_calculation($item) {
-        $row = $this->getSession()->getPage()->find('css', 'tr:contains("'.$item.'")');
+        $row = $this->getSession()->getPage()->find('css', 'tr:contains("' . $item . '")');
         $row->find('css', 'button:contains("Edit")')->click();
         $row->find('css', 'a:contains("Edit calculation")')->click();
     }
@@ -162,13 +162,22 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      *
      * @var \Behat\Mink\Element\NodeElement|null The located table row (<tr>) element or null if not found.
      */
-    private $trElement;
+    private $trelement;
 
     /**
+     * Searches for a table row (<tr>) containing the specified text.
+     *
+     * This method is triggered by the Gherkin "When" step in a Behat scenario.
+     * It searches for a table row (<tr>) element on the current page that contains
+     * the provided text. If no such row is found, an exception is thrown.
+     * The found row is stored in the `$trelement` property for later use.
+     *
      * @When I find the "tr" containing :text
+     * @param string $text The text to search for within the table row.
+     * @throws Exception If no table row containing the specified text is found.
+     *
      */
-    public function iFindTheTrContaining($text)
-    {
+    public function i_find_the_tr_containing($text) {
         $session = $this->getSession();
         $page = $session->getPage();
         $tr = $page->find('xpath', "//tr[contains(., '$text')]");
@@ -177,15 +186,21 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
             throw new Exception("No tr containing '$text' was found.");
         }
 
-        $this->trElement = $tr;
+        $this->trelement = $tr;
     }
 
     /**
+     * Clicks the button with the title "Cell actions" within the previously found table row.
+     *
+     * This method is triggered by the Gherkin "When" step in a Behat scenario. It searches for
+     * a button with the class `cellmenubtn` within the previously found `<tr>` element (stored
+     * in the `$trelement` property). If the button is not found, an exception is thrown.
+     *
      * @When I click the button with title "Cell actions"
+     * @throws Exception If the "Cell actions" button is not found within the table row.
      */
-    public function iClickTheCellActionsButton()
-    {
-        $button = $this->trElement->find('css', '.cellmenubtn');
+    public function i_click_the_cellactions_button() {
+        $button = $this->trelement->find('css', '.cellmenubtn');
 
         if (null === $button) {
             throw new Exception("Cell actions button not found.");
@@ -217,8 +232,8 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
             $elem = $this->getSession()->getPage()->find('css', 'select:contains("Choose...")');
             $elem->selectOption($student);
         } else {
-            $user = "user";
-            $this->execute('behat_grade::i_click_on_in_search_widget', [$student, $user]);
+            $user = "Search users";
+            $this->execute('behat_general::i_click_on_in_search_combobox', [$student, $user]);
         }
     }
 
@@ -229,8 +244,8 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * @param string $student The name of the student to select.
      */
     public function i_select_student($student) {
-        $user = "user";
-        $this->execute('behat_grade::i_click_on_in_search_widget', [$student, $user]);
+        $user = "Search users";
+        $this->execute('behat_general::i_click_on_in_search_combobox', [$student, $user]);
     }
 
     /**
@@ -255,7 +270,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * @param TableNode  $data   The table containing the elements and their corresponding formula values.
      */
     public function i_check_formula_is_correct($course, TableNode $data) {
-        GLOBAL $DB;
+        global $DB;
         $elem = $this->getSession()->getPage()->find('css', 'textarea');
         $valuetextarea = $elem->getValue();
 
@@ -290,7 +305,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
             }
             $i = 1;
             foreach ($elementsid as $id) {
-                $idfy = '!'.$i;
+                $idfy = '!' . $i;
                 $formula = str_replace($idfy, $id, $formula);
                 ++$i;
             }
@@ -311,7 +326,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * @param string $name     The name of the new item.
      */
     public function i_create_a_new_under_called($itemtype, $under, $name) {
-        $row = $this->getSession()->getPage()->find('css', 'tr:contains("'.$under.'")');
+        $row = $this->getSession()->getPage()->find('css', 'tr:contains("' . $under . '")');
 
         if ($row == null) {
             // If the row is temporal.
@@ -327,7 +342,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
         }
 
         $row->find('css', 'button:contains("Edit")')->click();
-        $row->find('css', 'a:contains("Add '. $itemtype .'")')->click();
+        $row->find('css', 'a:contains("Add ' . $itemtype . '")')->click();
         $tablenode = $this->get_selected_node("table", "gradeconfigwizard-dashboard-table");
         $inputs = $tablenode->findAll('css', 'input');
         foreach ($inputs as $input) {
@@ -349,12 +364,12 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
     public function i_should_see_under_in_the_table($tosee, $under) {
         $tablenode = $this->get_selected_node("table", "gradeconfigwizard-dashboard-table");
         // Find the row with the text.
-        $row = $tablenode->find('css', 'tr:contains("'.$under.'")');
+        $row = $tablenode->find('css', 'tr:contains("' . $under . '")');
         // Get the row under the row.
         $child = $row->find('xpath', 'following-sibling::tr[1]');
 
         // Check if the row contains the text.
-        if (strpos($child->getText(), $tosee) === false ) {
+        if (strpos($child->getText(), $tosee) === false) {
             throw new ExpectationException("The under row does not contain the text", $this->getSession());
         }
     }
@@ -368,7 +383,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
     public function i_disable_the_item($category) {
         $tablenode = $this->get_selected_node("table", "gradeconfigwizard-dashboard-table");
         // Find the row with the text.
-        $row = $tablenode->find('css', 'tr:contains("'.$category.'")');
+        $row = $tablenode->find('css', 'tr:contains("' . $category . '")');
 
         $row->find('css', 'button:contains("Edit")')->click();
         $row->find('css', 'a:contains("Disable")')->click();
@@ -382,8 +397,8 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * @param string $under  The name of the item under which the other item will be dragged.     *
      */
     public function i_drag_under($draged, $under) {
-        $dragged = $this->getSession()->getPage()->find('css', 'tr:contains("'.$draged.'")');
-        $target = $this->getSession()->getPage()->find('css', 'tr:contains("'.$under.'")');
+        $dragged = $this->getSession()->getPage()->find('css', 'tr:contains("' . $draged . '")');
+        $target = $this->getSession()->getPage()->find('css', 'tr:contains("' . $under . '")');
         $dragged->dragTo($target);
     }
 
@@ -418,7 +433,6 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
         $tablenode = $this->get_selected_node("table", "weightedevaluations-table");
         // Press the "Add pathway" button.
         $tablenode->find('css', 'button:contains("Add pathway")')->click();
-
     }
 
     /**
@@ -456,9 +470,12 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
             }
             // Find the add pathway button of the category in the rowsunder.
             foreach ($rowsunder as $row) {
-                if ($button = $row->find('css',
-                    'button[class="add-subcategory-btn align-items-center block-add btn btn-secondary d-flex"]')) {
-                    $button->click(); break;
+                if ($button = $row->find(
+                    'css',
+                    'button[class="add-subcategory-btn align-items-center block-add btn btn-secondary d-flex"]'
+                )) {
+                    $button->click();
+                    break;
                 }
             }
         }
@@ -480,7 +497,6 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
                 $i++;
             }
         }
-
     }
 
     /**
@@ -570,7 +586,6 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
             return false;
         }
         throw new ExpectationException("The item is in the modal dialog", $this->getSession());
-
     }
 
     /**
@@ -584,7 +599,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
     public function i_should_not_be_able_to_press($button) {
         $buttonnode = $this->find_button($button);
         $classes = $buttonnode->getAttribute('class');
-        if (strpos($classes, "disabled-box") === false ) {
+        if (strpos($classes, "disabled-box") === false) {
             throw new ExpectationException("The button is not disabled", $this->getSession());
         }
     }
@@ -675,7 +690,7 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
         foreach ($datahash as $key => $value) {
             // Get the weight from the hashtable.
 
-            $row = $this->getSession()->getPage()->find('css', 'tr:contains("'.$key.'")');
+            $row = $this->getSession()->getPage()->find('css', 'tr:contains("' . $key . '")');
             foreach ($row->findAll('css', 'td') as $td) {
                 // Set the weight.
                 if ($td->getAttribute('class') == "weight-2") {
@@ -779,10 +794,9 @@ class behat_grade_report_gradeconfigwizard extends behat_base {
      * @param string $item The name of the item to navigate to its formula.
      */
     public function i_navigate_to_formula_item($item) {
-        GLOBAL $DB;
-        $row = $this->getSession()->getPage()->find('css', 'tr:contains("'.$item.'")');
+        global $DB;
+        $row = $this->getSession()->getPage()->find('css', 'tr:contains("' . $item . '")');
         $row->find('css', 'a:contains("Edit")')->click();
         $row->find('css', 'a:contains("Edit calculation")')->click();
     }
-
 }

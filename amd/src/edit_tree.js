@@ -1,4 +1,4 @@
-/// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -181,7 +181,7 @@ let defaultPathSeparator = '/';
 const generateUniqueId = () => {
     let randomid = null;
     while (randomid === null || document.getElementById(randomid) !== null) {
-        // generate a 8 chars long random id
+        // Generate a 8 chars long random id
         randomid = Math.random().toString(36).substring(2, 10);
     }
     return randomid;
@@ -426,8 +426,6 @@ const dragstart = (event) => {
             under = true;
         }
         if (under && element.dataset.categorydepth > dragged.dataset.categorydepth) {
-            // Modify the displaytype of the element to none
-            //element.style.display = 'none';
             element.classList.add("gradeconfigwizard-draggingcontent");
             // And save the current elemnti into an array
             draggingchilds.push(element);

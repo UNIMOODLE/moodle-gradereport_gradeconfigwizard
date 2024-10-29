@@ -39,7 +39,6 @@ Feature: I need to generate the corresponding formula
     And I am on "Course 1" course homepage
     And I navigate to course grades
 
-
   @javascript @calculate_mean_grade
   Scenario: Calculate the mean grade of a Grade Item 2 (included in Category 1) and Assigment 2.
     The result is assigned to the Grade Item 1
@@ -109,7 +108,6 @@ When I navigate to "View > Grader report" in the course gradebook
     And I check formula is correct in "Course 1" for elements:
       | Totals                    | Formulas                                    | Elements                 |
       | Grade Item 2              | =sum([[grade_item_1_!1]],[[assigment_2_!2]])| Grade Item 1,Assigment 2 |
-
 
   @javascript @calculate_weight_grade
   Scenario: Calculate the weight mean grade of a Grade Item 1 and Assigment 2, values will be converted to integers.
@@ -218,8 +216,6 @@ When I navigate to "View > Grader report" in the course gradebook
       | Totals                    | Formulas                                             | Elements                          |
       | Total Category 1          | =min([[grade_item_2_!1]],[[sub_category_1_total_!2]])| Grade Item 2,sub_category_1_total |
 
-
-
   @javascript @calculate_mean_grade_hirarchy
   Scenario: Calculate the mean grade of a Grade Item 2 (from Category 1), Total Sub category 1,
   Grade Item 4 (from Category 2) and Total Category 2. The result is assigned to Total Category 1
@@ -266,7 +262,6 @@ When I navigate to "View > Grader report" in the course gradebook
     And I check formula is correct in "Course 1" for elements:
       | Totals                    | Formulas                                             | Elements                          |
       | Total Category 1          | =average([[grade_item_2_!1]],[[grade_item_4_!2]],[[sub_category_1_total_!3]],[[category_2_total_!4]])| Grade Item 2,Grade Item 4,sub_category_1_total,category_2_total |
-
 
   @javascript @validate_error_throw_broken_formula
   Scenario: Probably circular reference or broken calculation formula message case,

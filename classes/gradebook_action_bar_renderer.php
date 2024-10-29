@@ -53,7 +53,7 @@ class gradebook_action_bar_renderer extends gradebook_setup_action_bar {
      */
     private $headingmenu = "";
 
-     /**
+    /**
      * Constructor for the class.
      *
      * @param \context $context The context of the instance..

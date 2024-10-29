@@ -121,7 +121,6 @@ $url = new moodle_url(
 $PAGE->set_url($url);
 $PAGE->set_pagelayout('admin');
 
-//$context = context_system::instance();
 $PAGE->set_context($context);
 
 print_grade_page_head(
