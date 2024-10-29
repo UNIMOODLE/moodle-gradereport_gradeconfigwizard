@@ -1,4 +1,4 @@
-/// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -136,7 +136,7 @@ data-gradeitemid="${gradeitemid}" data-rowtype="subcategorygradeitem">
 const generateUniqueId = () => {
     let randomid = null;
     while (randomid === null || document.getElementById(randomid) !== null) {
-        // generate a 8 chars long random id
+        // Generate a 8 chars long random id
         randomid = Math.random().toString(36).substring(2, 10);
     }
     return randomid;
@@ -189,9 +189,9 @@ const recalculateRowspans = (randomid) => {
         });
 };
 
-const addCategory = async (categoryname) => {
+const addCategory = async(categoryname) => {
     // In case new category is added, enable save and exit button
-    if(saveandexitbutton.classList.contains('disabled-box')){
+    if (saveandexitbutton.classList.contains('disabled-box')) {
         saveandexitbutton.classList.remove('disabled-box');
     }
 
@@ -203,8 +203,9 @@ const addCategory = async (categoryname) => {
     let newrowshtml = newcategoryrowhtml;
 
     await getString('additinerary1', 'gradereport_gradeconfigwizard')
-    .then(function (str) {
+    .then(function(str) {
         newrowshtml += addsubcategorybuttonrowhtml(randomid, str);
+        return str;
     });
     newrowshtml += addsubcategorygradeitememptyrowhtml(randomid, "");
 
@@ -234,7 +235,7 @@ const removeCategory = (randomid) => {
         'tr[data-rowtype="subcategory"][data-randomid="' + randomid + '"][data-subrandomid]'
     );
     subcategoryrowstodelete.forEach(subcategoryrow => {
-        let subrandomid = subcategoryrow.dataset['subrandomid'];
+        let subrandomid = subcategoryrow.dataset.subrandomid;
         removeSubcategory(randomid, subrandomid);
     });
 
@@ -248,16 +249,17 @@ const removeCategory = (randomid) => {
     }
 };
 
-const addSubcategory = async (randomid) => {
+const addSubcategory = async(randomid) => {
     let subrandomid = generateUniqueId();
     let subcategoryaddbtnrow = weightedevaluationtablebody.querySelector(
         'tr[data-randomid="' + randomid + '"][data-rowtype="subcategory"] .add-subcategory-btn'
     ).closest('tr');
 
     await getString('additinerary2', 'gradereport_gradeconfigwizard')
-    .then(function (str) {
+    .then(function(str) {
         subcategoryaddbtnrow.insertAdjacentHTML('beforebegin', subcategoryrowhtml(randomid, subrandomid)
             + addsubcategorygradeitembuttonrowhtml(randomid, subrandomid, str));
+            return str;
     });
 
     let newsubcategoryrow = weightedevaluationtablebody.querySelector('' +
@@ -299,8 +301,8 @@ const addSubcategoryGradeitems = (randomid, subrandomid, gradeitems) => {
 };
 
 const addSubcategoryGradeitem = (randomid, subrandomid, gradeitem) => {
-    let gradeitemid = gradeitem.dataset['id'];
-    let gradeitemname = gradeitem.dataset['displayname'];
+    let gradeitemid = gradeitem.dataset.id;
+    let gradeitemname = gradeitem.dataset.displayname;
     let subcategorygradeitemaddbtnrow = weightedevaluationtablebody.querySelector(
         'tr[data-randomid="' + randomid + '"][data-subrandomid="' + subrandomid + '"][data-rowtype="subcategorygradeitem"]' +
         ' .subcategorygradeitem .add-subcategorygradeitem-btn'
@@ -346,24 +348,24 @@ const addCategoryButtonClickCallback = () => {
 };
 
 const availableGradeItemsModalShowCallback = (event) => {
-    //@TODO check if all works properly
+    // TODO check if all works properly
     let button = event.relatedTarget;
-    let callerrandomid = button.closest('tr').dataset['randomid'];
-    let gradeitemaddtarget = button.dataset['gradeitemaddtarget'];
-    let gradeitemid = button.closest('td').dataset['gradeitemid'];
+    let callerrandomid = button.closest('tr').dataset.randomid;
+    let gradeitemaddtarget = button.dataset.gradeitemaddtarget;
+    let gradeitemid = button.closest('td').dataset.gradeitemid;
     let callersubrandomid = button.closest('tr').dataset.subrandomid;
 
-    gradeitemsmodal.dataset['gradeitemaddtarget'] = gradeitemaddtarget;
-    gradeitemsmodal.dataset['callerrandomid'] = callerrandomid;
-    gradeitemsmodal.dataset['callersubrandomid'] = callersubrandomid;
-    gradeitemsmodal.dataset['gradeitemid'] = gradeitemid;
+    gradeitemsmodal.dataset.gradeitemaddtarget = gradeitemaddtarget;
+    gradeitemsmodal.dataset.callerrandomid = callerrandomid;
+    gradeitemsmodal.dataset.callersubrandomid = callersubrandomid;
+    gradeitemsmodal.dataset.gradeitemid = gradeitemid;
 };
 
 const availableGradeItemsModalConfirmCallback = () => {
-    let gradeitemaddtarget = gradeitemsmodal.dataset['gradeitemaddtarget'];
+    let gradeitemaddtarget = gradeitemsmodal.dataset.gradeitemaddtarget;
 
-    let randomid = gradeitemsmodal.dataset['callerrandomid'];
-    let subrandomid = gradeitemsmodal.dataset['callersubrandomid'];
+    let randomid = gradeitemsmodal.dataset.callerrandomid;
+    let subrandomid = gradeitemsmodal.dataset.callersubrandomid;
     let gradeitems = getGradeitemsmodalSelectedItems();
 
     switch (gradeitemaddtarget) {
@@ -381,7 +383,7 @@ const removeCategoryCallback = (event) => {
 };
 
 const addSubcategoryButtonCallback = (event) => {
-    let randomid = event.target.closest('tr').dataset['randomid'];
+    let randomid = event.target.closest('tr').dataset.randomid;
     addSubcategory(randomid);
 };
 

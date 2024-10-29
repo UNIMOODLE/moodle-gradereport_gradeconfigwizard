@@ -39,7 +39,6 @@ Feature: I need to generate the corresponding formula
     And I am on "Course 1" course homepage
     And I navigate to course grades
 
-
   @javascript @calculate_mean_grade
   Scenario: Calculate the mean grade of a Grade Item 2 (included in Category 1) and Assigment 2.
     The result is assigned to the Grade Item 1
@@ -68,12 +67,12 @@ Feature: I need to generate the corresponding formula
       | Grade Item 1  | 40.00  |
       | Assigment 2   | 50.00  |
 
-    When I navigate to "View > Grader report" in the course gradebook
-    And I click on "Edit calculation for Grade Item 1" "icon"
+When I navigate to "View > Grader report" in the course gradebook    
+    And I click on grade item menu "Grade Item 1" of type "gradeitem" on "grader" page
+    And I choose "Edit calculation" in the open action menu
     And I check formula is correct in "Course 1" for elements:
       | Totals                    | Formulas                                        | Elements                 |
       | Grade Item 1              | =average([[grade_item_2_!1]],[[assigment_2_!2]])| Grade Item 2,Assigment 2 |
-
 
   @javascript @calculate_sum_grade
   Scenario: Calculate the sum grade of a Grade Item 1 and Assigment 2.
@@ -104,11 +103,11 @@ Feature: I need to generate the corresponding formula
       | Assigment 2   | 50.00  |
 
     When I navigate to "View > Grader report" in the course gradebook
-    And I click on "Edit calculation for Grade Item 2" "icon"
+    And I click on grade item menu "Grade Item 2" of type "gradeitem" on "grader" page
+    And I choose "Edit calculation" in the open action menu
     And I check formula is correct in "Course 1" for elements:
       | Totals                    | Formulas                                    | Elements                 |
       | Grade Item 2              | =sum([[grade_item_1_!1]],[[assigment_2_!2]])| Grade Item 1,Assigment 2 |
-
 
   @javascript @calculate_weight_grade
   Scenario: Calculate the weight mean grade of a Grade Item 1 and Assigment 2, values will be converted to integers.
@@ -141,7 +140,8 @@ Feature: I need to generate the corresponding formula
       | Assigment 2   | 50.00  |
 
     When I navigate to "View > Grader report" in the course gradebook
-    And I click on "Edit calculation for Grade Item 2" "icon"
+    And I click on grade item menu "Grade Item 2" of type "gradeitem" on "grader" page
+    And I choose "Edit calculation" in the open action menu
     And I check formula is correct in "Course 1" for elements:
       | Totals                    | Formulas                                                | Elements                 |
       | Grade Item 2              | =sum([[grade_item_1_!1]]*2,[[assigment_2_!2]]*3)/5      | Grade Item 1,Assigment 2 |
@@ -175,7 +175,8 @@ Feature: I need to generate the corresponding formula
       | Grade Item 3  | 90.00  |
 
     When I navigate to "View > Grader report" in the course gradebook
-    And I click on "Edit calculation for Grade Item 1" "icon"
+    And I click on grade item menu "Grade Item 1" of type "gradeitem" on "grader" page
+    And I choose "Edit calculation" in the open action menu
     And I check formula is correct in "Course 1" for elements:
       | Totals                    | Formulas                                     | Elements                  |
       | Grade Item 1              | =max([[grade_item_2_!1]],[[grade_item_3_!2]])| Grade Item 2,Grade Item 3 |
@@ -209,12 +210,11 @@ Feature: I need to generate the corresponding formula
       | Sub category 1 total | 50.00  |
 
     When I navigate to "View > Grader report" in the course gradebook
-    And I click on "Edit calculation for Category 1 Category total" "icon"
+    And I click on grade item menu "Category 1" of type "gradeitem" on "grader" page
+    And I choose "Edit calculation" in the open action menu
     And I check formula is correct in "Course 1" for elements:
       | Totals                    | Formulas                                             | Elements                          |
       | Total Category 1          | =min([[grade_item_2_!1]],[[sub_category_1_total_!2]])| Grade Item 2,sub_category_1_total |
-
-
 
   @javascript @calculate_mean_grade_hirarchy
   Scenario: Calculate the mean grade of a Grade Item 2 (from Category 1), Total Sub category 1,
@@ -257,11 +257,11 @@ Feature: I need to generate the corresponding formula
       | Sub category 1 total | 50.00  |
 
     When I navigate to "View > Grader report" in the course gradebook
-    And I click on "Edit calculation for Category 1 Category total" "icon"
+    And I click on grade item menu "Category 1" of type "gradeitem" on "grader" page
+    And I choose "Edit calculation" in the open action menu
     And I check formula is correct in "Course 1" for elements:
       | Totals                    | Formulas                                             | Elements                          |
       | Total Category 1          | =average([[grade_item_2_!1]],[[grade_item_4_!2]],[[sub_category_1_total_!3]],[[category_2_total_!4]])| Grade Item 2,Grade Item 4,sub_category_1_total,category_2_total |
-
 
   @javascript @validate_error_throw_broken_formula
   Scenario: Probably circular reference or broken calculation formula message case,
@@ -281,7 +281,7 @@ Feature: I need to generate the corresponding formula
     And I click on "Generate formula" "button"
     And I click on "Save formula" "button"
 
-    And I should see "Probably circular reference or broken calculation formula"
+    And I should see "Error in the calculation of grade item Category total."
 
   @javascript @validate_error_throw_circular_reference
   Scenario: Probably circular reference or broken calculation formula message case,
@@ -312,7 +312,8 @@ Feature: I need to generate the corresponding formula
     And I should see "Succesfull Update"
 
     When I navigate to "View > Grader report" in the course gradebook
-    And I click on "Edit calculation for Sub category 1 Category total" "icon"
+    And I click on grade item menu "Sub category 1" of type "gradeitem" on "grader" page
+    And I choose "Edit calculation" in the open action menu
     And I check formula is correct in "Course 1" for elements:
       | Totals                    | Formulas                                         | Elements                      |
       | Total Sub category 1      | =max([[grade_item_2_!1]],[[category_2_total_!2]])| Grade Item 2,category_2_total |
@@ -324,11 +325,12 @@ Feature: I need to generate the corresponding formula
     And In Select aggregation method I choose "highest"
     And I click on "Generate formula" "button"
     And I click on "Save formula" "button"
-    And I should see "Probably circular reference or broken calculation formula"
+    And I should see "Error in the calculation of grade item Category total."
 
     # Check if the value before maintains having the error generating the new formula
     When I navigate to "View > Grader report" in the course gradebook
-    And I click on "Edit calculation for Sub category 1 Category total" "icon"
+    And I click on grade item menu "Sub category 1" of type "gradeitem" on "grader" page
+    And I choose "Edit calculation" in the open action menu
     And I check formula is correct in "Course 1" for elements:
       | Totals                    | Formulas                                         | Elements                      |
       | Total Sub category 1      | =max([[grade_item_2_!1]],[[category_2_total_!2]])| Grade Item 2,category_2_total |

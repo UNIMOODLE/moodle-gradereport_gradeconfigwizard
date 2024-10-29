@@ -1,4 +1,4 @@
-/// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -155,7 +155,7 @@ const previewFormula = () => {
         let selectedformulaitems = weightsdefinitiontable.querySelectorAll('[data-paramtype="weight"]');
         let itemsformula = '';
 
-        selectedformulaitems.forEach(function (selectedformulaitem) {
+        selectedformulaitems.forEach(function(selectedformulaitem) {
             let itemformula = "";
             itemformula = "  <ITEM>";
 
@@ -163,7 +163,6 @@ const previewFormula = () => {
             itemformula += "<IDNUMBER>" + selectedformulaitem.dataset.itemidnumber + "</IDNUMBER>";
             itemformula += "<GRADEITEMID>" + selectedformulaitem.dataset.itemid + "</GRADEITEMID>";
 
-            //let weightvalue = '';
             if (selectedformulaitem.dataset.enabled === '1') {
                 itemformula += "<WEIGHT>" + selectedformulaitem.value + "</WEIGHT>";
             }

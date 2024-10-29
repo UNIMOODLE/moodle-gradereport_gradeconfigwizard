@@ -1,4 +1,4 @@
-/// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -185,7 +185,7 @@ const addcategorygradeitemresitgradeitembuttoncelldisabledhtml = (gradeitemid, s
 const generateUniqueId = () => {
     let randomid = null;
     while (randomid === null || document.getElementById(randomid) !== null) {
-        // generate a 8 chars long random id
+        // Generate a 8 chars long random id
         randomid = Math.random().toString(36).substring(2, 10);
     }
     return randomid;
@@ -224,7 +224,7 @@ const recalculateRowspans = (randomid) => {
         datacell.rowSpan = totalItemCount;
     });
 };
-const addCategory = async (categoryname) => {
+const addCategory = async(categoryname) => {
     let randomid = generateUniqueId();
 
     let newcategoryrow = document.createElement('tr');
@@ -236,16 +236,17 @@ const addCategory = async (categoryname) => {
     let newcategorycell = document.createElement('td');
     newcategorycell.classList.add('category');
     newcategorycell.rowSpan = 2;
-    newcategorycell.innerHTML = categoryNameInput(randomid, categoryname) + removeitemiconhtml(randomid); //not needed
+    newcategorycell.innerHTML = categoryNameInput(randomid, categoryname) + removeitemiconhtml(randomid);
 
     newcategoryrow.appendChild(newcategorycell);
     await getStrings([
         {'key': 'addelement1', component: 'gradereport_gradeconfigwizard'},
         {'key': 'addelement2', component: 'gradereport_gradeconfigwizard'},
-    ]).then(function (str) {
+    ]).then(function(str) {
         newcategoryrow.innerHTML += newcategoryextracellshtml(randomid, str[0]);
         multipleevaluationtablebody.appendChild(newcategoryrow);
         newcategoryrow.insertAdjacentHTML('afterend', addcategoryelementsbuttonrowhtml(randomid, str[1]));
+        return str;
     });
 
 
@@ -269,8 +270,8 @@ const removeCategory = (randomid) => {
         'tr[data-rowtype="categorygradeitem"][data-randomid="' + randomid + '"]'
     );
     catgorygradeitemrowstodelete.forEach(catgorygradeitemrow => {
-        let randomid = catgorygradeitemrow.dataset['randomid'];
-        let gradeitemid = catgorygradeitemrow.dataset['gradeitemid'];
+        let randomid = catgorygradeitemrow.dataset.randomid;
+        let gradeitemid = catgorygradeitemrow.dataset.gradeitemid;
         removeCategoryGradeitem(randomid, gradeitemid);
     });
 
@@ -287,16 +288,17 @@ const addCategoryGradeitems = (randomid, gradeitems) => {
     refreshButtonsEnabledOrDisabled();
 };
 
-const addCategoryGradeitem = async (randomid, gradeitem) => {
-    let gradeitemid = gradeitem.dataset['id'];
-    let gradeitemname = gradeitem.dataset['displayname'];
+const addCategoryGradeitem = async(randomid, gradeitem) => {
+    let gradeitemid = gradeitem.dataset.id;
+    let gradeitemname = gradeitem.dataset.displayname;
     let categorygradeitemaddbtn = multipleevaluationtablebody.querySelectorAll(
         '[data-randomid="' + randomid + '"][data-rowtype="categorygradeitemaddbtn"]'
     );
     await getString('addelement3', 'gradereport_gradeconfigwizard')
-        .then(function (str) {
+        .then(function(str) {
         categorygradeitemaddbtn[0].insertAdjacentHTML('beforebegin',
             categorygradeitemrowhtml(randomid, gradeitemid, gradeitemname, str));
+        return str;
     });
 
     let newcategorygradeitemrow = multipleevaluationtablebody.querySelector(
@@ -326,7 +328,7 @@ const removeCategoryGradeitem = (randomid, gradeitemid) => {
         'tr[data-randomid="' + randomid + '"][data-rowtype="categorygradeitem"][data-gradeitemid="' + gradeitemid + '"]'
     );
     rowtodelete.forEach(row => {
-        row.querySelectorAll('[data-gradeitemid]').forEach(row => addGradeitemsmodalItem(row.dataset['gradeitemid']));
+        row.querySelectorAll('[data-gradeitemid]').forEach(row => addGradeitemsmodalItem(row.dataset.gradeitemid));
         row.remove();
     });
 
@@ -348,8 +350,8 @@ const removeCategoryGradeitem = (randomid, gradeitemid) => {
 };
 
 const addCategoryresititem = (randomid, gradeitem) => {
-    let gradeitemid = gradeitem.dataset['id'];
-    let gradeitemname = gradeitem.dataset['displayname'];
+    let gradeitemid = gradeitem.dataset.id;
+    let gradeitemname = gradeitem.dataset.displayname;
     let categoryresitcell = multipleevaluationtablebody.querySelector(
         'tr[data-randomid="' + randomid + '"][data-rowtype="category"] td.resit-1'
     );
@@ -371,11 +373,11 @@ const addCategoryresititem = (randomid, gradeitem) => {
     refreshButtonsEnabledOrDisabled();
 };
 
-const removeCategoryResititem = async (randomid, gradeitemid = null) => {
+const removeCategoryResititem = async(randomid, gradeitemid = null) => {
     let categoryresitgradeitem = null;
     if (gradeitemid === null) {
         categoryresitgradeitem = multipleevaluationtablebody.querySelector('tr[data-randomid="' + randomid + '"] td.resit-1');
-        gradeitemid = categoryresitgradeitem.dataset['gradeitemid'];
+        gradeitemid = categoryresitgradeitem.dataset.gradeitemid;
     } else {
         categoryresitgradeitem = multipleevaluationtablebody.querySelector(
             'tr[data-randomid="' + randomid + '"] td.resit-1[data-gradeitemid="' + gradeitemid + '"]'
@@ -383,9 +385,10 @@ const removeCategoryResititem = async (randomid, gradeitemid = null) => {
     }
     let categoryresitgradeitemcell = categoryresitgradeitem.closest('td');
     await getString('addelement4', 'gradereport_gradeconfigwizard')
-        .then(function (str) {
+        .then(function(str) {
         categoryresitgradeitemcell.insertAdjacentHTML('afterend', addcategoryresitbuttoncellenabledhtml(randomid, str));
         categoryresitgradeitemcell.remove();
+        return str;
     });
 
     if (gradeitemid !== undefined) {
@@ -406,8 +409,8 @@ const disableAddCategoryResititmeBtn = (randomid) => {
 };
 
 const addCategoryGradeitemResititem = (randomid, parentgradeitem, gradeitem) => {
-    let gradeitemid = gradeitem.dataset['id'];
-    let gradeitemname = gradeitem.dataset['displayname'];
+    let gradeitemid = gradeitem.dataset.id;
+    let gradeitemname = gradeitem.dataset.displayname;
 
     let categorygradeitemresitgradeitemaddbtn = multipleevaluationtablebody.querySelector(
         'tr[data-randomid="' + randomid + '"] td[data-gradeitemid="' +
@@ -426,7 +429,7 @@ const addCategoryGradeitemResititem = (randomid, parentgradeitem, gradeitem) => 
     refreshButtonsEnabledOrDisabled();
 };
 
-const removeCategoryGradeitemResititem = async (randomid, parentgradeitemid, gradeitemid) => {
+const removeCategoryGradeitemResititem = async(randomid, parentgradeitemid, gradeitemid) => {
     let categoryresitgradeitemcell = multipleevaluationtablebody.querySelector(
         'td.resit-2[data-gradeitemid="' + gradeitemid + '"]'
     );
@@ -434,13 +437,14 @@ const removeCategoryGradeitemResititem = async (randomid, parentgradeitemid, gra
         return;
     }
     await getString('addelement5', 'gradereport_gradeconfigwizard')
-        .then(function (str) {
+        .then(function(str) {
         categoryresitgradeitemcell.insertAdjacentHTML('afterend',
             addcategorygradeitemresitgradeitembuttoncelldisabledhtml(parentgradeitemid, str));
         categoryresitgradeitemcell.remove();
+        return str;
     });
 
-    //TODO: esto está hecho porque hasta que no se define un item de recuperación,
+    // TODO: esto está hecho porque hasta que no se define un item de recuperación,
     // el botón para añadir uno tiene el id del itemgrade al que irá asociado
     if (parentgradeitemid != gradeitemid) {
         addGradeitemsmodalItem(gradeitemid);
@@ -479,12 +483,12 @@ const refreshAddCategoryGradeitemResititemBtn = () => {
 const refreshSaveButtonEnabledOrDisabled = () => {
     if (checkSaveButtonShouldBeEnabled()) {
         saveandexitbutton.disabled = false;
-        if(saveandexitbutton.classList.contains('disabled-box')){
+        if (saveandexitbutton.classList.contains('disabled-box')) {
             saveandexitbutton.classList.remove('disabled-box');
         }
     } else {
         saveandexitbutton.disabled = true;
-        if(!saveandexitbutton.classList.contains('disabled-box')){
+        if (!saveandexitbutton.classList.contains('disabled-box')) {
             saveandexitbutton.classList.add('disabled-box');
         }
     }
@@ -502,7 +506,8 @@ const checkAddCategoryGradeitemResititemBtnShouldBeEnabled = (addcategorygradeit
 
 const checkSaveButtonShouldBeEnabled = () => {
     // If there are pending resit items to add
-    if (document.querySelector('.resit-2.add-btn button:not([disabled])')) {
+    if (document.querySelector('.resit-2.add-btn button:not([disabled])')
+        || document.querySelector('.resit-1.add-btn button:not([disabled])')) {
         return false;
     }
 
@@ -544,38 +549,38 @@ const removeCategoryGradeItemCallback = (event) => {
 const removeCategoryResitGradeitemCallback = (event) => {
     let parenttd = event.target.closest('td');
     let parenttr = parenttd.closest('tr');
-    let randomid = parenttr.dataset['randomid'];
-    let gradeitemid = parenttd.dataset['gradeitemid'];
+    let randomid = parenttr.dataset.randomid;
+    let gradeitemid = parenttd.dataset.gradeitemid;
     removeCategoryResititem(randomid, gradeitemid);
 };
 
 const removeCategoryGradeitemResitGradeitemCallback = (event) => {
     let parenttd = event.target.closest('td');
     let parenttr = parenttd.closest('tr');
-    let randomid = parenttr.dataset['randomid'];
-    let gradeitemid = parenttd.dataset['gradeitemid'];
-    let parentgradeitemid = parenttr.querySelector('td.item').dataset['gradeitemid'];
+    let randomid = parenttr.dataset.randomid;
+    let gradeitemid = parenttd.dataset.gradeitemid;
+    let parentgradeitemid = parenttr.querySelector('td.item').dataset.gradeitemid;
     removeCategoryGradeitemResititem(randomid, parentgradeitemid, gradeitemid);
 };
 
 const availableGradeItemsModalShowCallback = (event) => {
     let button = event.relatedTarget;
-    let callerrandomid = button.closest('tr').dataset['randomid'];
-    let gradeitemaddtarget = button.dataset['gradeitemaddtarget'];
-    let addgradeitemdepth = button.dataset['addgradeitemdepth'];
-    let gradeitemid = button.closest('td').dataset['gradeitemid'];
+    let callerrandomid = button.closest('tr').dataset.randomid;
+    let gradeitemaddtarget = button.dataset.gradeitemaddtarget;
+    let addgradeitemdepth = button.dataset.addgradeitemdepth;
+    let gradeitemid = button.closest('td').dataset.gradeitemid;
 
-    gradeitemsmodal.dataset['gradeitemaddtarget'] = gradeitemaddtarget;
-    gradeitemsmodal.dataset['addgradeitemdepth'] = addgradeitemdepth;
-    gradeitemsmodal.dataset['callerrandomid'] = callerrandomid;
-    gradeitemsmodal.dataset['gradeitemid'] = gradeitemid;
+    gradeitemsmodal.dataset.gradeitemaddtarget = gradeitemaddtarget;
+    gradeitemsmodal.dataset.addgradeitemdepth = addgradeitemdepth;
+    gradeitemsmodal.dataset.callerrandomid = callerrandomid;
+    gradeitemsmodal.dataset.gradeitemid = gradeitemid;
 };
 
 const availableGradeItemsModalConfirmCallback = () => {
-    let gradeitemaddtarget = gradeitemsmodal.dataset['gradeitemaddtarget'];
-    let gradeitemid = gradeitemsmodal.dataset['gradeitemid'];
+    let gradeitemaddtarget = gradeitemsmodal.dataset.gradeitemaddtarget;
+    let gradeitemid = gradeitemsmodal.dataset.gradeitemid;
 
-    let randomid = gradeitemsmodal.dataset['callerrandomid'];
+    let randomid = gradeitemsmodal.dataset.callerrandomid;
     let gradeitems = getGradeitemsmodalSelectedItems();
 
     switch (gradeitemaddtarget) {
@@ -608,9 +613,9 @@ const availableGradeItemsModalConfirmCallback = () => {
 const categoryMinGradeCheckboxChangeCallback = (event) => {
     let categorymingradecheckbox = event.target;
     let categorymingradecheckboxrow = categorymingradecheckbox.closest('tr');
-    let randomid = categorymingradecheckboxrow.dataset['randomid'];
+    let randomid = categorymingradecheckboxrow.dataset.randomid;
 
-    let categoryresititemid = categorymingradecheckboxrow.querySelector('.resit-1').dataset['gradeitemid'];
+    let categoryresititemid = categorymingradecheckboxrow.querySelector('.resit-1').dataset.gradeitemid;
     if (categoryresititemid) {
         removeCategoryResititem(randomid, categoryresititemid);
         disableAddCategoryResititmeBtn(randomid);
@@ -622,17 +627,21 @@ const categoryMinGradeCheckboxChangeCallback = (event) => {
     } else {
         categorymingradeinput.disabled = true;
         categorymingradeinput.value = '';
+        // TODO Colocar aquí el apagado del boton
+        let categoryresititemidBtn = categorymingradecheckboxrow.querySelector('.resit-1 button');
+        categoryresititemidBtn.disabled = true;
+
     }
     refreshButtonsEnabledOrDisabled();
 };
 
-const categoryGradeitemMinGradeCheckboxChangeCallback = async (event) => {
+const categoryGradeitemMinGradeCheckboxChangeCallback = async(event) => {
     let categorymingradecheckbox = event.target;
     let categorygradeitemchangedrow = categorymingradecheckbox.closest('tr');
-    let randomid = categorygradeitemchangedrow.dataset['randomid'];
+    let randomid = categorygradeitemchangedrow.dataset.randomid;
 
-    let parentgradeitemid = categorygradeitemchangedrow.querySelector('td.item').dataset['gradeitemid'];
-    let resitgradeitemid = categorygradeitemchangedrow.querySelector('td.resit-2').dataset['gradeitemid'];
+    let parentgradeitemid = categorygradeitemchangedrow.querySelector('td.item').dataset.gradeitemid;
+    let resitgradeitemid = categorygradeitemchangedrow.querySelector('td.resit-2').dataset.gradeitemid;
     let isresitbuttonwithnoresititem = categorygradeitemchangedrow.querySelector('td.resit-2').classList.contains('add-btn');
     if (resitgradeitemid !== null && parentgradeitemid !== null && !isresitbuttonwithnoresititem) {
         await removeCategoryGradeitemResititem(randomid, parentgradeitemid, resitgradeitemid);

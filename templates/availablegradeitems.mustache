@@ -32,6 +32,23 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 }}
+{{!
+    @template gradereport_gradeconfigwizard/availablegradeitems
+
+    Available grade items template.
+
+    Context variables required for this template:
+    * id - string - The unique identifier for the grade item.
+    * itemname -  string - The name of the grade item.
+    * categoryname - string - The name of the category to which the grade item belongs.
+
+    Example context (json):
+    {
+        "id": "55",
+        "itemname": "Test assign 1",
+        "categoryname": "Category 1"
+    }
+}}
 {{#availablegradeitems}}
   {{^iscourse}}
       {{^iscategory}}

@@ -57,6 +57,7 @@ final class multiplegradebook_test extends \advanced_testcase {
      */
     public function setUp(): void {
         global $DB;
+        parent::setUp();
         $this->resetAfterTest(true);
         $this->course1 = $this->getDataGenerator()->create_course();
 

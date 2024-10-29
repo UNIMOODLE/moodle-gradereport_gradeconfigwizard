@@ -32,6 +32,23 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 }}
+{{!
+    @template gradereport_gradeconfigwizard/formulacreator
+
+    Formulacreator template
+
+    Context variables required for this template:
+    * courseid - string - ID of the course.
+    * gradeitemid - string - ID of the grade item being processed.
+    * urlcancelformulacreator - string - URL to cancel the formula creation.
+
+    Example context (json):
+    {
+        "courseid": "3",
+        "gradeitemid": "5",
+        "urlcancelformulacreator": "/moodle/cancel_formulacreator.php?id=3"
+    }
+}}
 
 <form action="formulacreator.php?id={{courseid}}&gradeitemid={{gradeitemid}}" method="POST">
 <div class="container">
@@ -116,7 +133,6 @@
 
 {{#js}}
 
-    //gradeitemid = "{{gradeitemid}}";
     require(['gradereport_gradeconfigwizard/formulacreator'], function(Formulacreator) {
     Formulacreator.init();
     });
