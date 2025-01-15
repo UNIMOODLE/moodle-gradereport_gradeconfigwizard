@@ -88,6 +88,7 @@ $string['multitablerecovery1'] = 'RECUPERACIÓN';
 $string['multitablerecovery2'] = 'RECUPERACIÓN';
 $string['multitableweight1'] = 'PESAXE';
 $string['multitableweight2'] = 'PESAXE';
+$string['exceptionnullparameter'] = 'Atopouse un valor nulo ou baleiro. Proceso detido.';
 $string['pluginname'] = 'Asistente de configuración de notas';
 $string['privacy:metadata'] = 'O informe de cualificación do Asistente de configuración de cualificación só mostra os datos almacenados noutras localizacións.';
 $string['savebutton'] = 'Garda e sae';

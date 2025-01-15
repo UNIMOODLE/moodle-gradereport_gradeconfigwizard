@@ -53,6 +53,9 @@ array_walk_recursive(
     $categories,
     function (&$valor, $clave) {
         $valor = clean_param($valor, PARAM_TEXT);
+        if (is_null($valor) || $valor === '') {
+            throw new Exception(get_string('exceptionnullparameter', 'gradereport_gradeconfigwizard'));
+        }
     }
 );
 

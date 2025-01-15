@@ -88,6 +88,7 @@ $string['multitablerecovery1'] = 'RECUPERACIÓ';
 $string['multitablerecovery2'] = 'RECUPERACIÓ';
 $string['multitableweight1'] = 'PONDERACIÓ';
 $string['multitableweight2'] = 'PONDERACIÓ';
+$string['exceptionnullparameter'] = 'S´ha trobat un valor nul o buit. Procés detingut';
 $string['pluginname'] = 'Assistent per configurar qualificacions';
 $string['privacy:metadata'] = 'L\'informe de qualificació de l\'Assistent per configurar qualificacions només mostra dades emmagatzemades en altres ubicacions.';
 $string['savebutton'] = 'Desa i surt';

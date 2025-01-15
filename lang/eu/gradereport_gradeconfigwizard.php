@@ -88,6 +88,7 @@ $string['multitablerecovery1'] = 'BERRESKURATZEA';
 $string['multitablerecovery2'] = 'BERRESKURATZEA';
 $string['multitableweight1'] = 'PISATZEA';
 $string['multitableweight2'] = 'PISATZEA';
+$string['exceptionnullparameter'] = 'Balio nulua edo hutsik aurkitu da. Prozesua gelditu da.';
 $string['pluginname'] = 'Konfiguratu kalifikazioen morroia';
 $string['privacy:metadata'] = 'Grade Setup Wizard kalifikazio-txostenak beste kokapen batzuetan gordetako datuak soilik bistaratzen ditu.';
 $string['savebutton'] = 'Gorde eta irten';
