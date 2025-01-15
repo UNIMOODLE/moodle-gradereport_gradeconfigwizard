@@ -79,10 +79,10 @@ const addsubcategorybuttonrowhtml = (randomid, str) => `
 const subcategoryrowhtml = (randomid, subrandomid) => `
 <tr id="'${subrandomid}" data-randomid="${randomid}" data-subrandomid="${subrandomid}" data-rowtype="subcategory">
   <td class="subcategory" rowspan="2">
-    <input type="text" name="categories[${randomid}][subcategories][${subrandomid}][name]" value="">${removeitemiconhtml(randomid)}
+    <input type="text" name="categories[${randomid}][subcategories][${subrandomid}][name]" value="" required>${removeitemiconhtml(randomid)}
   </td>
   <td class="weight-1">
-    <input type="number" name="categories[${randomid}][subcategories][${subrandomid}][weight]" size="4" value="1">
+    <input type="number" name="categories[${randomid}][subcategories][${subrandomid}][weight]" size="4" value="1" required>
   </td>
 </tr>
 `;

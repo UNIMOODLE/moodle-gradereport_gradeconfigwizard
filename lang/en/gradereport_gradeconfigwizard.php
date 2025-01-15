@@ -88,6 +88,7 @@ $string['multitablerecovery1'] = 'CATEGORY RESIT';
 $string['multitablerecovery2'] = 'RESIT';
 $string['multitableweight1'] = 'CATEGORY WEIGHT';
 $string['multitableweight2'] = 'WEIGHT';
+$string['exceptionnullparameter'] = 'Null or empty value found. Process stopped.';
 $string['pluginname'] = 'Grade setup wizard';
 $string['privacy:metadata'] = 'Grade setup wizard\'s grading report only shows data stored in other locations.';
 $string['savebutton'] = 'Save and exit';

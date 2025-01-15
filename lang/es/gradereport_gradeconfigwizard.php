@@ -88,6 +88,7 @@ $string['multitablerecovery1'] = 'RECUPERACIÓN';
 $string['multitablerecovery2'] = 'RECUPERACIÓN';
 $string['multitableweight1'] = 'PONDERACIÓN';
 $string['multitableweight2'] = 'PONDERACIÓN';
+$string['exceptionnullparameter'] = 'Se encontró un valor nulo o vacío. Proceso detenido.';
 $string['pluginname'] = 'Asistente para configurar calificaciones';
 $string['privacy:metadata'] = 'El informe de calificación del Asistente para configurar calificaciones sólo muestra datos almacenados en otras ubicaciones.';
 $string['savebutton'] = 'Guardar y salir';
